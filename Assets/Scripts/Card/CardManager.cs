@@ -8,14 +8,24 @@ public class CardManager : MonoBehaviour
 
     public void CreateCard()
 	{
+        List<Sprite> CardImgList = new List<Sprite>(Resources.LoadAll<Sprite>("Cards"));
+        Debug.Log(CardImgList.Count);
+        int RandomNum;
+        Sprite CurCardTexture;
+        GameObject _Card;
         for (int i = 0; i < 52; i++)
 		{
+            RandomNum = Random.Range(0, CardImgList.Count);
+            CurCardTexture = CardImgList[RandomNum];
 
+            _Card = Instantiate(CardPrefab, this.transform);
+            _Card.GetComponent<Card>().SetCardInfo(CurCardTexture, CurCardTexture.name);
+            CardImgList.RemoveAt(RandomNum);
 		}
 	}
 
-    void Update()
-    {
-        
-    }
+	private void Start()
+	{
+        CreateCard();
+	}
 }

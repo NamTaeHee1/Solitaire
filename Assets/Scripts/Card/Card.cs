@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class Card : MonoBehaviour
 {
-	private Texture2D CardTexture { get; set; }
-	private string CardName { get; set; }
+	public Sprite CardTexture;
 
-	public void SetCardInfo(Texture2D CardTexure, string CardName)
+	public string CardName 
+	{
+		get { return name; }
+		set { transform.name = value;}
+	}
+
+	public void SetCardInfo(Sprite CardTexure, string CardName)
 	{
 		this.CardTexture = CardTexure;
 		this.CardName = CardName;
