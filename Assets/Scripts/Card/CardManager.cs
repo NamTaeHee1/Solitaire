@@ -6,13 +6,13 @@ public class CardManager : MonoBehaviour
 {
     [SerializeField] private GameObject CardPrefab;
 
-    public void CreateCard()
+    private void CreateCards()
 	{
         List<Sprite> CardImgList = new List<Sprite>(Resources.LoadAll<Sprite>("Cards"));
-        Debug.Log(CardImgList.Count);
         int RandomNum;
         Sprite CurCardTexture;
         GameObject _Card;
+
         for (int i = 0; i < 52; i++)
 		{
             RandomNum = Random.Range(0, CardImgList.Count);
@@ -24,8 +24,5 @@ public class CardManager : MonoBehaviour
 		}
 	}
 
-	private void Start()
-	{
-        CreateCard();
-	}
+    private void Start() => CreateCards();
 }
