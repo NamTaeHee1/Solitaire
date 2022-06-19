@@ -13,7 +13,7 @@ public class Card : MonoBehaviour
 		DRAG
 	}
 
-	CardState _CardState = CardState.IDLE;
+	public CardState _CardState = CardState.IDLE;
 
 	public string CardName 
 	{
