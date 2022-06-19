@@ -24,5 +24,8 @@ public class CardManager : MonoBehaviour
 		}
 	}
 
-    private void Start() => CreateCards();
+    private void Start()
+	{
+        CreateCards();
+     }
 }

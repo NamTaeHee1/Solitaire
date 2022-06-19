@@ -6,6 +6,15 @@ public class Card : MonoBehaviour
 {
 	public Sprite CardTexture;
 
+	public enum CardState
+	{  
+		IDLE,
+		CLICK,
+		DRAG
+	}
+
+	CardState _CardState = CardState.IDLE;
+
 	public string CardName 
 	{
 		get { return name; }
@@ -16,5 +25,17 @@ public class Card : MonoBehaviour
 	{
 		this.CardTexture = CardTexure;
 		this.CardName = CardName;
+	}
+
+	public void Move()
+	{
+		if(_CardState == CardState.CLICK)
+		{
+			// Click Move Function
+		}
+		else if(_CardState == CardState.DRAG)
+		{
+			// Drag Move Function
+		}
 	}
 }
