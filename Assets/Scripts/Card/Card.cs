@@ -9,8 +9,7 @@ public class Card : MonoBehaviour
 	public enum CardState
 	{  
 		IDLE,
-		CLICK,
-		DRAG
+		CLICKED
 	}
 
 	public CardState _CardState = CardState.IDLE;
@@ -29,13 +28,6 @@ public class Card : MonoBehaviour
 
 	public void Move()
 	{
-		if(_CardState == CardState.CLICK)
-		{
-			// Click Move Function
-		}
-		else if(_CardState == CardState.DRAG)
-		{
-			// Drag Move Function
-		}
+
 	}
 }
