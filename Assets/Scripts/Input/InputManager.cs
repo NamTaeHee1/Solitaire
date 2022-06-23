@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class InputManager : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler
+public class InputManager : MonoBehaviour
 {
 	public enum InputType
 	{
@@ -21,20 +21,5 @@ public class InputManager : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
 			_InputType = InputType.IDLE;
 
 		print(_InputType);
-	}
-
-	public void OnDrag(PointerEventData eventData)
-	{
-		throw new System.NotImplementedException();
-	}
-
-	public void OnPointerDown(PointerEventData eventData)
-	{
-		Debug.Log(eventData.ToString());
-	}
-
-	public void OnPointerUp(PointerEventData eventData)
-	{
-		throw new System.NotImplementedException();
 	}
 }
