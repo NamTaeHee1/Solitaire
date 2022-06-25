@@ -2169,7 +2169,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1789598857}
   m_CullTransparentMesh: 1
---- !u!1 &1892000987
+--- !u!1 &1880321691
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2177,37 +2177,36 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1892000989}
-  - component: {fileID: 1892000988}
+  - component: {fileID: 1880321693}
+  - component: {fileID: 1880321692}
   m_Layer: 0
-  m_Name: InputManager
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1892000988
+--- !u!114 &1880321692
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1892000987}
+  m_GameObject: {fileID: 1880321691}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ddf84445c610ea4693c9194e4309107, type: 3}
+  m_Script: {fileID: 11500000, guid: 640efa8e41c4e044e9c0172e3c8a2d89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _InputType: 0
---- !u!4 &1892000989
+--- !u!4 &1880321693
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1892000987}
+  m_GameObject: {fileID: 1880321691}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.59556687, y: -0.59291476, z: -0.5960035}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
