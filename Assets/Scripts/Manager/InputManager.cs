@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class InputManager : MonoBehaviour
+public class InputManager
 {
 	public enum InputType
 	{
@@ -12,14 +12,6 @@ public class InputManager : MonoBehaviour
 	}
 
 	public InputType _InputType = InputType.IDLE;
-
-	private void Update()
-	{
-		if (Input.GetMouseButton(0) || Input.GetMouseButtonUp(0))
-		{
-
-		}
-	}
 
 	private void InputMouseUpdate()
 	{

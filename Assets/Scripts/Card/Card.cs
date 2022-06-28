@@ -25,9 +25,4 @@ public class Card : MonoBehaviour
 		this.CardTexture = CardTexure;
 		this.CardName = CardName;
 	}
-
-	public void Move()
-	{
-
-	}
 }
