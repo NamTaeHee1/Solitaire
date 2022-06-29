@@ -29,9 +29,4 @@ public class CardManager : MonoBehaviour
 	{
         CreateCards();
      }
-
-    public void MovePos()
-	{
-
-	}
 }

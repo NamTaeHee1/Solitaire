@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,5 +20,13 @@ public class InputManager
 			_InputType = InputType.DRAG;
 		if (Input.GetMouseButtonUp(0))
 			_InputType = InputType.IDLE;
+	}
+
+	Action InputAction;
+
+	public void OnUpdate()
+	{
+		if (InputAction != null)
+			InputAction.Invoke();
 	}
 }

@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class CardController : MonoBehaviour // 클릭, 드래그 함수 관리
 {
-    // Start is called before the first frame update
-    void Start()
+    public void Move()
     {
-        
+
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public void Drag()
+	{
+
+	}
 }
