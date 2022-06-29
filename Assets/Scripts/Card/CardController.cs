@@ -4,7 +4,23 @@ using UnityEngine;
 
 public class CardController : MonoBehaviour // 클릭, 드래그 함수 관리
 {
-    public void Move()
+	public enum InputType
+	{
+		IDLE,
+		DRAG
+	}
+
+	public InputType _InputType = InputType.IDLE;
+
+	private void InputMouseUpdate()
+	{
+		if (Input.GetMouseButton(0))
+			_InputType = InputType.DRAG;
+		if (Input.GetMouseButtonUp(0))
+			_InputType = InputType.IDLE;
+	}
+
+	public void Move()
     {
 
     }

@@ -20,4 +20,9 @@ public class GameManager : MonoBehaviour
 		else
 			Destroy(this);
 	}
+
+	private void Update()
+	{
+		_Input.OnUpdate();
+	}
 }
