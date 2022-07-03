@@ -16,8 +16,8 @@ public class Card : MonoBehaviour
 
 	public string CardName 
 	{
-		get { return name; }
-		set { transform.name = value;}
+		get { return CardName; }
+		set { transform.name = value; }
 	}
 
 	public void SetCardInfo(Sprite CardTexure, string CardName)
