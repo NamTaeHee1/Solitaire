@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Card : MonoBehaviour
+public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler
 {
 	public Sprite CardTexture;
 
@@ -24,5 +25,20 @@ public class Card : MonoBehaviour
 	{
 		this.CardTexture = CardTexure;
 		this.CardName = CardName;
+	}
+
+	public void OnDrag(PointerEventData eventData)
+	{
+		throw new System.NotImplementedException();
+	}
+
+	public void OnPointerDown(PointerEventData eventData)
+	{
+		Debug.Log("CardClicked");
+	}
+
+	public void OnPointerUp(PointerEventData eventData)
+	{
+		throw new System.NotImplementedException();
 	}
 }

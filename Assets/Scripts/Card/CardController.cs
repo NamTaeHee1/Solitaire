@@ -30,9 +30,6 @@ public class CardController : MonoBehaviour // 클릭, 드래그 함수 관리
 
 	private void InputCardUpdate()
 	{
-		InputGameObject = EventSystem.current.currentSelectedGameObject;
-		if(InputGameObject == null || InputGameObject.CompareTag("Card") == false)
-			return;
 		Debug.Log("Input Card!");
 	}
 
