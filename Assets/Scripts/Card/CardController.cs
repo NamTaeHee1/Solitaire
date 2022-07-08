@@ -6,13 +6,8 @@ using UnityEngine.EventSystems;
 public class CardController : MonoBehaviour // 클릭, 드래그 함수 관리
 {
 	[SerializeField] private GameObject InputGameObject;
-	public enum InputType
-	{
-		IDLE,
-		DRAG
-	}
 
-	public InputType _InputType = InputType.IDLE;
+	private State.InputState _InputState = State.InputState.IDLE;
 
 	private void Start()
 	{
@@ -23,9 +18,9 @@ public class CardController : MonoBehaviour // 클릭, 드래그 함수 관리
 	private void InputTypeUpdate()
 	{
 		if (Input.GetMouseButton(0))
-			_InputType = InputType.DRAG;
+			_InputState = State.InputState.DRAG;
 		if (Input.GetMouseButtonUp(0))
-			_InputType = InputType.IDLE;
+			_InputState = State.InputState.IDLE;
 	}
 
 	private void InputCardUpdate()

@@ -7,13 +7,7 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 {
 	public Sprite CardTexture;
 
-	public enum CardState
-	{  
-		IDLE,
-		CLICKED
-	}
-
-	public CardState _CardState = CardState.IDLE;
+	public State.CardState CardState = State.CardState.IDLE;
 
 	public string CardName 
 	{

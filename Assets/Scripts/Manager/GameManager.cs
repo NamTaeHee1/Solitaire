@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-	private static GameManager instance = null;
-	public static GameManager Instance { get { return instance; } }
+	private static GameManager _instance = null;
+	public static GameManager Instance { get { return _instance; } }
 
 	private static InputManager _input = new InputManager();
 	static public InputManager _Input { get { return _input; } }
 
 	private void Awake()
 	{
-		if (instance == null)
+		if (_instance == null)
 		{
-			instance = this;
+			_instance = this;
 			DontDestroyOnLoad(this);
 		}
 		else
