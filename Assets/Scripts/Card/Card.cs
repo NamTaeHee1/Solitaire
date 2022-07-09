@@ -23,7 +23,7 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 	public void OnDrag(PointerEventData eventData)
 	{
-		throw new System.NotImplementedException();
+
 	}
 
 	public void OnPointerDown(PointerEventData eventData)
@@ -33,6 +33,6 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 	public void OnPointerUp(PointerEventData eventData)
 	{
-		throw new System.NotImplementedException();
+
 	}
 }
