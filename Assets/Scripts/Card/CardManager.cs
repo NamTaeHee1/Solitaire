@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CardController : MonoBehaviour // 클릭, 드래그 함수 관리
+public class CardManager : MonoBehaviour // 클릭, 드래그 함수 관리
 {
-	[SerializeField] private GameObject InputGameObject;
-
 	private State.InputState _InputState = State.InputState.IDLE;
 
 	private void Start()

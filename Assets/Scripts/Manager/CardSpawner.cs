@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CardManager : MonoBehaviour
+public class CardSpawner : MonoBehaviour
 {
     [SerializeField] private Image CardPrefab;
     private const int CARD_MAX_SIZE = 52;
