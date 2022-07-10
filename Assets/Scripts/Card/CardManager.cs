@@ -3,27 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CardManager : MonoBehaviour // 클릭, 드래그 함수 관리
+public class CardManager : MonoBehaviour
 {
-	private State.InputState _InputState = State.InputState.IDLE;
+	public Card CurrentInputCard = null;
 
-	private void Start()
+	private static CardManager _Instance = null;
+	public static CardManager Instance
 	{
-		GameManager._Input.InputAction = InputTypeUpdate;
-		GameManager._Input.InputAction += InputCardUpdate;
+		get { return _Instance; }
 	}
 
-	private void InputTypeUpdate()
+	private void Awake()
 	{
-		if (Input.GetMouseButton(0))
-			_InputState = State.InputState.DRAG;
-		if (Input.GetMouseButtonUp(0))
-			_InputState = State.InputState.IDLE;
-	}
-
-	private void InputCardUpdate()
-	{
-		Debug.Log("Input Card!");
+		_Instance = this;
+		DontDestroyOnLoad(this);
 	}
 
 	public void Move()
@@ -34,5 +27,11 @@ public class CardManager : MonoBehaviour // 클릭, 드래그 함수 관리
     public void Drag()
 	{
 
+	}
+
+	public void ChangeState(Card Card, State.CardState Card_State, State.InputState Input_State)
+	{
+		Card.CardState = Card_State;
+		InputController._InputState = Input_State;
 	}
 }

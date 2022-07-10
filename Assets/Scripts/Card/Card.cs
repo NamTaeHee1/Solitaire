@@ -23,16 +23,24 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 	public void OnDrag(PointerEventData eventData)
 	{
-
+		CardState = State.CardState.CLICKED;
+		SetCurrentInputCard(this);
 	}
 
 	public void OnPointerDown(PointerEventData eventData)
 	{
-		Debug.Log("CardClicked");
+		CardState = State.CardState.CLICKED;
+		SetCurrentInputCard(this);
 	}
 
 	public void OnPointerUp(PointerEventData eventData)
 	{
+		CardState = State.CardState.IDLE;
+		SetCurrentInputCard(null);
+	}
 
+	private void SetCurrentInputCard(Card card)
+	{
+		CardManager.Instance.CurrentInputCard = card == null ? null : card;
 	}
 }
