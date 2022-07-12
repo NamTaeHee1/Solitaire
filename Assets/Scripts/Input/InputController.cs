@@ -22,9 +22,11 @@ public class InputController : MonoBehaviour
 
 	private void CardActionUpdate()
 	{
+		Debug.Log("CardActionUpdate");
 		Card CurCard = CardManager.Instance.CurrentInputCard;
 		if (CurCard == null)
 			return;
+		Debug.Log("CardActionUpdateConnect");
 
 		switch(CurCard.CardState)
 		{
@@ -33,6 +35,9 @@ public class InputController : MonoBehaviour
 				Debug.Log("Move");
 				break;
 			case State.CardState.CLICKED:
+				Debug.Log("Click");
+				break;
+			case State.CardState.DRAGING:
 				CardManager.Instance.Drag();
 				Debug.Log("Drag");
 				break;

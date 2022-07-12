@@ -13,6 +13,7 @@ public class State
 	public enum CardState
 	{
 		IDLE,
-		CLICKED
+		CLICKED,
+		DRAGING
 	}
 }

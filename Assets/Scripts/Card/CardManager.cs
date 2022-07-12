@@ -26,7 +26,9 @@ public class CardManager : MonoBehaviour
 
     public void Drag()
 	{
-
+		Transform CardObj = CurrentInputCard.transform;
+		Vector3 MousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+		CardObj.position = new Vector3(MousePos.x, MousePos.y, 0);
 	}
 
 	public void ChangeState(Card Card, State.CardState Card_State, State.InputState Input_State)
