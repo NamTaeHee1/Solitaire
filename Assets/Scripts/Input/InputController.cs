@@ -30,9 +30,11 @@ public class InputController : MonoBehaviour
 		{
 			case State.CardState.IDLE:
 				CardManager.Instance.Move();
+				Debug.Log("Move");
 				break;
 			case State.CardState.CLICKED:
 				CardManager.Instance.Drag();
+				Debug.Log("Drag");
 				break;
 		}
 	}
