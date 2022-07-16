@@ -47,13 +47,13 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 				ClickPos = localCursor;
 
 		Vector2 CardSize = GetComponent<RectTransform>().sizeDelta;
-
+		Debug.Log($"CardClickPos.x : {(CardSize / 2 + ClickPos).x}, CardClickPos.y : {(CardSize / 2 + ClickPos).y}, CardSize : {CardSize}");
 		return CardSize / 2 + ClickPos;
 	}
 
 	public void OnPointerUp(PointerEventData eventData)
 	{
-		transform.parent = GameObject.Find("CardSpawnPos").transform;
+		transform.parent.SetParent(GameObject.Find("CardSpawnPos").transform);
 		CardState = State.CardState.IDLE;
 		CardClickPos = Vector3.zero;
 		SetCurrentInputCard(null);
