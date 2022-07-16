@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class CardSpawner : MonoBehaviour
 {
-    [SerializeField] private Image CardPrefab;
+    [SerializeField] private GameObject CardPrefab;
     private const int CARD_MAX_SIZE = 52;
 
     private void CreateCards()
@@ -13,7 +13,7 @@ public class CardSpawner : MonoBehaviour
         List<Sprite> CardImgList = new List<Sprite>(Resources.LoadAll<Sprite>("Cards"));
         int RandomNum;
         Sprite CurCardTexture;
-        Image _Card;
+        GameObject _Card;
 
         for (int i = 0; i < CARD_MAX_SIZE; i++)
 		{

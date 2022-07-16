@@ -28,7 +28,7 @@ public class CardManager : MonoBehaviour
 	{
 		Transform CardObj = CurrentInputCard.transform;
 		Vector3 MousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition /*+ CurrentInputCard.CardClickPos */);
-		MousePos += Camera.main.ScreenToWorldPoint(CurrentInputCard.CardClickPos);
+		//MousePos += Camera.main.ScreenToWorldPoint(CurrentInputCard.CardClickPos);
 		CardObj.position = new Vector3(MousePos.x, MousePos.y, 0);
 
 

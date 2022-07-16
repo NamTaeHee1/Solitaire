@@ -834,7 +834,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34be0b2df74d55846aeee95402fca534, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CardPrefab: {fileID: 666354505035578698, guid: 6aab4495901be1b4d9949e9b47a4c581, type: 3}
+  CardPrefab: {fileID: 7121862259997278454, guid: 3aab2c540515f5542b5a79f7371fbe3f, type: 3}
 --- !u!222 &690812664
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2831,3 +2831,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CardTexture: {fileID: 0}
   CardState: 0
+  CardClickPos: {x: 0, y: 0, z: 0}
