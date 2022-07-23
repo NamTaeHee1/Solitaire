@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
 
 	private static InputManager _input = new InputManager();
 	static public InputManager _Input { get { return _input; } }
+	
+	public Card CurrentInputCard = null;
 
 	private void Awake()
 	{
