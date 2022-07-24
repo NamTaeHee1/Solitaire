@@ -9,8 +9,6 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 	public State.CardState CardState = State.CardState.IDLE;
 
-	public Vector3 CardClickPos = Vector3.zero;
-
 	public string CardName 
 	{
 		get { return CardName; }
@@ -32,13 +30,15 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	public void OnDrag(PointerEventData eventData)
 	{
 		SetCardState(State.CardState.DRAGING);
-		Move(eventData);
+		Drag(eventData);
 		SetCurrentInputCard(this);
 	}
 
-	private void Move(PointerEventData eventData)
+	private void Drag(PointerEventData eventData)
 	{
-		transform.GetComponent<RectTransform>().anchoredPosition += eventData.delta;
+		RectTransform CardRect = transform.GetComponent<RectTransform>();
+		CardRect.anchoredPosition = Vector2.Lerp(CardRect.anchoredPosition, CardRect.anchoredPosition + eventData.delta, 1f);
+		Debug.Log(Time.deltaTime * 1000.0f);
 	}
 
 	public void OnPointerUp(PointerEventData eventData)
@@ -47,10 +47,7 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 		SetCurrentInputCard(null);
 	}
 
-	private void SetCardState(State.CardState state)
-	{
-		CardState = state;
-	}
+	private void SetCardState(State.CardState state) => CardState = state;
 
 	private void SetCurrentInputCard(Card card)
 	{
