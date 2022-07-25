@@ -52,7 +52,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CardTexture: {fileID: 0}
   CardState: 0
-  CardClickPos: {x: 0, y: 0, z: 0}
+  CardRect: {fileID: 4731036666131990605}
 --- !u!222 &3970483134664655304
 CanvasRenderer:
   m_ObjectHideFlags: 0
