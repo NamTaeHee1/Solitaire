@@ -39,7 +39,7 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	{
 		SetCardState(State.CardState.IDLE);
 		SetCurrentInputCard(null);
-		StartCoroutine(MoveCard());
+		Move();
 	}
 	#endregion
 
@@ -49,30 +49,26 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 	private void Drag(PointerEventData eventData)
 	{
-		CardRect.anchoredPosition = Vector2.Lerp(CardRect.anchoredPosition, CardRect.anchoredPosition + eventData.delta, 1f);
+		CardRect.anchoredPosition = Vector2.Lerp(CardRect.anchoredPosition, CardRect.anchoredPosition + eventData.delta, 1.0f);
 	}
 
 	private void Move()
 	{
-		while (Vector3.Distance(CardRect.anchoredPosition, GameObject.Find("CardSpawner").transform.position) > 0.01f)
-		{
-			Debug.Log("몇번작동하는거야 도데체");
-			CardRect.anchoredPosition = Vector3.Lerp(CardRect.localPosition, GameObject.Find("CardSpawner").transform.position, 0.5f);
-		}
+		// 카드 위치 확인
 	}
-	#endregion
 
-	IEnumerator MoveCard()
+	IEnumerator MoveCard(Vector3 ToPos, float Speed)
 	{
 		float t = 0;
 
 		while (Vector3.Distance(CardRect.anchoredPosition, GameObject.Find("CardSpawner").transform.position) > 0.01f)
 		{
-			t += Time.deltaTime;
+			t += Time.deltaTime * 0.5f;
 			CardRect.anchoredPosition = Vector3.Lerp(CardRect.localPosition, GameObject.Find("CardSpawner").transform.position, t);
 			yield return null;
 		}
 	}
+	#endregion
 
 	private void SetCardState(State.CardState state) => CardState = state;
 
