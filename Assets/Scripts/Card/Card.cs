@@ -55,16 +55,20 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	private void Move()
 	{
 		// 카드 위치 확인
+		// 위치마다 분류 팔요
+		// 
+		StartCoroutine(MoveCard(Vector3.zero, 0.5f)); // 일단 예시로 생성 지점으로 가게 설정
+		
 	}
 
 	IEnumerator MoveCard(Vector3 ToPos, float Speed)
 	{
 		float t = 0;
 
-		while (Vector3.Distance(CardRect.anchoredPosition, GameObject.Find("CardSpawner").transform.position) > 0.01f)
+		while (Vector3.Distance(CardRect.anchoredPosition, ToPos) > 0.01f)
 		{
-			t += Time.deltaTime * 0.5f;
-			CardRect.anchoredPosition = Vector3.Lerp(CardRect.localPosition, GameObject.Find("CardSpawner").transform.position, t);
+			t += Time.deltaTime * Speed;
+			CardRect.anchoredPosition = Vector3.Lerp(CardRect.localPosition, ToPos, t);
 			yield return null;
 		}
 	}
@@ -75,5 +79,11 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	private void SetCurrentInputCard(Card card)
 	{
 		GameManager.Instance.CurrentInputCard = card == null ? null : card;
+	}
+
+	private void OnTriggerEnter(Collider collider)
+	{
+		if (collider.CompareTag("Card"))
+			Debug.Log("CardCollision");
 	}
 }
