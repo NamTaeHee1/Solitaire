@@ -9,6 +9,10 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 	public State.CardState CardState = State.CardState.IDLE;
 
+	// 기호 정보 변수 ex) 킹, 퀸, 다이아몬드
+
+	// 숫자 정보 변수 ex) 1 ~ 9
+
 	public string CardName 
 	{
 		get { return CardName; }
@@ -81,9 +85,9 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 		GameManager.Instance.CurrentInputCard = card == null ? null : card;
 	}
 
-	private void OnTriggerEnter(Collider collider)
+	private void OnTriggerEnter2D(Collider2D collision)
 	{
-		if (collider.CompareTag("Card"))
-			Debug.Log("CardCollision");
+		if(collision.CompareTag("Card"))
+			Debug.Log("CardTrigger");
 	}
 }
