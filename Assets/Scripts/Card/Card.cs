@@ -9,6 +9,9 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 	public State.CardState CardState = State.CardState.IDLE;
 
+	public Card pCard = null; // Parent Card
+	public Card cCard = null; // Child Card
+
 	// 기호 정보 변수 ex) 킹, 퀸, 다이아몬드
 
 	// 숫자 정보 변수 ex) 1 ~ 9
