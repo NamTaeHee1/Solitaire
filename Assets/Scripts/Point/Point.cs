@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class Point : MonoBehaviour
 {
-	public PlaceType _placeType = PlaceType.S;
+
 }

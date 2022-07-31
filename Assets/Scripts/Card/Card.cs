@@ -90,7 +90,6 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
-		if(collision.CompareTag("Card"))
-			Debug.Log("CardTrigger");
+		// Trigger 확인 시 카드 밑으로 이동
 	}
 }
