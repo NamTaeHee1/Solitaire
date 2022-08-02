@@ -12,7 +12,7 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	public Card pCard = null; // Parent Card
 	public Card cCard = null; // Child Card
 
-	[SerializeField] private Vector2 ChildCardPosition = Vector2.zero;
+	[SerializeField] private Vector3 ChildCardPosition = Vector3.zero;
 
 	private bool isCheckTrigger = false;
 
@@ -67,9 +67,11 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	{
 		// 카드 위치 확인
 		// 위치마다 분류 팔요
-		// 
-		StartCoroutine(MoveCard(Vector3.zero, 0.5f)); // 일단 예시로 생성 지점으로 가게 설정
-		
+		if(isCheckTrigger)
+			StartCoroutine(MoveCard(pCard.transform.position + ChildCardPosition, 0.5f));
+		else
+			StartCoroutine(MoveCard(Vector3.zero, 0.5f));
+
 	}
 
 	IEnumerator MoveCard(Vector3 ToPos, float Speed)
@@ -95,9 +97,11 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
 		isCheckTrigger = true;
+		pCard = collision.GetComponent<Card>();
 	}
 	private void OnTriggerExit2D(Collider2D collision)
 	{
 		isCheckTrigger = false;
+		pCard = null;
 	}
 } 
