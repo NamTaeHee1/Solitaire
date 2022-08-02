@@ -12,6 +12,10 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	public Card pCard = null; // Parent Card
 	public Card cCard = null; // Child Card
 
+	[SerializeField] private Vector2 ChildCardPosition = Vector2.zero;
+
+	private bool isCheckTrigger = false;
+
 	// 기호 정보 변수 ex) 킹, 퀸, 다이아몬드
 
 	// 숫자 정보 변수 ex) 1 ~ 9
@@ -90,6 +94,10 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
-		// Trigger 확인 시 카드 밑으로 이동
+		isCheckTrigger = true;
 	}
-}
+	private void OnTriggerExit2D(Collider2D collision)
+	{
+		isCheckTrigger = false;
+	}
+} 

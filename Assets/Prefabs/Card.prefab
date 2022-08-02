@@ -56,6 +56,7 @@ MonoBehaviour:
   CardState: 0
   pCard: {fileID: 0}
   cCard: {fileID: 0}
+  ChildCardPosition: {x: 0, y: -20}
   CardRect: {fileID: 4731036666131990605}
 --- !u!222 &3970483134664655304
 CanvasRenderer:
