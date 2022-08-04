@@ -68,7 +68,7 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 		// 카드 위치 확인
 		// 위치마다 분류 팔요
 		if(isCheckTrigger)
-			StartCoroutine(MoveCard(pCard.transform.position + ChildCardPosition, 0.5f));
+			StartCoroutine(MoveCard(ChildCardPosition, 0.5f));
 		else
 			StartCoroutine(MoveCard(Vector3.zero, 0.5f));
 
@@ -98,10 +98,12 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	{
 		isCheckTrigger = true;
 		pCard = collision.GetComponent<Card>();
+		transform.SetParent(pCard.transform);
 	}
 	private void OnTriggerExit2D(Collider2D collision)
 	{
 		isCheckTrigger = false;
 		pCard = null;
+		transform.SetParent(GameObject.Find("S").transform);
 	}
 } 
