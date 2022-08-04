@@ -26,6 +26,11 @@ public class CardSpawner : MonoBehaviour
 		}
 	}
 
+    private void MoveCardToPoints()
+	{
+
+	}
+
     private void Start()
 	{
         CreateCards();
