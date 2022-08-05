@@ -96,10 +96,22 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
+		if (CardState == State.CardState.IDLE || pCard != null)
+			return;
 		isCheckTrigger = true;
 		pCard = collision.GetComponent<Card>();
 		transform.SetParent(pCard.transform);
 	}
+
+	private void OnTriggerStay2D(Collider2D collision)
+	{
+		if (CardState == State.CardState.IDLE || pCard != null)
+			return;
+		isCheckTrigger = true;
+		pCard = collision.GetComponent<Card>();
+		transform.SetParent(pCard.transform);
+	}
+
 	private void OnTriggerExit2D(Collider2D collision)
 	{
 		isCheckTrigger = false;
