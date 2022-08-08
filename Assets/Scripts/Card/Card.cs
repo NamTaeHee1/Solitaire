@@ -96,19 +96,21 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
-		if (CardState == State.CardState.IDLE || pCard != null)
+		if (CardState == State.CardState.IDLE || pCard != null || cCard != null)
 			return;
 		isCheckTrigger = true;
 		pCard = collision.GetComponent<Card>();
+		collision.GetComponent<Card>().cCard = this;
 		transform.SetParent(pCard.transform);
 	}
 
 	private void OnTriggerStay2D(Collider2D collision)
 	{
-		if (CardState == State.CardState.IDLE || pCard != null)
+		if (CardState == State.CardState.IDLE || pCard != null || cCard != null)
 			return;
 		isCheckTrigger = true;
 		pCard = collision.GetComponent<Card>();
+		collision.GetComponent<Card>().cCard = this;
 		transform.SetParent(pCard.transform);
 	}
 
@@ -116,6 +118,7 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	{
 		isCheckTrigger = false;
 		pCard = null;
+		collision.GetComponent<Card>().cCard = null;
 		transform.SetParent(GameObject.Find("S").transform);
 	}
 } 
