@@ -101,7 +101,6 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 		isCheckTrigger = true;
 		pCard = collision.GetComponent<Card>();
 		collision.GetComponent<Card>().cCard = this;
-		transform.SetParent(pCard.transform);
 	}
 
 	private void OnTriggerStay2D(Collider2D collision)
@@ -111,7 +110,6 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 		isCheckTrigger = true;
 		pCard = collision.GetComponent<Card>();
 		collision.GetComponent<Card>().cCard = this;
-		transform.SetParent(pCard.transform);
 	}
 
 	private void OnTriggerExit2D(Collider2D collision)
@@ -119,6 +117,5 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 		isCheckTrigger = false;
 		pCard = null;
 		collision.GetComponent<Card>().cCard = null;
-		transform.SetParent(GameObject.Find("S").transform);
 	}
 } 
