@@ -14,7 +14,7 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 	[SerializeField] private Vector3 ChildCardPosition = Vector3.zero;
 
-	private bool isCheckTrigger = false;
+	private bool isTriggerOtherCard = false;
 
 	// 기호 정보 변수 ex) 킹, 퀸, 다이아몬드
 
@@ -67,7 +67,7 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	{
 		// 카드 위치 확인
 		// 위치마다 분류 팔요
-		if(isCheckTrigger)
+		if(isTriggerOtherCard)
 			StartCoroutine(MoveCard(ChildCardPosition, 0.5f));
 		else
 			StartCoroutine(MoveCard(Vector3.zero, 0.5f));
@@ -94,11 +94,17 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 		GameManager.Instance.CurrentInputCard = card == null ? null : card;
 	}
 
+	// 카드가 상대 카드와 만났을 경우
+	// 1. 카드 이미지가 상대 카드와 이미지가 겹치도록 만나야한다 OnTriggerEnter, Stay에 호출이 필요
+	// 2. 상대 카드의 윗면(자식)으로 가려면 현재 카드는 pCard 상대카드는 cCard가 없어야하고,
+	//     반대로 다른 카드의 아랫면(부모)으로 가려면 현재 카드는 cCard 상대카드는 pCard가 없어야함
+	// 3. 
+
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
 		if (CardState == State.CardState.IDLE || pCard != null || cCard != null)
 			return;
-		isCheckTrigger = true;
+		isTriggerOtherCard = true;
 		pCard = collision.GetComponent<Card>();
 		collision.GetComponent<Card>().cCard = this;
 	}
@@ -107,14 +113,14 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	{
 		if (CardState == State.CardState.IDLE || pCard != null || cCard != null)
 			return;
-		isCheckTrigger = true;
+		isTriggerOtherCard = true;
 		pCard = collision.GetComponent<Card>();
 		collision.GetComponent<Card>().cCard = this;
 	}
 
 	private void OnTriggerExit2D(Collider2D collision)
 	{
-		isCheckTrigger = false;
+		isTriggerOtherCard = false;
 		pCard = null;
 		collision.GetComponent<Card>().cCard = null;
 	}
