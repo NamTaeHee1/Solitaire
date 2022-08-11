@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class CardSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject CardPrefab;
+    [SerializeField] private Point[] KPoints;
     private const int CARD_MAX_SIZE = 52;
 
     private void CreateCards()
@@ -28,11 +29,19 @@ public class CardSpawner : MonoBehaviour
 
     private void MoveCardToPoints()
 	{
-
+        Debug.Log("MoveCard");
+        for (int i = 0; i < KPoints.Length; i++)
+		{
+            for (int j = i; j < KPoints.Length; j++)
+			{
+                transform.GetChild(0).GetComponent<Card>().Move(KPoints[j]);
+               }
+		}
 	}
 
     private void Start()
 	{
         CreateCards();
+        MoveCardToPoints();
      }
 }
