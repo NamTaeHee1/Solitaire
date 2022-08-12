@@ -52,11 +52,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80a010e7af6cc984abc3020c3bb03129, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CardTexture: {fileID: 0}
+  CardFrontTexture: {fileID: 0}
+  CardBackTexture: {fileID: 21300000, guid: 21abfb87035730f4b8c2539f6bbfd9da, type: 3}
   CardState: 0
   pCard: {fileID: 0}
-  cCard: {fileID: 0}
   ChildCardPosition: {x: 0, y: -50, z: 0}
+  isTriggerOtherCard: 0
   CardRect: {fileID: 4731036666131990605}
 --- !u!222 &3970483134664655304
 CanvasRenderer:

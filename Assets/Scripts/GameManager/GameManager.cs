@@ -7,9 +7,6 @@ public class GameManager : MonoBehaviour
 	private static GameManager _instance = null;
 	public static GameManager Instance { get { return _instance; } }
 
-	private static InputManager _input = new InputManager();
-	static public InputManager _Input { get { return _input; } }
-
 	private void Awake()
 	{
 		if (_instance == null)
@@ -19,10 +16,5 @@ public class GameManager : MonoBehaviour
 		}
 		else
 			Destroy(this);
-	}
-
-	private void Update()
-	{
-		_Input.OnUpdate();
 	}
 }

@@ -29,12 +29,13 @@ public class CardSpawner : MonoBehaviour
 
     private void MoveCardToPoints()
 	{
-        Debug.Log("MoveCard");
+        float WaitTime = 0;
+
         for (int i = 0; i < KPoints.Length; i++)
 		{
             for (int j = i; j < KPoints.Length; j++)
 			{
-                transform.GetChild(0).GetComponent<Card>().Move(KPoints[j]);
+                transform.GetChild(transform.childCount - 1).GetComponent<Card>().Move(KPoints[j], WaitTime += 0.05f);
                }
 		}
 	}
