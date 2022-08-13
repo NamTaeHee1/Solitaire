@@ -9,6 +9,7 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	[SerializeField] private Sprite CardFrontTexture;
 	[SerializeField] private Sprite CardBackTexture;
 	public CardEnum.CardState CardState = CardEnum.CardState.IDLE;
+	public CardEnum.CardDirection CardDIrection = CardEnum.CardDirection.BACK;
 	public Card pCard = null; // Parent Card
 
 	[SerializeField] private Vector3 ChildCardPosition = Vector3.zero;
@@ -55,6 +56,8 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 				GetComponent<Image>().sprite = CardBackTexture;
 				break;
 		}
+
+		CardDIrection = Direction;
 	}
 	#endregion
 
@@ -73,6 +76,8 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 	public void OnDrag(PointerEventData eventData)
 	{
+		if (CardDIrection == CardEnum.CardDirection.BACK)
+			return;
 		SetCardState(CardEnum.CardState.DRAGING);
 		CardRect.anchoredPosition = Vector2.Lerp(CardRect.anchoredPosition, CardRect.anchoredPosition + eventData.delta, 1.0f);
 	}
