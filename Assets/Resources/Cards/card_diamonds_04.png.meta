@@ -97,12 +97,12 @@ TextureImporter:
       name: card_diamonds_04_0
       rect:
         serializedVersion: 2
-        x: 11
-        y: 2
-        width: 42
-        height: 60
+        x: 12
+        y: 3
+        width: 40
+        height: 58
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

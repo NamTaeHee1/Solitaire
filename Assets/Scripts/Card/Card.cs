@@ -120,7 +120,7 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 		}
 	}
 
-	IEnumerator MoveCard(Vector3 ToPos, float WaitTime = 0)
+	IEnumerator MoveCard(Vector3 ToPos, float WaitTime = 0) // pCard를 여기서 정하도록 변경
 	{
 		float t = 0;
 		float toPosTime = 0.75f;
