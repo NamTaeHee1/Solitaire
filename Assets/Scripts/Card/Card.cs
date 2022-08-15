@@ -95,9 +95,9 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 	[SerializeField] private RectTransform CardRect;
 
-	public void Move(Point movePoint = null, float WaitTime = 0)
+	public void Move(Point movePoint = null, float WaitTime = 0, Card pCard = null)
 	{
-		if(movePoint == null)
+		if(movePoint == null) // 플레이어가 드래그하고 PointerUp 함수가 호출 될 경우
 		{
 			if (isTriggerOtherCard)
 				StartCoroutine(MoveCard(pCard.transform.localPosition + ChildCardPosition, WaitTime));
@@ -107,20 +107,22 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 			return;
 		}
 
-		if (movePoint.GetChildCount() == 0)
+		// 스크립트에서 Move 함수를 호출할 경우
+		if (movePoint.GetChildCount() == 0) // 이동할 Point에 아무 카드도 없다면
 		{
 			transform.SetParent(movePoint.transform);
 			StartCoroutine(MoveCard(Vector3.zero, WaitTime));
 		}
-		else
-		{
+		else // 있다면
+		{ // pCard에 값을 넣어도 초기화됨
 			Card movePointLastCard = movePoint.transform.GetChild(movePoint.GetChildCount() - 1).GetComponent<Card>();
 			transform.SetParent(movePoint.transform);
-			StartCoroutine(MoveCard((movePoint.GetChildCount() - 1) * ChildCardPosition, WaitTime));
+			pCard = movePointLastCard;
+			StartCoroutine(MoveCard(pCard.transform.localPosition, WaitTime));
 		}
 	}
 
-	IEnumerator MoveCard(Vector3 ToPos, float WaitTime = 0) // pCard를 여기서 정하도록 변경
+	IEnumerator MoveCard(Vector3 ToPos, float WaitTime = 0)
 	{
 		float t = 0;
 		float toPosTime = 0.75f;
@@ -138,24 +140,24 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	#region OnTriggerEvents
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
-		if (CardState == CardEnum.CardState.IDLE || pCard != null)
-			return;
+/*		if (CardState == CardEnum.CardState.IDLE || pCard != null)
+			return;*/
 		isTriggerOtherCard = true;
-		pCard = collision.GetComponent<Card>();
+		//pCard = collision.GetComponent<Card>();
 	}
 
 	private void OnTriggerStay2D(Collider2D collision)
 	{
-		if (collision.GetComponent<Card>() != null)
-			pCard = collision.GetComponent<Card>();
+/*		if (collision.GetComponent<Card>() != null)
+			pCard = collision.GetComponent<Card>();*/
 		isTriggerOtherCard = true;
-		pCard = collision.GetComponent<Card>();
+		//pCard = collision.GetComponent<Card>();
 	}
 
 	private void OnTriggerExit2D(Collider2D collision)
 	{
 		isTriggerOtherCard = false;
-		pCard = null;
+		//pCard = null;
 	}
 	#endregion
 }
