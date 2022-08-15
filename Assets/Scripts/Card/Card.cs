@@ -15,6 +15,8 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	[SerializeField] private Vector3 ChildCardPosition = Vector3.zero;
 	[SerializeField] private bool isTriggerOtherCard = false;
 
+	[SerializeField] private Card CurCollisionCard = null;
+
 	// 기호 정보 변수 ex) 킹, 퀸, 다이아몬드
 
 	// 숫자 정보 변수 ex) 1 ~ 9
@@ -121,11 +123,13 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	IEnumerator MoveCard(Vector3 ToPos, float WaitTime = 0)
 	{
 		float t = 0;
+		float toPosTime = 0.75f;
 		yield return new WaitForSeconds(WaitTime);
-		while (Vector3.Distance(CardRect.anchoredPosition, ToPos) > 0.01f)
+		while (toPosTime > t)
 		{
-			t += Time.deltaTime * 0.5f;
-			CardRect.localPosition = Vector3.Lerp(CardRect.localPosition, ToPos, t);
+			Debug.Log($"CardName : {transform.name}, Connected!, Time : {t}");
+			t += Time.deltaTime;
+			CardRect.localPosition = Vector2.Lerp(CardRect.localPosition, ToPos, t / toPosTime);
 			yield return null;
 		}
 	}
@@ -142,10 +146,8 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 	private void OnTriggerStay2D(Collider2D collision)
 	{
-		if (pCard != null && pCard != collision.GetComponent<Card>())
+		if (collision.GetComponent<Card>() != null)
 			pCard = collision.GetComponent<Card>();
-		if (CardState == CardEnum.CardState.IDLE || pCard != null)
-			return;
 		isTriggerOtherCard = true;
 		pCard = collision.GetComponent<Card>();
 	}
