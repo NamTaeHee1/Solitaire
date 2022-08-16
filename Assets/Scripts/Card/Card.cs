@@ -15,8 +15,6 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	[SerializeField] private Vector3 ChildCardPosition = Vector3.zero;
 	[SerializeField] private bool isTriggerOtherCard = false;
 
-	[SerializeField] private Card CurCollisionCard = null;
-
 	// 기호 정보 변수 ex) 킹, 퀸, 다이아몬드
 
 	// 숫자 정보 변수 ex) 1 ~ 9
@@ -115,10 +113,9 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 		}
 		else // 있다면
 		{ // pCard에 값을 넣어도 초기화됨
-			Card movePointLastCard = movePoint.transform.GetChild(movePoint.GetChildCount() - 1).GetComponent<Card>();
 			transform.SetParent(movePoint.transform);
-			pCard = movePointLastCard;
-			StartCoroutine(MoveCard(pCard.transform.localPosition, WaitTime));
+			pCard = movePoint.transform.GetChild(movePoint.GetChildCount() - 1).GetComponent<Card>();
+			StartCoroutine(MoveCard(ChildCardPosition * (movePoint.GetChildCount() - 1), WaitTime));
 		}
 	}
 
@@ -129,7 +126,6 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 		yield return new WaitForSeconds(WaitTime);
 		while (toPosTime > t)
 		{
-			Debug.Log($"CardName : {transform.name}, Connected!, Time : {t}");
 			t += Time.deltaTime;
 			CardRect.localPosition = Vector2.Lerp(CardRect.localPosition, ToPos, t / toPosTime);
 			yield return null;
