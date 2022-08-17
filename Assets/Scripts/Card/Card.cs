@@ -84,6 +84,8 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 	public void OnPointerUp(PointerEventData eventData)
 	{
+		if (CardDIrection == CardEnum.CardDirection.BACK)
+			return;
 		SetCardState(CardEnum.CardState.IDLE);
 		Move();
 	}
