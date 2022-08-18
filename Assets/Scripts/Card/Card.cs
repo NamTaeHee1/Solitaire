@@ -95,7 +95,7 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 	[SerializeField] private RectTransform CardRect;
 
-	public void Move(Point movePoint = null, float WaitTime = 0, Card pCard = null)
+	public void Move(Point movePoint = null, float WaitTime = 0)
 	{
 		if(movePoint == null) // 플레이어가 드래그하고 PointerUp 함수가 호출 될 경우
 		{
@@ -116,7 +116,7 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 		else // 있다면
 		{ // pCard에 값을 넣어도 초기화됨
 			transform.SetParent(movePoint.transform);
-			pCard = movePoint.transform.GetChild(movePoint.GetChildCount() - 1).GetComponent<Card>();
+			pCard = movePoint.transform.GetChild(transform.GetSiblingIndex() - 1).GetComponent<Card>();
 			StartCoroutine(MoveCard(ChildCardPosition * (movePoint.GetChildCount() - 1), WaitTime));
 		}
 	}
