@@ -99,7 +99,7 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	{
 		if(movePoint == null) // 플레이어가 드래그하고 PointerUp 함수가 호출 될 경우
 		{
-			if (isTriggerOtherCard)
+			if (pCard != null)
 				StartCoroutine(MoveCard(pCard.transform.localPosition + ChildCardPosition, WaitTime));
 			else
 				StartCoroutine(MoveCard(Vector3.zero, WaitTime));
@@ -133,29 +133,10 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 			yield return null;
 		}
 	}
-	#endregion
 
-	#region OnTriggerEvents
-	private void OnTriggerEnter2D(Collider2D collision)
+	public void SearchCardArea() // 주변 카드 검색 및 리스트로 반환 & pCard로 지정하는 함수는 따로 구현
 	{
-/*		if (CardState == CardEnum.CardState.IDLE || pCard != null)
-			return;*/
-		isTriggerOtherCard = true;
-		//pCard = collision.GetComponent<Card>();
-	}
 
-	private void OnTriggerStay2D(Collider2D collision)
-	{
-/*		if (collision.GetComponent<Card>() != null)
-			pCard = collision.GetComponent<Card>();*/
-		isTriggerOtherCard = true;
-		//pCard = collision.GetComponent<Card>();
-	}
-
-	private void OnTriggerExit2D(Collider2D collision)
-	{
-		isTriggerOtherCard = false;
-		//pCard = null;
 	}
 	#endregion
 }
