@@ -3318,7 +3318,6 @@ GameObject:
   - component: {fileID: 1664206522597169544}
   - component: {fileID: 2949156133082962734}
   - component: {fileID: 4978645851660637235}
-  - component: {fileID: 5324074354941843347}
   m_Layer: 5
   m_Name: A
   m_TagString: Untagged
@@ -3326,24 +3325,3 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &5324074354941843347
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5324074354941843346}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80a010e7af6cc984abc3020c3bb03129, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CardFrontTexture: {fileID: 0}
-  CardBackTexture: {fileID: 0}
-  CardState: 0
-  CardDIrection: 1
-  pCard: {fileID: 0}
-  ChildCardPosition: {x: 0, y: 0, z: 0}
-  isTriggerOtherCard: 0
-  CurCollisionCard: {fileID: 0}
-  CardRect: {fileID: 0}
