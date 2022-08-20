@@ -54,16 +54,11 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	}
 	#endregion
 
-	#region Point
-	public Point GetCurPoint()
-	{
-		return transform.parent.GetComponent<Point>();
-	}
-	#endregion
-
 	#region IHandler Functions
 	public void OnPointerDown(PointerEventData eventData)
 	{
+		gameObject.AddComponent<Rigidbody2D>();
+		GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
 		SetCardState(CardEnum.CardState.CLICKED);
 	}
 
@@ -77,6 +72,7 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 	public void OnPointerUp(PointerEventData eventData)
 	{
+		Destroy(gameObject.GetComponent<Rigidbody2D>());
 		if (CardTextureDIrection == CardEnum.CardDirection.BACK)
 			return;
 		SetCardState(CardEnum.CardState.IDLE);
@@ -89,6 +85,15 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	{
 		if(movePoint == null) // 플레이어가 드래그하고 PointerUp 함수가 호출 될 경우
 		{
+			List<Card> OverlapCards = SearchCardAround();
+
+			foreach (Card card in OverlapCards)
+			{
+				if (card.CardTextureDIrection == CardEnum.CardDirection.BACK // 뒷면이거나
+					/* 카드 규칙에 맞지 않거나 */)
+					OverlapCards.Remove(card);
+			}
+
 			if (pCard != null)
 				StartCoroutine(MoveCard(pCard.transform.localPosition + ChildCardPosition, WaitTime));
 			else
@@ -96,18 +101,6 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 			return;
 		}
-
-		List<Card> OverlapCards = SearchCardAround();
-
-		foreach (Card card in OverlapCards)
-		{
-			if (card.CardTextureDIrection == CardEnum.CardDirection.BACK // 뒷면이거나
-				/* 카드 규칙에 맞지 않거나 */) 
-					OverlapCards.Remove(card);
-		}
-
-		for (int i = 0; i < OverlapCards.Count; i++)
-			Debug.Log($"CardName : {transform.name}, OverlapCards[{i}] : {OverlapCards[i].name}");
 
 		// 스크립트에서 Move 함수를 호출할 경우
 		if (movePoint.GetChildCount() == 0) // 이동할 Point에 아무 카드도 없다면
@@ -140,13 +133,19 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 	private void OnDrawGizmos()
 	{
+		if (CardState != CardEnum.CardState.DRAGING)
+			return;
 		Gizmos.color = Color.red;
-		Gizmos.DrawWireCube(transform.localPosition, new Vector2(2, 2));
+		Vector3 screenSize = Camera.main.ScreenToWorldPoint(GameObject.Find("CardCanvas").GetComponent<RectTransform>().sizeDelta) * 2;
+		Vector2 cardSize = new Vector2(screenSize.x / (GameObject.Find("CardCanvas").GetComponent<RectTransform>().sizeDelta.x / CardRect.sizeDelta.x),
+															  screenSize.y / (GameObject.Find("CardCanvas").GetComponent<RectTransform>().sizeDelta.y / CardRect.sizeDelta.y));
+		Gizmos.DrawWireCube(transform.position, cardSize); // OverlapBox 함수에 쓸 Card UI 크기 알아내기
+		Debug.Log(cardSize);
 	}
 
 	private List<Card> SearchCardAround() // 주변 카드 검색 및 리스트로 반환 & pCard로 지정하는 함수는 따로 구현
 	{
-		Collider2D[] OverlapObjects = Physics2D.OverlapBoxAll(transform.position, CardRect.sizeDelta, 0);
+		Collider2D[] OverlapObjects = Physics2D.OverlapBoxAll(transform.position, new Vector2(2, 2), 0);
 
 		for (int i = 0; i < OverlapObjects.Length; i++)
 			Debug.Log(OverlapObjects[i].name);
