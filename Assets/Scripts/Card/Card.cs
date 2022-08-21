@@ -131,24 +131,15 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 		}
 	}
 
-	private void OnDrawGizmos()
-	{
-		if (CardState != CardEnum.CardState.DRAGING)
-			return;
-		Gizmos.color = Color.red;
-		Vector3 screenSize = Camera.main.ScreenToWorldPoint(GameObject.Find("CardCanvas").GetComponent<RectTransform>().sizeDelta) * 2;
-		Vector2 cardSize = new Vector2(screenSize.x / (GameObject.Find("CardCanvas").GetComponent<RectTransform>().sizeDelta.x / CardRect.sizeDelta.x),
-															  screenSize.y / (GameObject.Find("CardCanvas").GetComponent<RectTransform>().sizeDelta.y / CardRect.sizeDelta.y));
-		Gizmos.DrawWireCube(transform.position, cardSize); // OverlapBox 함수에 쓸 Card UI 크기 알아내기
-		Debug.Log(cardSize);
-	}
-
 	private List<Card> SearchCardAround() // 주변 카드 검색 및 리스트로 반환 & pCard로 지정하는 함수는 따로 구현
 	{
-		Collider2D[] OverlapObjects = Physics2D.OverlapBoxAll(transform.position, new Vector2(2, 2), 0);
+		RectTransform CardCanvasRect = GameObject.Find("CardCanvas").GetComponent<RectTransform>();
 
-		for (int i = 0; i < OverlapObjects.Length; i++)
-			Debug.Log(OverlapObjects[i].name);
+		Vector2 CanvasSize = Camera.main.ScreenToWorldPoint(CardCanvasRect.sizeDelta) * 2;
+		Vector2 CardSize = new Vector2(CanvasSize.x / (CardCanvasRect.sizeDelta.x / CardRect.sizeDelta.x),
+															  CanvasSize.y / (CardCanvasRect.sizeDelta.y / CardRect.sizeDelta.y));
+
+		Collider2D[] OverlapObjects = Physics2D.OverlapBoxAll(transform.position, CardSize, 0);
 
 		List<Card> OverlapCards = new List<Card>();
 
