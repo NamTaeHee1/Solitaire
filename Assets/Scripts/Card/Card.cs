@@ -83,26 +83,33 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	#region Move & Drag Function
 	public void Move(Point movePoint = null, float WaitTime = 0)
 	{
-		if(movePoint == null) // 플레이어가 드래그하고 PointerUp 함수가 호출 될 경우
+		// 플레이어가 드래그하고 PointerUp 함수가 호출 될 경우
+		if (movePoint == null)
 		{
 			List<Card> OverlapCards = SearchCardAround();
 
-			foreach (Card card in OverlapCards)
+			for(int i = OverlapCards.Count - 1; i >= 0; i--)
 			{
-				if (card.CardTextureDIrection == CardEnum.CardDirection.BACK // 뒷면이거나
-					/* 카드 규칙에 맞지 않거나 */)
-					OverlapCards.Remove(card);
+				if (OverlapCards[i].CardTextureDIrection == CardEnum.CardDirection.BACK || OverlapCards[i] == this)
+				{
+					OverlapCards.Remove(OverlapCards[i]);
+				}
 			}
 
-			if (pCard != null)
-				StartCoroutine(MoveCard(pCard.transform.localPosition + ChildCardPosition, WaitTime));
-			else
+			for (int i = 0; i < OverlapCards.Count; i++)
+			{
+				Debug.Log($"{i}번째 카드 : {OverlapCards[i].name} 자기 자신인가 : {OverlapCards[i] == this}");
+			}
+
+			if (pCard == null)
 				StartCoroutine(MoveCard(Vector3.zero, WaitTime));
+			else
+				StartCoroutine(MoveCard(pCard.transform.localPosition + ChildCardPosition, WaitTime));
 
 			return;
 		}
 
-		// 스크립트에서 Move 함수를 호출할 경우
+		// 다른 함수에서 Move 함수를 호출할 경우
 		if (movePoint.GetChildCount() == 0) // 이동할 Point에 아무 카드도 없다면
 		{
 			transform.SetParent(movePoint.transform);
@@ -129,6 +136,20 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 			CardRect.localPosition = Vector2.Lerp(CardRect.localPosition, ToPos, t / toPosTime);
 			yield return null;
 		}
+	}
+
+	private void OnDrawGizmos()
+	{
+		if (CardState != CardEnum.CardState.DRAGING)
+			return;
+		RectTransform CardCanvasRect = GameObject.Find("CardCanvas").GetComponent<RectTransform>();
+
+		Vector2 CanvasSize = Camera.main.ScreenToWorldPoint(CardCanvasRect.sizeDelta) * 2;
+		Vector2 CardSize = new Vector2(CanvasSize.x / (CardCanvasRect.sizeDelta.x / CardRect.sizeDelta.x),
+															  CanvasSize.y / (CardCanvasRect.sizeDelta.y / CardRect.sizeDelta.y));
+
+		Gizmos.color = Color.red;
+		Gizmos.DrawWireCube(transform.position, CardSize);
 	}
 
 	private List<Card> SearchCardAround() // 주변 카드 검색 및 리스트로 반환 & pCard로 지정하는 함수는 따로 구현
