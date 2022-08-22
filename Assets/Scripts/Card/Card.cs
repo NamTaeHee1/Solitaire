@@ -94,37 +94,14 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 		if (movePoint == null)
 		{
 			List<Card> OverlapCards = SearchCardAround();
+			pCard = ChoosePCardFromList(OverlapCards);
 
-			for(int i = OverlapCards.Count - 1; i >= 0; i--)
-			{
-				if (OverlapCards[i].CardTextureDIrection == CardEnum.CardDirection.BACK || OverlapCards[i] == this)
-				{
-					OverlapCards.Remove(OverlapCards[i]);
-				}
-			}
-
-			if (OverlapCards.Count > 1)
-			{
-				Card ProximateCard = OverlapCards[0];
-
-				for (int i = 1; i < OverlapCards.Count; i++)
-				{
-					if (OverlapCards[i].GetDistance(this) < ProximateCard.GetDistance(this))
-						ProximateCard = OverlapCards[i];
-				}
-
-				pCard = ProximateCard;
-			}
-			else
-				pCard = OverlapCards[0];
-
-
-			Debug.Log($"pCard : {pCard.name}");
+			Point point = pCard == null ? transform.parent.GetComponent<Point>() : pCard.transform.parent.GetComponent<Point>();
 
 			if (pCard == null)
-				StartCoroutine(MoveCard(ChildCardPosition * (transform.parent.childCount - 1), WaitTime));
+				StartCoroutine(MoveCard(ChildCardPosition * (point.GetChildCount() - 1), WaitTime));
 			else
-				Move(pCard.transform.parent.GetComponent<Point>());
+				Move(point);
 
 			return;
 		}
@@ -159,20 +136,34 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	}
 	#endregion
 
-	#region DifferentCard
-	private void OnDrawGizmos()
+	#region pCard
+	private Card ChoosePCardFromList(List<Card> OverlapCards) // 리스트 중에서 현재 선택한 카드와 가장 가까운 카드를 반환
 	{
-		if (CardState != CardEnum.CardState.DRAGING)
-			return;
-		RectTransform CardCanvasRect = GameObject.Find("CardCanvas").GetComponent<RectTransform>();
+		for (int i = OverlapCards.Count - 1; i >= 0; i--)
+		{
+			if (OverlapCards[i].CardTextureDIrection == CardEnum.CardDirection.BACK || OverlapCards[i] == this)
+			{
+				OverlapCards.Remove(OverlapCards[i]);
+			}
+		}
 
-		Vector2 CanvasSize = Camera.main.ScreenToWorldPoint(CardCanvasRect.sizeDelta) * 2;
-		Vector2 CardSize = new Vector2(CanvasSize.x / (CardCanvasRect.sizeDelta.x / CardRect.sizeDelta.x),
-															  CanvasSize.y / (CardCanvasRect.sizeDelta.y / CardRect.sizeDelta.y));
+		Card ProximateCard = OverlapCards[0];
 
-		Gizmos.color = Color.red;
-		Gizmos.DrawWireCube(transform.position, CardSize);
+		if (OverlapCards.Count > 1)
+		{
+			for (int i = 1; i < OverlapCards.Count; i++)
+			{
+				Debug.Log($"{i}번째 카드 : {OverlapCards[i].name}, OverlapCards[i].GetDistance(this) : {OverlapCards[i].GetDistance(this)}, ProximateCard.GetDistance(this) : {ProximateCard.GetDistance(this)}");
+				if (OverlapCards[i].GetDistance(this) < ProximateCard.GetDistance(this)) // 거리 계산 버그 찾기
+					ProximateCard = OverlapCards[i];
+			}
+		}
+
+		return ProximateCard;
 	}
+	#endregion
+
+	#region Interact with DifferentCard
 
 	private float GetDistance(Card DIffCard)
 	{
@@ -198,6 +189,22 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 		}
 
 		return OverlapCards;
+	}
+	#endregion
+
+	#region Gizmo
+	private void OnDrawGizmos()
+	{
+		if (CardState != CardEnum.CardState.DRAGING)
+			return;
+		RectTransform CardCanvasRect = GameObject.Find("CardCanvas").GetComponent<RectTransform>();
+
+		Vector2 CanvasSize = Camera.main.ScreenToWorldPoint(CardCanvasRect.sizeDelta) * 2;
+		Vector2 CardSize = new Vector2(CanvasSize.x / (CardCanvasRect.sizeDelta.x / CardRect.sizeDelta.x),
+															  CanvasSize.y / (CardCanvasRect.sizeDelta.y / CardRect.sizeDelta.y));
+
+		Gizmos.color = Color.red;
+		Gizmos.DrawWireCube(transform.position, CardSize);
 	}
 	#endregion
 }
