@@ -54,6 +54,13 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	}
 	#endregion
 
+	#region Point
+	private void MovePoint(Point point)
+	{
+		transform.SetParent(point.transform);
+	}
+	#endregion
+
 	#region IHandler Functions
 	public void OnPointerDown(PointerEventData eventData)
 	{
@@ -96,15 +103,28 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 				}
 			}
 
-			for (int i = 0; i < OverlapCards.Count; i++)
+			if (OverlapCards.Count > 1)
 			{
-				Debug.Log($"{i}번째 카드 : {OverlapCards[i].name} 자기 자신인가 : {OverlapCards[i] == this}");
+				Card ProximateCard = OverlapCards[0];
+
+				for (int i = 1; i < OverlapCards.Count; i++)
+				{
+					if (OverlapCards[i].GetDistance(this) < ProximateCard.GetDistance(this))
+						ProximateCard = OverlapCards[i];
+				}
+
+				pCard = ProximateCard;
 			}
+			else
+				pCard = OverlapCards[0];
+
+
+			Debug.Log($"pCard : {pCard.name}");
 
 			if (pCard == null)
-				StartCoroutine(MoveCard(Vector3.zero, WaitTime));
+				StartCoroutine(MoveCard(ChildCardPosition * (transform.parent.childCount - 1), WaitTime));
 			else
-				StartCoroutine(MoveCard(pCard.transform.localPosition + ChildCardPosition, WaitTime));
+				Move(pCard.transform.parent.GetComponent<Point>());
 
 			return;
 		}
@@ -137,7 +157,9 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 			yield return null;
 		}
 	}
+	#endregion
 
+	#region DifferentCard
 	private void OnDrawGizmos()
 	{
 		if (CardState != CardEnum.CardState.DRAGING)
@@ -150,6 +172,11 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 		Gizmos.color = Color.red;
 		Gizmos.DrawWireCube(transform.position, CardSize);
+	}
+
+	private float GetDistance(Card DIffCard)
+	{
+		return Vector2.Distance(CardRect.anchoredPosition, DIffCard.CardRect.anchoredPosition);
 	}
 
 	private List<Card> SearchCardAround() // 주변 카드 검색 및 리스트로 반환 & pCard로 지정하는 함수는 따로 구현
