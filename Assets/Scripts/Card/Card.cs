@@ -167,7 +167,7 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 	private float GetDistance(Card DIffCard)
 	{
-		return Vector2.Distance(CardRect.anchoredPosition, DIffCard.CardRect.anchoredPosition);
+		return Vector2.Distance(Camera.main.ScreenToWorldPoint(CardRect.anchoredPosition), Camera.main.ScreenToWorldPoint(DIffCard.CardRect.anchoredPosition));
 	}
 
 	private List<Card> SearchCardAround() // 주변 카드 검색 및 리스트로 반환 & pCard로 지정하는 함수는 따로 구현
