@@ -17,11 +17,7 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	[SerializeField] private Vector3 ChildCardPosition = Vector3.zero;
 	[SerializeField] private RectTransform CardRect;
 
-	// 기호 정보 변수 ex) 킹, 퀸, 다이아몬드
-
-	// 숫자 정보 변수 ex) 1 ~ 9
-
-	#region Propety, Init
+	#region Card Propety, Init
 	public string CardName 
 	{
 		get { return CardName; }
@@ -55,6 +51,27 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	#endregion
 
 	#region Point
+	private Point[] K
+	{
+		get
+		{
+			GameObject K_Points = GameObject.Find("K_Points");
+			Point[] K_Array = new Point[K_Points.transform.childCount];
+
+			for (int i = 0; i < K_Points.transform.childCount; i++)
+			{
+				K_Array[i] = K_Points.transform.GetChild(i).GetComponent<Point>();
+			}
+
+			return K_Array;
+		}
+	}
+
+	private Point SelectCardPoint
+	{
+		get { return GameObject.Find("SelectCardPoint").GetComponent<Point>(); }
+	}
+
 	private void MovePoint(Point point)
 	{
 		transform.SetParent(point.transform);
@@ -71,6 +88,7 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	{
 		gameObject.AddComponent<Rigidbody2D>();
 		GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+		MovePoint(SelectCardPoint);
 		SetCardState(CardEnum.CardState.CLICKED);
 	}
 
@@ -154,12 +172,16 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 		Card ProximateCard = OverlapCards[0];
 
+		for (int i = 0; i < OverlapCards.Count; i++)
+		{
+			Debug.Log($"{i}번째 카드 : {OverlapCards[i].name}, 현재카드와의 Distance : {OverlapCards[i].GetDistance(this)}");
+		}
+
 		if (OverlapCards.Count > 1)
 		{
 			for (int i = 1; i < OverlapCards.Count; i++)
 			{
-				Debug.Log($"{i}번째 카드 : {OverlapCards[i].name}, OverlapCards[i].GetDistance(this) : {OverlapCards[i].GetDistance(this)}, ProximateCard.GetDistance(this) : {ProximateCard.GetDistance(this)}");
-				if (OverlapCards[i].GetDistance(this) < ProximateCard.GetDistance(this)) // 거리 계산 버그 찾기
+				if (OverlapCards[i].GetDistance(this) < ProximateCard.GetDistance(this))
 					ProximateCard = OverlapCards[i];
 			}
 		}
@@ -172,7 +194,8 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 	private float GetDistance(Card DIffCard)
 	{
-		return Vector2.Distance(Camera.main.ScreenToWorldPoint(CardRect.anchoredPosition), Camera.main.ScreenToWorldPoint(DIffCard.CardRect.anchoredPosition));
+		Vector2 distance = transform.position - DIffCard.transform.position;
+		return distance.sqrMagnitude;
 	}
 
 	private List<Card> SearchCardAround() // 주변 카드 검색 및 리스트로 반환 & pCard로 지정하는 함수는 따로 구현
