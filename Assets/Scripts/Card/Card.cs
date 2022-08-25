@@ -59,6 +59,11 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	{
 		transform.SetParent(point.transform);
 	}
+
+	private Point GetPoint()
+	{
+		return transform.parent.GetComponent<Point>();
+	}
 	#endregion
 
 	#region IHandler Functions
