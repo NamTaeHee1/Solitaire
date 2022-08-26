@@ -74,7 +74,16 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 	private void MovePoint(Point point)
 	{
-		transform.SetParent(point.transform);
+		if (CardRect.GetSiblingIndex() < GetPoint().GetChildCount() - 1) // 현재 Drag하는 카드가 Point의 마지막 자식 오브젝트가 아니라면
+		{
+			for (int i = CardRect.GetSiblingIndex(); i < GetPoint().GetChildCount() - 1; i++)
+			{
+				Card card = GetPoint().transform.GetChild(i).GetComponent<Card>();
+				card.CardRect.SetParent(point.transform);
+			}
+		}
+		else
+			transform.SetParent(point.transform);
 	}
 
 	private Point GetPoint()
@@ -89,6 +98,8 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 		gameObject.AddComponent<Rigidbody2D>();
 		GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
 		MovePoint(SelectCardPoint);
+		for (int i = 0; i < SelectCardPoint.GetChildCount(); i++)
+			Debug.Log($"{i}번째 카드 : {SelectCardPoint.transform.GetChild(i).name}");
 		SetCardState(CardEnum.CardState.CLICKED);
 	}
 
@@ -98,13 +109,23 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 			return;
 		SetCardState(CardEnum.CardState.DRAGING);
 		CardRect.anchoredPosition = Vector2.Lerp(CardRect.anchoredPosition, CardRect.anchoredPosition + eventData.delta, 1.0f);
+		Debug.Log($"CardRect.GetSiblingIndex() : {CardRect.GetSiblingIndex()}, GetPoint().GetChildCount() - 1 : {GetPoint().GetChildCount() - 1}");
+		if (CardRect.GetSiblingIndex() < GetPoint().GetChildCount() - 1) // 현재 Drag하는 카드가 Point의 마지막 자식 오브젝트가 아니라면
+		{
+			for (int i = CardRect.GetSiblingIndex() + 1; i < GetPoint().GetChildCount() - 1; i++)
+			{
+				Card card = GetPoint().transform.GetChild(i).GetComponent<Card>();
+				card.CardRect.localPosition = i * ChildCardPosition + pCard.CardRect.localPosition;
+			}
+		}
+			
 	}
 
 	public void OnPointerUp(PointerEventData eventData)
 	{
-		Destroy(gameObject.GetComponent<Rigidbody2D>());
 		if (CardTextureDIrection == CardEnum.CardDirection.BACK)
 			return;
+		Destroy(gameObject.GetComponent<Rigidbody2D>());
 		SetCardState(CardEnum.CardState.IDLE);
 		Move();
 	}
@@ -117,7 +138,8 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 		if (movePoint == null)
 		{
 			List<Card> OverlapCards = SearchCardAround();
-			pCard = ChoosePCardFromList(OverlapCards);
+			if(OverlapCards.Count > 0)
+				pCard = ChoosePCardFromList(OverlapCards);
 
 			Point point = pCard == null ? transform.parent.GetComponent<Point>() : pCard.transform.parent.GetComponent<Point>();
 
@@ -164,7 +186,7 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	{
 		for (int i = OverlapCards.Count - 1; i >= 0; i--)
 		{
-			if (OverlapCards[i].CardTextureDIrection == CardEnum.CardDirection.BACK || OverlapCards[i] == this)
+			if (OverlapCards[i].CardTextureDIrection == CardEnum.CardDirection.BACK)
 			{
 				OverlapCards.Remove(OverlapCards[i]);
 			}
@@ -212,7 +234,7 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 		foreach (Collider2D Object in OverlapObjects)
 		{
-			if (Object.CompareTag("Card"))
+			if (Object.CompareTag("Card") && Object.GetComponent<Card>() != this)
 				OverlapCards.Add(Object.GetComponent<Card>());
 		}
 
