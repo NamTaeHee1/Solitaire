@@ -74,15 +74,15 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 	private void MovePoint(Point point)
 	{
-		Debug.Log($"CardRect.GetSiblingIndex() : {CardRect.GetSiblingIndex()}, GetPoint().GetChildCount() - 1 : {GetPoint().GetChildCount() - 1}");
+		Point CurPoint = GetPoint();
 		int CardRectSiblingIndex = CardRect.GetSiblingIndex();
-		int PointChildCount = GetPoint().GetChildCount() - 1;
+		int PointChildCount = CurPoint.GetChildCount() - 1;
 
 		if (CardRectSiblingIndex < PointChildCount) // 현재 Drag하는 카드가 Point의 마지막 자식 오브젝트가 아니라면
 		{
-			for (int i = 0; i < PointChildCount - 1; i++)
+			for (int i = 0; i < PointChildCount; i++)
 			{
-				Card card = GetPoint().transform.GetChild(CardRectSiblingIndex + i).GetComponent<Card>();
+				Card card = CurPoint.transform.GetChild(CardRectSiblingIndex).GetComponent<Card>();
 				card.CardRect.SetParent(point.transform);
 			}
 		}
@@ -101,8 +101,6 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	{
 		gameObject.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
 		MovePoint(SelectCardPoint);
-		for (int i = 0; i < SelectCardPoint.GetChildCount(); i++)
-			Debug.Log($"SelectCardPoint {i}번째 카드 : {SelectCardPoint.transform.GetChild(i).name}");
 		SetCardState(CardEnum.CardState.CLICKED);
 	}
 
@@ -117,7 +115,7 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 			for (int i = CardRect.GetSiblingIndex() + 1; i < GetPoint().GetChildCount() - 1; i++)
 			{
 				Card card = GetPoint().transform.GetChild(i).GetComponent<Card>();
-				card.CardRect.localPosition = i * ChildCardPosition + pCard.CardRect.localPosition;
+				card.CardRect.position = i * ChildCardPosition + pCard.CardRect.position;
 			}
 		}
 			
