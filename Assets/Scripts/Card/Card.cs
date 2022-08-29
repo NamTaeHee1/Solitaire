@@ -101,6 +101,8 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	{
 		gameObject.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
 		MovePoint(SelectCardPoint);
+		for (int i = 0; i < SelectCardPoint.GetChildCount(); i++)
+			Debug.Log($"SelectCardPoint {i}번째 카드 : {SelectCardPoint.transform.GetChild(i).name}");
 		SetCardState(CardEnum.CardState.CLICKED);
 	}
 
@@ -110,11 +112,12 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 			return;
 		SetCardState(CardEnum.CardState.DRAGING);
 		CardRect.anchoredPosition = Vector2.Lerp(CardRect.anchoredPosition, CardRect.anchoredPosition + eventData.delta, 1.0f);
-		if (CardRect.GetSiblingIndex() < GetPoint().GetChildCount() - 1) // 현재 Drag하는 카드가 Point의 마지막 자식 오브젝트가 아니라면
+		Point CurPoint = GetPoint();
+		if (CardRect.GetSiblingIndex() < CurPoint.GetChildCount() - 1) // 현재 Drag하는 카드가 Point의 마지막 자식 오브젝트가 아니라면
 		{
 			for (int i = CardRect.GetSiblingIndex() + 1; i < GetPoint().GetChildCount() - 1; i++)
 			{
-				Card card = GetPoint().transform.GetChild(i).GetComponent<Card>();
+				Card card = CurPoint.transform.GetChild(i).GetComponent<Card>();
 				card.CardRect.position = i * ChildCardPosition + pCard.CardRect.position;
 			}
 		}
@@ -181,7 +184,7 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	}
 	#endregion
 
-	#region pCard
+	#region pCard(Parent Card)
 	private Card ChoosePCardFromList(List<Card> OverlapCards) // 리스트 중에서 현재 선택한 카드와 가장 가까운 카드를 반환
 	{
 		for (int i = OverlapCards.Count - 1; i >= 0; i--)
