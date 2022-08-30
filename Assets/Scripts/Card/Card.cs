@@ -112,16 +112,17 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 			return;
 		SetCardState(CardEnum.CardState.DRAGING);
 		CardRect.anchoredPosition = Vector2.Lerp(CardRect.anchoredPosition, CardRect.anchoredPosition + eventData.delta, 1.0f);
+
 		Point CurPoint = GetPoint();
-		if (CardRect.GetSiblingIndex() < CurPoint.GetChildCount() - 1) // 현재 Drag하는 카드가 Point의 마지막 자식 오브젝트가 아니라면
+		if (!(CardRect.GetSiblingIndex() < CurPoint.GetChildCount() - 1))
+			return;
+
+		for (int i = CardRect.GetSiblingIndex() + 1; i < CurPoint.GetChildCount() - 1; i++)
 		{
-			for (int i = CardRect.GetSiblingIndex() + 1; i < GetPoint().GetChildCount() - 1; i++)
-			{
-				Card card = CurPoint.transform.GetChild(i).GetComponent<Card>();
-				card.CardRect.position = i * ChildCardPosition + pCard.CardRect.position;
-			}
+			Card card = CurPoint.transform.GetChild(i).GetComponent<Card>();
+			card.CardRect.position = i * ChildCardPosition + pCard.CardRect.position;
 		}
-			
+
 	}
 
 	public void OnPointerUp(PointerEventData eventData)
