@@ -78,16 +78,17 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 		int CardRectSiblingIndex = CardRect.GetSiblingIndex();
 		int PointChildCount = CurPoint.GetChildCount() - 1;
 
-		if (CardRectSiblingIndex < PointChildCount) // 현재 Drag하는 카드가 Point의 마지막 자식 오브젝트가 아니라면
+		if ((CardRectSiblingIndex < PointChildCount) == false) // 현재 Drag하는 카드가 Point의 마지막 자식 오브젝트이라면
 		{
-			for (int i = 0; i < PointChildCount; i++)
-			{
-				Card card = CurPoint.transform.GetChild(CardRectSiblingIndex).GetComponent<Card>();
-				card.CardRect.SetParent(point.transform);
-			}
-		}
-		else
 			transform.SetParent(point.transform);
+			return;
+		}
+
+		for (int i = PointChildCount; i > PointChildCount - CardRectSiblingIndex; i--)
+		{
+			Card card = CurPoint.transform.GetChild(i).GetComponent<Card>();
+			card.CardRect.SetParent(point.transform);
+		}
 	}
 
 	private Point GetPoint()
@@ -114,7 +115,9 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 		CardRect.anchoredPosition = Vector2.Lerp(CardRect.anchoredPosition, CardRect.anchoredPosition + eventData.delta, 1.0f);
 
 		Point CurPoint = GetPoint();
-		if (!(CardRect.GetSiblingIndex() < CurPoint.GetChildCount() - 1))
+		for (int i = 0; i < CurPoint.GetChildCount(); i++)
+			Debug.Log(CurPoint.transform.GetChild(i).name);
+		if ((CardRect.GetSiblingIndex() < CurPoint.GetChildCount() - 1) == false)
 			return;
 
 		for (int i = CardRect.GetSiblingIndex() + 1; i < CurPoint.GetChildCount() - 1; i++)
