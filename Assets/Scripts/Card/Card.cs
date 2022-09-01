@@ -75,19 +75,23 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	private void MovePoint(Point point)
 	{
 		Point CurPoint = GetPoint();
-		int CardRectSiblingIndex = CardRect.GetSiblingIndex();
-		int PointChildCount = CurPoint.GetChildCount() - 1;
+		int CardRectSiblingIndex = CurPoint.GetPointFirstCardIdx();
+		int PointChildCount = CurPoint.GetPointLastCardIdx();
+		Debug.Log($"CardRectSiblingIndex : {CardRectSiblingIndex}, PointChildCount : {PointChildCount}");
 
-		if ((CardRectSiblingIndex < PointChildCount) == false) // 현재 Drag하는 카드가 Point의 마지막 자식 오브젝트이라면
+		if ((CardRectSiblingIndex == PointChildCount))
 		{
 			transform.SetParent(point.transform);
-			return;
 		}
-
-		for (int i = PointChildCount; i > PointChildCount - CardRectSiblingIndex; i--)
+		else
 		{
-			Card card = CurPoint.transform.GetChild(i).GetComponent<Card>();
-			card.CardRect.SetParent(point.transform);
+			for (int i = 0; i > PointChildCount - CardRectSiblingIndex; i++)
+			{
+				Card card = CurPoint.transform.GetChild(CardRectSiblingIndex).GetComponent<Card>();
+				card.CardRect.SetParent(point.transform);
+				card.transform.SetAsLastSibling();
+				Debug.Log($"{card.name}이 {i + 1}번째로 들어감");
+			}
 		}
 	}
 
@@ -117,10 +121,10 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 		Point CurPoint = GetPoint();
 		for (int i = 0; i < CurPoint.GetChildCount(); i++)
 			Debug.Log(CurPoint.transform.GetChild(i).name);
-		if ((CardRect.GetSiblingIndex() < CurPoint.GetChildCount() - 1) == false)
+		if ((CardRect.GetSiblingIndex() > CurPoint.GetChildCount() - 1) == false)
 			return;
-
-		for (int i = CardRect.GetSiblingIndex() + 1; i < CurPoint.GetChildCount() - 1; i++)
+		Debug.Log("OnDrag 들어옴");
+		for (int i = CardRect.GetSiblingIndex(); i < CurPoint.GetChildCount() - 1; i++)
 		{
 			Card card = CurPoint.transform.GetChild(i).GetComponent<Card>();
 			card.CardRect.position = i * ChildCardPosition + pCard.CardRect.position;

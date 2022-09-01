@@ -8,4 +8,22 @@ public class Point : MonoBehaviour
 	{
 		return transform.childCount;
 	}
+
+	public int GetPointFirstCardIdx()
+	{
+		for (int i = 0; i < GetChildCount() - 1; i++)
+		{
+			Card card = transform.GetChild(i).GetComponent<Card>();
+			if (card.CardTextureDIrection == CardEnum.CardDirection.BACK)
+				continue;
+			else
+				return i;
+		}
+		return GetChildCount() - 1;
+	}
+
+	public int GetPointLastCardIdx()
+	{
+		return GetChildCount() - 1;
+	}
 }
