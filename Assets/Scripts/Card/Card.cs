@@ -77,7 +77,6 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 		Point CurPoint = GetPoint();
 		int CardRectSiblingIndex = CurPoint.GetPointFirstCardIdx();
 		int PointChildCount = CurPoint.GetPointLastCardIdx();
-		Debug.Log($"CardRectSiblingIndex : {CardRectSiblingIndex}, PointChildCount : {PointChildCount}");
 
 		if ((CardRectSiblingIndex == PointChildCount))
 		{
@@ -90,7 +89,6 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 				Card card = CurPoint.transform.GetChild(CardRectSiblingIndex).GetComponent<Card>();
 				card.CardRect.SetParent(point.transform);
 				card.transform.SetAsLastSibling();
-				Debug.Log($"{card.name}이 {i + 1}번째로 들어감");
 			}
 		}
 	}
