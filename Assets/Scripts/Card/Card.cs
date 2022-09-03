@@ -102,6 +102,8 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	#region IHandler Functions
 	public void OnPointerDown(PointerEventData eventData)
 	{
+		if (CardTextureDIrection == CardEnum.CardDirection.BACK)
+			return;
 		gameObject.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
 		MovePoint(SelectCardPoint);
 		for (int i = 0; i < SelectCardPoint.GetChildCount(); i++)
