@@ -17,6 +17,8 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	[SerializeField] private Vector3 ChildCardPosition = Vector3.zero;
 	[SerializeField] private RectTransform CardRect;
 
+	private Point CurPoint = null;
+
 	#region Card Propety, Init
 	public string CardName 
 	{
@@ -34,8 +36,10 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	#endregion
 
 	#region Texture
-	public void Show(CardEnum.CardDirection Direction)
+	public IEnumerator Show(CardEnum.CardDirection Direction, float WaitTime)
 	{
+		yield return new WaitForSeconds(WaitTime);
+
 		switch (Direction)
 		{
 			case CardEnum.CardDirection.FRONT:
@@ -74,7 +78,7 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 	private void MovePoint(Point point)
 	{
-		Point CurPoint = GetPoint();
+		CurPoint = GetPoint();
 		int CardRectSiblingIndex = CurPoint.GetPointFirstCardIdx();
 		int PointChildCount = CurPoint.GetPointLastCardIdx();
 
@@ -84,7 +88,7 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 		}
 		else
 		{
-			for (int i = 0; i > PointChildCount - CardRectSiblingIndex; i++)
+			for (int i = CardRectSiblingIndex; i <= PointChildCount; i++)
 			{
 				Card card = CurPoint.transform.GetChild(CardRectSiblingIndex).GetComponent<Card>();
 				card.CardRect.SetParent(point.transform);
@@ -118,7 +122,7 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 		SetCardState(CardEnum.CardState.DRAGING);
 		CardRect.anchoredPosition = Vector2.Lerp(CardRect.anchoredPosition, CardRect.anchoredPosition + eventData.delta, 1.0f);
 
-		Point CurPoint = GetPoint();
+		CurPoint = GetPoint();
 		for (int i = 0; i < CurPoint.GetChildCount(); i++)
 			Debug.Log(CurPoint.transform.GetChild(i).name);
 		if ((CardRect.GetSiblingIndex() > CurPoint.GetChildCount() - 1) == false)

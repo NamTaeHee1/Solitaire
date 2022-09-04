@@ -37,7 +37,7 @@ public class CardSpawner : MonoBehaviour
 			{
                 Card _Card = transform.GetChild(transform.childCount - 1).GetComponent<Card>();
                 _Card.Move(KPoints[j], WaitTime += 0.05f);
-                _Card.Show(j == i ? CardEnum.CardDirection.FRONT : CardEnum.CardDirection.BACK);
+                _Card.StartCoroutine(_Card.Show(j == i ? CardEnum.CardDirection.FRONT : CardEnum.CardDirection.BACK, WaitTime));
                }
 		}
 	}
