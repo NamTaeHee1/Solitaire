@@ -123,7 +123,6 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 			Debug.Log(CurPoint.transform.GetChild(i).name);
 		if ((CardRect.GetSiblingIndex() > CurPoint.GetChildCount() - 1) == false)
 			return;
-		Debug.Log("OnDrag µé¾î¿È");
 		for (int i = CardRect.GetSiblingIndex(); i < CurPoint.GetChildCount() - 1; i++)
 		{
 			Card card = CurPoint.transform.GetChild(i).GetComponent<Card>();
