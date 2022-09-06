@@ -4,7 +4,8 @@ public class CardEnum
 	{
 		IDLE,
 		CLICKED,
-		DRAGING
+		DRAGING,
+		MOVING
 	}
 
 	public enum CardDirection

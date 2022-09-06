@@ -35,6 +35,11 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	private void SetCardState(CardEnum.CardState state) => CardState = state;
 	#endregion
 
+	private void Update()
+	{
+
+	}
+
 	#region Texture
 	public IEnumerator Show(CardEnum.CardDirection Direction, float WaitTime)
 	{
@@ -125,13 +130,6 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 		CurPoint = GetPoint();
 		for (int i = 0; i < CurPoint.GetChildCount(); i++)
 			Debug.Log(CurPoint.transform.GetChild(i).name);
-		if ((CardRect.GetSiblingIndex() > CurPoint.GetChildCount() - 1) == false)
-			return;
-		for (int i = CardRect.GetSiblingIndex(); i < CurPoint.GetChildCount() - 1; i++)
-		{
-			Card card = CurPoint.transform.GetChild(i).GetComponent<Card>();
-			card.CardRect.position = i * ChildCardPosition + pCard.CardRect.position;
-		}
 
 	}
 
@@ -184,12 +182,18 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 		float t = 0;
 		float toPosTime = 0.75f;
 		yield return new WaitForSeconds(WaitTime);
+		CardState = CardEnum.CardState.MOVING;
 		while (toPosTime > t)
 		{
 			if (CardState == CardEnum.CardState.CLICKED)
 				break;
 			t += Time.deltaTime;
 			CardRect.localPosition = Vector2.Lerp(CardRect.localPosition, ToPos, t / toPosTime);
+			if (Vector3.Distance(CardRect.localPosition, ToPos) < 0.001f)
+			{
+				CardState = CardEnum.CardState.IDLE;
+				break;
+			}
 			yield return null;
 		}
 	}
