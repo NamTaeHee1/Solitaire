@@ -37,7 +37,10 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 	private void Update()
 	{
-
+		if (CardState == CardEnum.CardState.IDLE && pCard != null)
+		{
+			transform.localPosition = pCard.transform.localPosition + ChildCardPosition;
+		}
 	}
 
 	#region Texture
@@ -181,15 +184,15 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	{
 		float t = 0;
 		float toPosTime = 0.75f;
-		yield return new WaitForSeconds(WaitTime);
 		CardState = CardEnum.CardState.MOVING;
+		yield return new WaitForSeconds(WaitTime);
 		while (toPosTime > t)
 		{
 			if (CardState == CardEnum.CardState.CLICKED)
 				break;
 			t += Time.deltaTime;
 			CardRect.localPosition = Vector2.Lerp(CardRect.localPosition, ToPos, t / toPosTime);
-			if (Vector3.Distance(CardRect.localPosition, ToPos) < 0.001f)
+			if (Vector3.Distance(CardRect.localPosition, ToPos) < 0.1f)
 			{
 				CardState = CardEnum.CardState.IDLE;
 				break;
@@ -204,11 +207,19 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	{
 		for (int i = OverlapCards.Count - 1; i >= 0; i--)
 		{
-			if (OverlapCards[i].CardTextureDIrection == CardEnum.CardDirection.BACK)
+			if (OverlapCards[i].CardTextureDIrection == CardEnum.CardDirection.BACK) // 뒷면이면 pCard에서 제외
 			{
 				OverlapCards.Remove(OverlapCards[i]);
 			}
+			foreach (Card card in CurPoint.GetMoveableCardList()) // 같은 Point에 있는 카드는 pCard에서 제외
+			{
+				if (card == OverlapCards[i])
+					OverlapCards.Remove(OverlapCards[i]);
+			}
 		}
+
+		if (OverlapCards.Count == 0)
+			return null;
 
 		Card ProximateCard = OverlapCards[0];
 
