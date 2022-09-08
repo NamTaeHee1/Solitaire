@@ -18,6 +18,7 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	[SerializeField] private RectTransform CardRect;
 
 	private Point CurPoint = null;
+	private Point PrevPoint = null;
 
 	#region Card Propety, Init
 	public string CardName 
@@ -86,6 +87,7 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
 	private void MovePoint(Point point)
 	{
+		PrevPoint = CurPoint;
 		CurPoint = GetPoint();
 		int CardRectSiblingIndex = CurPoint.GetPointFirstCardIdx();
 		int PointChildCount = CurPoint.GetPointLastCardIdx();
@@ -118,8 +120,6 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 			return;
 		gameObject.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
 		MovePoint(SelectCardPoint);
-		for (int i = 0; i < SelectCardPoint.GetChildCount(); i++)
-			Debug.Log($"SelectCardPoint {i}번째 카드 : {SelectCardPoint.transform.GetChild(i).name}");
 		SetCardState(CardEnum.CardState.CLICKED);
 	}
 
