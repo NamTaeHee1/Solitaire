@@ -64,26 +64,6 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 	#endregion
 
 	#region Point
-	private Point[] K
-	{
-		get
-		{
-			GameObject K_Points = GameObject.Find("K_Points");
-			Point[] K_Array = new Point[K_Points.transform.childCount];
-
-			for (int i = 0; i < K_Points.transform.childCount; i++)
-			{
-				K_Array[i] = K_Points.transform.GetChild(i).GetComponent<Point>();
-			}
-
-			return K_Array;
-		}
-	}
-
-	private Point SelectCardPoint
-	{
-		get { return GameObject.Find("SelectCardPoint").GetComponent<Point>(); }
-	}
 
 	private void MovePoint(Point point)
 	{
