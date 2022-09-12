@@ -99,7 +99,7 @@ public class Card : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 		if (CardTextureDIrection == CardEnum.CardDirection.BACK)
 			return;
 		gameObject.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
-		MovePoint(SelectCardPoint);
+		MovePoint(PointManager.Instance.SelectCardPoint);
 		SetCardState(CardEnum.CardState.CLICKED);
 	}
 
