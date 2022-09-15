@@ -15,13 +15,9 @@ public class Point : MonoBehaviour
 		{
 			Card card = transform.GetChild(i).GetComponent<Card>();
 			if (card.CardTextureDIrection == CardEnum.CardDirection.BACK)
-			{
 				continue;
-			}
 			else
-			{
 				return i;
-			}
 		}
 		return GetChildCount() - 1;
 	}
