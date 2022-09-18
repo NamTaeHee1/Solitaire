@@ -35,7 +35,6 @@ public class Point : MonoBehaviour
 		{
 			CardList.Add(transform.GetChild(i).GetComponent<Card>());
 		}
-
 		return CardList;
 	}
 }
