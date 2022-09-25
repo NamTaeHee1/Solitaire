@@ -6,7 +6,16 @@ public class PointManager : MonoBehaviour
 {
 	public static PointManager Instance
 	{
-		get { return _instance; }
+		get
+		{ 
+			if (_instance == null)
+			{
+				PointManager _PointManager = Instantiate(Resources.Load<GameObject>("Prefabs/PointManager")).GetComponent<PointManager>();
+				_instance = _PointManager;
+				DontDestroyOnLoad(_instance);
+			}
+			return _instance; 
+		}
 	}
 
 	private static PointManager _instance;
@@ -15,13 +24,10 @@ public class PointManager : MonoBehaviour
 	public Point[] A;
 	public Point SelectCardPoint;
 
-	private void Awake()
+	private void Start()
 	{
-		_instance = this;
-		DontDestroyOnLoad(this);
-
 		GameObject K_Points = GameObject.Find("K_Points");
-		Point[] K_Array = new Point[K_Points.transform.childCount];
+		K = new Point[K_Points.transform.childCount];
 
 		for (int i = 0; i < K_Points.transform.childCount; i++)
 		{
@@ -29,7 +35,7 @@ public class PointManager : MonoBehaviour
 		}
 
 		GameObject A_Points = GameObject.Find("A_Points");
-		Point[] A_Array = new Point[A_Points.transform.childCount];
+		A = new Point[A_Points.transform.childCount];
 
 		for (int i = 0; i < A_Points.transform.childCount; i++)
 		{
