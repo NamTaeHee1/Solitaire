@@ -123,6 +123,59 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &12260722
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 12260724}
+  - component: {fileID: 12260723}
+  m_Layer: 0
+  m_Name: PointManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &12260723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 12260722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e4782db4afb8634694726e9962890be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  K:
+  - {fileID: 1106841351}
+  - {fileID: 981747159}
+  - {fileID: 1199971299}
+  - {fileID: 850560196}
+  - {fileID: 1752882568}
+  - {fileID: 357776942}
+  - {fileID: 894684774}
+  A: []
+  SelectCardPoint: {fileID: 1873067402}
+--- !u!4 &12260724
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 12260722}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &107387709
 GameObject:
   m_ObjectHideFlags: 0
@@ -289,7 +342,7 @@ GameObject:
   - component: {fileID: 357776941}
   - component: {fileID: 357776942}
   m_Layer: 5
-  m_Name: K
+  m_Name: K_6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -514,10 +567,10 @@ RectTransform:
   m_Father: {fileID: 1531931419}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1080, y: 160}
+  m_SizeDelta: {x: 0, y: 160}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &473864178
 MonoBehaviour:
@@ -1006,7 +1059,7 @@ GameObject:
   - component: {fileID: 850560195}
   - component: {fileID: 850560196}
   m_Layer: 5
-  m_Name: K
+  m_Name: K_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1091,7 +1144,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34be0b2df74d55846aeee95402fca534, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CardPrefab: {fileID: 7121862259997278454, guid: 3aab2c540515f5542b5a79f7371fbe3f, type: 3}
   KPoints:
   - {fileID: 1106841351}
   - {fileID: 981747159}
@@ -1187,7 +1239,7 @@ GameObject:
   - component: {fileID: 894684773}
   - component: {fileID: 894684774}
   m_Layer: 5
-  m_Name: K
+  m_Name: K_7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1311,7 +1363,7 @@ GameObject:
   - component: {fileID: 981747158}
   - component: {fileID: 981747159}
   m_Layer: 5
-  m_Name: K
+  m_Name: K_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1438,7 +1490,7 @@ GameObject:
   - component: {fileID: 1106841350}
   - component: {fileID: 1106841351}
   m_Layer: 5
-  m_Name: K
+  m_Name: K_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1565,7 +1617,7 @@ GameObject:
   - component: {fileID: 1199971298}
   - component: {fileID: 1199971299}
   m_Layer: 5
-  m_Name: K
+  m_Name: K_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1936,7 +1988,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1080, y: 1920}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -2118,7 +2170,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1080, y: 1920}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -2478,7 +2530,7 @@ GameObject:
   - component: {fileID: 1752882567}
   - component: {fileID: 1752882568}
   m_Layer: 5
-  m_Name: K
+  m_Name: K_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2908,10 +2960,10 @@ RectTransform:
   m_Father: {fileID: 1531931419}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1080, y: 120}
+  m_SizeDelta: {x: 0, y: 120}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1970640745
 MonoBehaviour:

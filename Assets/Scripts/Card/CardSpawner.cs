@@ -5,9 +5,15 @@ using UnityEngine.UI;
 
 public class CardSpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject CardPrefab;
+    private GameObject CardPrefab;
     [SerializeField] private Point[] KPoints;
     private const int CARD_MAX_SIZE = 52;
+
+    private void Start()
+    {
+        CreateCards();
+        MoveCardToPoints();
+    }
 
     private void CreateCards()
 	{
@@ -15,6 +21,8 @@ public class CardSpawner : MonoBehaviour
         int RandomNum;
         Sprite CurCardTexture;
         GameObject _Card;
+
+        CardPrefab = Resources.Load<GameObject>("Prefabs/Card");
 
         for (int i = 0; i < CARD_MAX_SIZE; i++)
 		{
@@ -41,10 +49,4 @@ public class CardSpawner : MonoBehaviour
                }
 		}
 	}
-
-    private void Start()
-	{
-        CreateCards();
-        MoveCardToPoints();
-     }
 }
