@@ -163,7 +163,6 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 
 				Card PointLastCard = PrevPoint.transform.GetChild(PrevPoint.GetPointLastCardIdx()).GetComponent<Card>();
 				PointLastCard.StartCoroutine(PointLastCard.Show(CardEnum.CardDirection.FRONT));
-				Debug.Log($"PointLastCard : {PointLastCard.name}, Show Front");
 			}
 
 			CurPoint = point;
@@ -210,21 +209,70 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 	#region pCard(Parent Card)
 	private Card ChoosePCardFromList(List<Card> OverlapCards) // 리스트 중에서 현재 선택한 카드와 가장 가까운 카드를 반환
 	{
+		Debug.Log($"OverlapCards.Count : {OverlapCards.Count}");
+		for (int i = 0; i < OverlapCards.Count; i++)
+		{
+			Debug.Log($"OverlapCards[{i}] : {OverlapCards[i].name}");
+		}
+		Debug.Log($"PrevPoint.GetMoveableCardList().Count : {PrevPoint.GetMoveableCardList().Count}");
+		for (int i = 0; i < PrevPoint.GetMoveableCardList().Count; i++)
+		{
+			Debug.Log($"PrevPoint.GetMoveableCardList()[{i}] : {PrevPoint.GetMoveableCardList()[i]}");
+		}
+		Debug.Log($"CurPoint.GetMoveableCardList().Count : {CurPoint.GetMoveableCardList().Count}");
+		for (int i = 0; i < CurPoint.GetMoveableCardList().Count; i++)
+		{
+			Debug.Log($"CurPoint.GetMoveableCardList()[{i}] : {CurPoint.GetMoveableCardList()[i]}");
+		}
+
+
+		
+
+
 		for (int i = OverlapCards.Count - 1; i >= 0; i--)
 		{
 			if (OverlapCards[i].CardTextureDIrection == CardEnum.CardDirection.BACK) // 뒷면이면 pCard에서 제외
 			{
 				OverlapCards.Remove(OverlapCards[i]);
+				continue;
 			}
-			foreach (Card card in PrevPoint.GetMoveableCardList()) // 같은 Point에 있던 카드는 pCard에서 제외
+
+			List<Card> PointCardList = new List<Card>();
+			PointCardList.AddRange(PrevPoint.GetMoveableCardList());
+			PointCardList.AddRange(CurPoint.GetMoveableCardList());
+
+			foreach (Card card in PointCardList) // 저번 Point와 이번 Point의 카드는 pCard에서 제외
+			{
+				if (OverlapCards[i] == card)
+				{
+					OverlapCards.RemoveAt(i);
+					continue;
+				}
+			}
+
+/*			foreach (Card card in PrevPoint.GetMoveableCardList()) // 저번 Point에 있는 카드는 pCard에서 제외
 			{
 				if (card == OverlapCards[i])
+				{
 					OverlapCards.Remove(OverlapCards[i]);
+					break;
+				}
 			}
+			foreach (Card card in CurPoint.GetMoveableCardList()) // 현재 Point에 있는 카드도 pCard에서 제외
+			{
+				if (card == OverlapCards[i])
+				{
+					OverlapCards.Remove(OverlapCards[i]);
+					break;
+				}
+			}*/
 		}
 
 		if (OverlapCards.Count == 0)
+		{
+			Debug.Log("OverlapCards.Count = 0");
 			return null;
+		}
 
 		Card ProximateCard = OverlapCards[0];
 
@@ -254,7 +302,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 		return distance.sqrMagnitude;
 	}
 
-	private List<Card> SearchCardAround() // 주변 카드 검색 및 리스트로 반환 & pCard로 지정하는 함수는 따로 구현
+	private List<Card> SearchCardAround() // 자신을 제외한 주변 카드 검색 및 리스트로 반환 & pCard로 지정하는 함수는 따로 구현
 	{
 		RectTransform CardCanvasRect = GameObject.Find("CardCanvas").GetComponent<RectTransform>();
 
