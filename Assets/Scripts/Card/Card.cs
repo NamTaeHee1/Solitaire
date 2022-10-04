@@ -46,7 +46,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 	{
 		if (CardState == CardEnum.CardState.IDLE && pCard != null)
 		{
-
+			CurPoint = pCard.CurPoint;
+			PrevPoint = pCard.PrevPoint;
 			transform.localPosition = pCard.transform.localPosition + ChildCardPosition;
 		}
 	}
