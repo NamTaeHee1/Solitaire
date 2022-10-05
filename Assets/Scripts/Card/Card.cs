@@ -42,7 +42,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 	private void SetCardState(CardEnum.CardState state) => CardState = state;
 	#endregion
 
-	private void Update()
+/*	private void Update()
 	{
 		if (CardState == CardEnum.CardState.IDLE && pCard != null)
 		{
@@ -50,7 +50,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 			PrevPoint = pCard.PrevPoint;
 			transform.localPosition = pCard.transform.localPosition + ChildCardPosition;
 		}
-	}
+	}*/
 
 	#region Texture
 	public IEnumerator Show(CardEnum.CardDirection Direction, float WaitTime = 0)
