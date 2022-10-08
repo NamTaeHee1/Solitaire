@@ -24,15 +24,14 @@ public class Point : MonoBehaviour
 
 	public int GetPointLastCardIdx()
 	{
-
-		return GetChildCount() - 1;
+		return GetChildCount();
 	}
 
 	public List<Card> GetMoveableCardList()
 	{
 		List<Card> CardList = new List<Card>();
 
-		for (int i = GetPointFirstCardIdx(); i < GetPointLastCardIdx() + 1; i++)
+		for (int i = GetPointFirstCardIdx(); i < GetPointLastCardIdx(); i++)
 		{
 			CardList.Add(transform.GetChild(i).GetComponent<Card>());
 		}

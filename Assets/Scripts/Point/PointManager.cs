@@ -18,7 +18,6 @@ public class PointManager : MonoBehaviour
 	private void Awake()
 	{
 		_instance = this;
-		DontDestroyOnLoad(_instance);
 	}
 
 }

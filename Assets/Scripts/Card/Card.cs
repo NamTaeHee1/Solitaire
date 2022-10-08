@@ -86,7 +86,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 		}
 		else
 		{
-			for (int i = CardRectSiblingIndex; i <= PointChildCount; i++)
+			for (int i = CardRectSiblingIndex; i < PointChildCount; i++)
 			{
 				Card card = CurPoint.transform.GetChild(CardRectSiblingIndex).GetComponent<Card>();
 				card.CardRect.SetParent(point.transform);
@@ -163,7 +163,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 			{
 				Move(point);
 
-				Card PointLastCard = PrevPoint.transform.GetChild(PrevPoint.GetPointLastCardIdx()).GetComponent<Card>();
+				Card PointLastCard = PrevPoint.transform.GetChild(PrevPoint.GetPointLastCardIdx() - 1).GetComponent<Card>();
 				PointLastCard.StartCoroutine(PointLastCard.Show(CardEnum.CardDirection.FRONT));
 			}
 
@@ -211,26 +211,6 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 	#region pCard(Parent Card)
 	private Card ChoosePCardFromList(List<Card> OverlapCards) // 리스트 중에서 현재 선택한 카드와 가장 가까운 카드를 반환
 	{
-		Debug.Log($"OverlapCards.Count : {OverlapCards.Count}");
-		for (int i = 0; i < OverlapCards.Count; i++)
-		{
-			Debug.Log($"OverlapCards[{i}] : {OverlapCards[i].name}");
-		}
-		Debug.Log($"PrevPoint.GetMoveableCardList().Count : {PrevPoint.GetMoveableCardList().Count}");
-		for (int i = 0; i < PrevPoint.GetMoveableCardList().Count; i++)
-		{
-			Debug.Log($"PrevPoint.GetMoveableCardList()[{i}] : {PrevPoint.GetMoveableCardList()[i]}");
-		}
-		Debug.Log($"CurPoint.GetMoveableCardList().Count : {CurPoint.GetMoveableCardList().Count}");
-		for (int i = 0; i < CurPoint.GetMoveableCardList().Count; i++)
-		{
-			Debug.Log($"CurPoint.GetMoveableCardList()[{i}] : {CurPoint.GetMoveableCardList()[i]}");
-		}
-
-
-		
-
-
 		for (int i = OverlapCards.Count - 1; i >= 0; i--)
 		{
 			if (OverlapCards[i].CardTextureDIrection == CardEnum.CardDirection.BACK) // 뒷면이면 pCard에서 제외
