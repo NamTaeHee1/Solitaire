@@ -24,7 +24,6 @@ public class Point : MonoBehaviour
 
 	public int GetPointLastCardIdx()
 	{
-
 		return GetChildCount();
 	}
 
