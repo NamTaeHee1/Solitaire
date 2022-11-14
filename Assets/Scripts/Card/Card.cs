@@ -144,7 +144,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 	}
 	#endregion
 
-	#region Move & Drag Function
+	#region Move Function
 	public void Move(Point movePoint = null, float WaitTime = 0)
 	{
 		// 플레이어가 드래그하고 PointerUp 함수가 호출 될 경우
@@ -178,15 +178,16 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 			StartCoroutine(MoveCard(Vector3.zero, WaitTime));
 		}
 		else // 있다면
-		{ // pCard에 값을 넣어도 초기화됨
+		{
 			transform.SetParent(movePoint.transform);
 			pCard = movePoint.transform.GetChild(transform.GetSiblingIndex() - 1).GetComponent<Card>();
-			StartCoroutine(MoveCard(ChildCardPosition * (movePoint.GetChildCount() - 1), WaitTime));
+			StartCoroutine(MoveCard(ChildCardPosition * (movePoint.GetChildCount() - 1), WaitTime, (movePoint != PrevPoint)));
+			//																										현재 갈 포인트가 이전 포인트가 다르다면 다른 카드 자식으로 들어가는거므로 GoToAnotherCardChild = true
 		}
 		CurPoint = movePoint;
 	}
 
-	IEnumerator MoveCard(Vector3 ToPos, float WaitTime = 0)
+	IEnumerator MoveCard(Vector3 ToPos, float WaitTime = 0, bool GoToAnotherCardChild = false)
 	{
 		float t = 0;
 		float toPosTime = 0.75f;
@@ -198,10 +199,24 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 				break;
 			t += Time.deltaTime;
 			CardRect.localPosition = Vector2.Lerp(CardRect.localPosition, ToPos, t / toPosTime);
-			if (Vector3.Distance(CardRect.localPosition, ToPos) < 0.1f)
+			if (Vector3.Distance(CardRect.localPosition, ToPos) < 0.1f) // 카드가 목표지점에 도착할 경우
 			{
 				CardState = CardEnum.CardState.IDLE;
+				if (GoToAnotherCardChild)
+					StartCoroutine(FollowPCard());
 				break;
+			}
+			yield return null;
+		}
+	}
+
+	IEnumerator FollowPCard()
+	{
+		while (true)
+		{
+			if (CardState == CardEnum.CardState.IDLE) // 현재 포인트 첫번째 카드가 움직일 경우에만 실행하도록 if  문 구현
+			{
+				CardRect.localPosition = pCard.CardRect.localPosition + ChildCardPosition;
 			}
 			yield return null;
 		}
