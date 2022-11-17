@@ -77,8 +77,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 	private void MovePoint(Point point)
 	{
 		CurPoint = GetPoint();
-		int CardRectSiblingIndex = CurPoint.GetPointFirstCardIdx();
-		int PointChildCount = CurPoint.GetPointLastCardIdx();
+		int CardRectSiblingIndex = CurPoint.GetMoveableFirstCardIdx();
+		int PointChildCount = CurPoint.GetMoveableLastCardIdx();
 
 		if ((CardRectSiblingIndex == PointChildCount))
 		{
@@ -163,7 +163,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 			{
 				Move(point);
 
-				Card PointLastCard = PrevPoint.transform.GetChild(PrevPoint.GetPointLastCardIdx() - 1).GetComponent<Card>();
+				Card PointLastCard = PrevPoint.transform.GetChild(PrevPoint.GetMoveableLastCardIdx() - 1).GetComponent<Card>();
 				PointLastCard.StartCoroutine(PointLastCard.Show(CardEnum.CardDirection.FRONT));
 			}
 
@@ -202,7 +202,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 			if (Vector3.Distance(CardRect.localPosition, ToPos) < 0.1f) // 카드가 목표지점에 도착할 경우
 			{
 				CardState = CardEnum.CardState.IDLE;
-				if (GoToAnotherCardChild)
+				if (GoToAnotherCardChild) // 다른 카드 자식으로 간다면 PCard를 따라가는 함수 실행
 					StartCoroutine(FollowPCard());
 				break;
 			}
@@ -210,17 +210,33 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 		}
 	}
 
-	IEnumerator FollowPCard()
+	IEnumerator FollowPCard() // 걍 어떤 카드를 드래그할때 그 카드 자식들이 실행하도록 만들자
 	{
 		while (true)
 		{
-			if (CardState == CardEnum.CardState.IDLE) // 현재 포인트 첫번째 카드가 움직일 경우에만 실행하도록 if  문 구현
+			if (AreAnyMovingPCard())
 			{
 				CardRect.localPosition = pCard.CardRect.localPosition + ChildCardPosition;
 			}
 			yield return null;
 		}
 	}
+
+	private bool AreAnyMovingPCard()
+	{
+		Card PCard = this.pCard;
+		while (PCard == null)
+		{
+			if (PCard.CardState != CardEnum.CardState.IDLE)
+				return true;
+
+			PCard = PCard.pCard;
+		}
+
+		return false;
+	}
+
+
 	#endregion
 
 	#region pCard(Parent Card)

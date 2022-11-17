@@ -9,7 +9,7 @@ public class Point : MonoBehaviour
 		return transform.childCount;
 	}
 
-	public int GetPointFirstCardIdx()
+	public int GetMoveableFirstCardIdx()
 	{
 		for (int i = 0; i < GetChildCount() - 1; i++)
 		{
@@ -22,9 +22,8 @@ public class Point : MonoBehaviour
 		return GetChildCount();
 	}
 
-	public int GetPointLastCardIdx()
+	public int GetMoveableLastCardIdx()
 	{
-
 		return GetChildCount();
 	}
 
@@ -32,7 +31,7 @@ public class Point : MonoBehaviour
 	{
 		List<Card> CardList = new List<Card>();
 
-		for (int i = GetPointFirstCardIdx(); i < GetPointLastCardIdx(); i++)
+		for (int i = GetMoveableFirstCardIdx(); i < GetMoveableLastCardIdx(); i++)
 		{
 			CardList.Add(transform.GetChild(i).GetComponent<Card>());
 		}
