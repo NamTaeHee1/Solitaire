@@ -113,6 +113,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 
 	public void OnBeginDrag(PointerEventData eventData)
 	{
+		if (CardTextureDIrection == CardEnum.CardDirection.BACK)
+			return;
 		MovePoint(PointManager.Instance.SelectCardPoint);
 	}
 
@@ -161,10 +163,11 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 				StartCoroutine(MoveCard(ChildCardPosition * (point.GetChildCount() - 1), WaitTime));
 			else // pCard가 있는 Point로 이동
 			{
+				CardRect.SetParent(pCard.transform);
 				Move(point);
 
-				Card PointLastCard = PrevPoint.transform.GetChild(PrevPoint.GetMoveableLastCardIdx() - 1).GetComponent<Card>();
-				PointLastCard.StartCoroutine(PointLastCard.Show(CardEnum.CardDirection.FRONT));
+				Card PrevPointLastCard = PrevPoint.transform.GetChild(PrevPoint.GetMoveableLastCardIdx() - 1).GetComponent<Card>();
+				PrevPointLastCard.StartCoroutine(PrevPointLastCard.Show(CardEnum.CardDirection.FRONT));
 			}
 
 			CurPoint = point;
@@ -224,13 +227,13 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 
 	private bool AreAnyMovingPCard()
 	{
-		Card PCard = this.pCard;
-		while (PCard == null)
+		Card _pCard = pCard;
+		while (_pCard == null)
 		{
-			if (PCard.CardState != CardEnum.CardState.IDLE)
+			if (_pCard.CardState != CardEnum.CardState.IDLE)
 				return true;
 
-			PCard = PCard.pCard;
+			_pCard = _pCard.pCard;
 		}
 
 		return false;
@@ -262,23 +265,6 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 					continue;
 				}
 			}
-
-/*			foreach (Card card in PrevPoint.GetMoveableCardList()) // 저번 Point에 있는 카드는 pCard에서 제외
-			{
-				if (card == OverlapCards[i])
-				{
-					OverlapCards.Remove(OverlapCards[i]);
-					break;
-				}
-			}
-			foreach (Card card in CurPoint.GetMoveableCardList()) // 현재 Point에 있는 카드도 pCard에서 제외
-			{
-				if (card == OverlapCards[i])
-				{
-					OverlapCards.Remove(OverlapCards[i]);
-					break;
-				}
-			}*/
 		}
 
 		if (OverlapCards.Count == 0)
