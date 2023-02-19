@@ -24,6 +24,7 @@ public class Point : MonoBehaviour
 
 	public int GetMoveableLastCardIdx()
 	{
+
 		return GetChildCount();
 	}
 
