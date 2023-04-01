@@ -9,33 +9,63 @@ public class Point : MonoBehaviour
 		return transform.childCount;
 	}
 
-	public int GetMoveableFirstCardIdx()
+	public Card GetMoveableFirstCard()
 	{
-		for (int i = 0; i < GetChildCount() - 1; i++)
+		if (GetChildCount() == 0)
+			return null;
+
+		Transform _curCard = transform;
+		
+		while(true)
 		{
-			Card card = transform.GetChild(i).GetComponent<Card>();
-			if (card.CardTextureDIrection == CardEnum.CardDirection.BACK)
-				continue;
+			Card _childCard = _curCard.GetChild(0).GetComponent<Card>();
+
+			// 내 자식 오브젝트가 없거나 내 자식 카드 컴포넌트의 카드 방향이 앞면이라면 break;
+			if (_childCard == null || _childCard.cardTextureDirection == CardEnum.ECardDirection.FRONT)
+				break;
 			else
-				return i;
+				_curCard = _childCard.transform;
 		}
-		return GetChildCount();
+
+		return _curCard.GetComponent<Card>();
 	}
 
-	public int GetMoveableLastCardIdx()
+	public Card GetMoveableLastCard()
 	{
+		if (GetChildCount() == 0)
+			return null;
 
-		return GetChildCount();
+		Transform _curCard = GetMoveableFirstCard().transform;
+
+		while(true)
+		{
+			Card _childCard = _curCard.GetChild(0).GetComponent<Card>();
+
+			//내 자식 오브젝트가 없으면 마지막이므로 break;
+			if (_childCard == null)
+				break;
+			else
+				_curCard = _childCard.transform;
+		}
+
+		return _curCard.GetComponent<Card>();
 	}
 
 	public List<Card> GetMoveableCardList()
 	{
-		List<Card> CardList = new List<Card>();
+		List<Card> cardList = new List<Card>();
+		Transform _curCard = GetMoveableFirstCard().transform;
 
-		for (int i = GetMoveableFirstCardIdx(); i < GetMoveableLastCardIdx(); i++)
+		while(true)
 		{
-			CardList.Add(transform.GetChild(i).GetComponent<Card>());
+			cardList.Add(_curCard.GetComponent<Card>());
+
+			if (_curCard.GetChild(0) == null)
+				break;
+			else
+				_curCard = _curCard.GetChild(0);
 		}
-		return CardList;
+
+		return cardList;
 	}
 }

@@ -1,6 +1,6 @@
 public class CardEnum
 {
-	public enum CardState
+	public enum ECardMoveState
 	{
 		IDLE,
 		CLICKED,
@@ -8,7 +8,7 @@ public class CardEnum
 		MOVING
 	}
 
-	public enum CardDirection
+	public enum ECardDirection
 	{
 		FRONT,
 		BACK
