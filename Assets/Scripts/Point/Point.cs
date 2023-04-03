@@ -14,17 +14,22 @@ public class Point : MonoBehaviour
 		if (GetChildCount() == 0)
 			return null;
 
-		Transform _curCard = transform;
+		RectTransform _curCard = GetComponent<RectTransform>();
 		
 		while(true)
 		{
-			Card _childCard = _curCard.GetChild(0).GetComponent<Card>();
+			RectTransform _childCard;
 
-			// 내 자식 오브젝트가 없거나 내 자식 카드 컴포넌트의 카드 방향이 앞면이라면 break;
-			if (_childCard == null || _childCard.cardTextureDirection == CardEnum.ECardDirection.FRONT)
+			if (_curCard.GetChild(0) == null)
 				break;
 			else
-				_curCard = _childCard.transform;
+				_childCard = _curCard.GetChild(0).GetComponent<RectTransform>();
+
+			// 내 자식 오브젝트가 없거나 내 자식 카드 컴포넌트의 카드 방향이 앞면이라면 break;
+			if (_childCard.GetComponent<Card>() == null || _childCard.GetComponent<Card>().cardTextureDirection == CardEnum.ECardDirection.FRONT)
+				break;
+			else
+				_curCard = _childCard;
 		}
 
 		return _curCard.GetComponent<Card>();
@@ -39,13 +44,13 @@ public class Point : MonoBehaviour
 
 		while(true)
 		{
-			Card _childCard = _curCard.GetChild(0).GetComponent<Card>();
+			Transform _childCard = _curCard.GetChild(0);
 
 			//내 자식 오브젝트가 없으면 마지막이므로 break;
 			if (_childCard == null)
 				break;
 			else
-				_curCard = _childCard.transform;
+				_curCard = _childCard;
 		}
 
 		return _curCard.GetComponent<Card>();
