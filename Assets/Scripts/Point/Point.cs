@@ -37,6 +37,7 @@ public class Point : MonoBehaviour
 
 	public Card GetMoveableLastCard()
 	{
+		
 		if (GetChildCount() == 0)
 			return null;
 
