@@ -25,7 +25,7 @@ public class Point : MonoBehaviour
 			else
 				_childCard = _curCard.GetChild(0).GetComponent<RectTransform>();
 
-			// ³» ÀÚ½Ä ¿ÀºêÁ§Æ®°¡ ¾ø°Å³ª ³» ÀÚ½Ä Ä«µå ÄÄÆ÷³ÍÆ®ÀÇ Ä«µå ¹æÇâÀÌ ¾Õ¸éÀÌ¶ó¸é break;
+			// ë‚´ ìì‹ ì˜¤ë¸Œì íŠ¸ê°€ ì—†ê±°ë‚˜ ë‚´ ìì‹ ì¹´ë“œ ì»´í¬ë„ŒíŠ¸ì˜ ì¹´ë“œ ë°©í–¥ì´ ì•ë©´ì´ë¼ë©´ break;
 			if (_childCard.GetComponent<Card>() == null || _childCard.GetComponent<Card>().cardTextureDirection == CardEnum.ECardDirection.FRONT)
 				break;
 			else
@@ -37,6 +37,7 @@ public class Point : MonoBehaviour
 
 	public Card GetMoveableLastCard()
 	{
+
 		if (GetChildCount() == 0)
 			return null;
 
@@ -46,7 +47,7 @@ public class Point : MonoBehaviour
 		{
 			Transform _childCard = _curCard.GetChild(0);
 
-			//³» ÀÚ½Ä ¿ÀºêÁ§Æ®°¡ ¾øÀ¸¸é ¸¶Áö¸·ÀÌ¹Ç·Î break;
+			//ë‚´ ìì‹ ì˜¤ë¸Œì íŠ¸ê°€ ì—†ìœ¼ë©´ ë§ˆì§€ë§‰ì´ë¯€ë¡œ break;
 			if (_childCard == null)
 				break;
 			else
