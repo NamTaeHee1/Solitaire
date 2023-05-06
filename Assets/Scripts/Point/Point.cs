@@ -20,7 +20,7 @@ public class Point : MonoBehaviour
 		{
 			RectTransform _childCard;
 
-			if (_curCard.GetChild(0) == null)
+			if (_curCard.childCount == 0)
 				break;
 			else
 				_childCard = _curCard.GetChild(0).GetComponent<RectTransform>();
@@ -37,7 +37,6 @@ public class Point : MonoBehaviour
 
 	public Card GetMoveableLastCard()
 	{
-
 		if (GetChildCount() == 0)
 			return null;
 
@@ -45,13 +44,13 @@ public class Point : MonoBehaviour
 
 		while(true)
 		{
-			Transform _childCard = _curCard.GetChild(0);
+			Transform _childCard = _curCard;
 
 			//내 자식 오브젝트가 없으면 마지막이므로 break;
-			if (_childCard == null)
+			if (_childCard.childCount == 0)
 				break;
 			else
-				_curCard = _childCard;
+				_curCard = _curCard.GetChild(0);
 		}
 
 		return _curCard.GetComponent<Card>();
