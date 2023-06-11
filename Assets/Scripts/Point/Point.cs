@@ -58,7 +58,6 @@ public class Point : MonoBehaviour
 
 	public List<Card> GetMoveableCardList()
 	{
-
 		List<Card> cardList = new List<Card>();
 		Transform _curCard = GetMoveableFirstCard().transform;
 
