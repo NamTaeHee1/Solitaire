@@ -6,7 +6,12 @@ public class PointManager : MonoBehaviour
 {
 	public static PointManager Instance
 	{
-		 get { return _instance; }
+		 get 
+		 {
+			if (_instance == null)
+				_instance = FindObjectOfType<PointManager>();
+			return _instance; 
+		 }
 	}
 
 	private static PointManager _instance;
@@ -14,10 +19,4 @@ public class PointManager : MonoBehaviour
 	public Point[] K;
 	public Point[] A;
 	public Point SelectCardPoint;
-
-	private void Awake()
-	{
-		_instance = this;
-	}
-
 }

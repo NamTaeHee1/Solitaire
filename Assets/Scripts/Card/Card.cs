@@ -167,24 +167,25 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 		curPoint = movePoint;
 	}
 
+	private const float TO_POS_TIME = 0.75f;
+
 	IEnumerator MoveCard(Vector3 ToPos, float WaitTime = 0)
 	{
 		float t = 0;
-		float toPosTime = 0.75f;
 
 		cardState = CardEnum.ECardMoveState.MOVING;
 
 		yield return new WaitForSeconds(WaitTime);
 
-		while (toPosTime > t)
+		while (TO_POS_TIME > t)
 		{
 			if (cardState == CardEnum.ECardMoveState.CLICKED)
 				break;
 
 			t += Time.deltaTime;
-			cardRect.localPosition = Vector2.Lerp(cardRect.localPosition, ToPos, t / toPosTime);
+			cardRect.anchoredPosition = Vector2.Lerp(cardRect.anchoredPosition, ToPos, t / TO_POS_TIME);
 
-			if (Vector3.Distance(cardRect.localPosition, ToPos) < 0.1f) // 카드가 목표지점에 도착할 경우
+			if (Vector3.Distance(cardRect.anchoredPosition, ToPos) < 0.1f) // 카드가 목표지점에 도착할 경우
 			{
 				cardState = CardEnum.ECardMoveState.IDLE;
 				break;

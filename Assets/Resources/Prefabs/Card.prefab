@@ -52,7 +52,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardFrontTexture: {fileID: 0}
-  cardBackTexture: {fileID: 0}
+  cardBackTexture: {fileID: -8246103488371625927, guid: 21abfb87035730f4b8c2539f6bbfd9da, type: 3}
   cardState: 0
   cardTextureDirection: 1
   pCard: {fileID: 0}
