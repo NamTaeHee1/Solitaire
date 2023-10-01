@@ -1,16 +1,13 @@
-public class CardEnum
+public enum ECardMoveState
 {
-	public enum ECardMoveState
-	{
-		IDLE,
-		CLICKED,
-		DRAGING,
-		MOVING
-	}
+	IDLE,
+	CLICKED,
+	DRAGING,
+	MOVING
+}
 
-	public enum ECardDirection
-	{
-		FRONT,
-		BACK
-	}
+public enum ECardDirection
+{
+	FRONT,
+	BACK
 }

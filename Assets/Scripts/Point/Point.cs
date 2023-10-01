@@ -26,7 +26,7 @@ public class Point : MonoBehaviour
 				_childCard = _curCard.GetChild(0).GetComponent<RectTransform>();
 
 			// 내 자식 오브젝트가 없거나 내 자식 카드 컴포넌트의 카드 방향이 앞면이라면 break;
-			if (_childCard.GetComponent<Card>() == null || _childCard.GetComponent<Card>().cardTextureDirection == CardEnum.ECardDirection.FRONT)
+			if (_childCard.GetComponent<Card>() == null || _childCard.GetComponent<Card>().cardTextureDirection == ECardDirection.FRONT)
 				break;
 			else
 				_curCard = _childCard;

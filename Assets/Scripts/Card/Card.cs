@@ -12,8 +12,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 	[SerializeField] private Sprite cardBackTexture;
 
 	[Header("카드 Enum")]
-	public CardEnum.ECardMoveState cardState = CardEnum.ECardMoveState.IDLE;
-	public CardEnum.ECardDirection cardTextureDirection = CardEnum.ECardDirection.BACK;
+	public ECardMoveState cardState = ECardMoveState.IDLE;
+	public ECardDirection cardTextureDirection = ECardDirection.BACK;
 
 	[Header("Parent Card")]
 	public Card pCard = null; // Parent Card
@@ -23,7 +23,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 	[SerializeField] private Point prevPoint = null;
 
 	[Header("Hierarchy에서 관리")]
-	[SerializeField] private Vector3 childCardPosition = Vector3.zero;
+	[SerializeField] private Vector2 childCardPosition = Vector2.zero;
 	[SerializeField] private RectTransform cardRect;
 
 	#region Card Propety, Init
@@ -39,7 +39,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 		this.cardName = CardName;
 	}
 
-	private void SetCardState(CardEnum.ECardMoveState state) => cardState = state;
+	private void SetCardState(ECardMoveState state) => cardState = state;
 	#endregion
 
 /*	private void Update()
@@ -53,23 +53,29 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 	}*/
 
 	#region Texture
-	public IEnumerator Show(CardEnum.ECardDirection Direction, float WaitTime = 0)
+	private IEnumerator Show(ECardDirection _direction, float _waitTime = 0)
 	{
-		yield return new WaitForSeconds(WaitTime);
+		yield return new WaitForSeconds(_waitTime);
 
 		Image CardImage = GetComponent<Image>();
-		switch (Direction)
+		switch (_direction)
 		{
-			case CardEnum.ECardDirection.FRONT:
+			case ECardDirection.FRONT:
 				CardImage.sprite = cardFrontTexture;
 				break;
-			case CardEnum.ECardDirection.BACK:
+			case ECardDirection.BACK:
 				CardImage.sprite = cardBackTexture;
 				break;
 		}
 
-		cardTextureDirection = Direction;
+		cardTextureDirection = _direction;
 	}
+
+	public void ShowCoroutine(ECardDirection _direction, float _waitTime = 0)
+	{
+		StartCoroutine(Show(_direction, _waitTime));
+	}
+
 	#endregion
 
 	#region Point
@@ -83,24 +89,24 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 	#region IHandler Functions
 	public void OnPointerDown(PointerEventData eventData)
 	{
-		if (cardTextureDirection == CardEnum.ECardDirection.BACK)
+		if (cardTextureDirection == ECardDirection.BACK)
 			return;
-		gameObject.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+		gameObject.GetOrAddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
 		prevPoint = GetPoint();
-		SetCardState(CardEnum.ECardMoveState.CLICKED);
+		SetCardState(ECardMoveState.CLICKED);
 	}
 
 	public void OnBeginDrag(PointerEventData eventData)
 	{
-		if (cardTextureDirection == CardEnum.ECardDirection.BACK)
+		if (cardTextureDirection == ECardDirection.BACK)
 			return;
 	}
 
 	public void OnDrag(PointerEventData eventData)
 	{
-		if (cardTextureDirection == CardEnum.ECardDirection.BACK)
+		if (cardTextureDirection == ECardDirection.BACK)
 			return;
-		SetCardState(CardEnum.ECardMoveState.DRAGING);
+		SetCardState(ECardMoveState.DRAGING);
 		//CardRect.anchoredPosition = Vector2.Lerp(CardRect.anchoredPosition, CardRect.anchoredPosition + eventData.delta, 1.0f);
 
 		Vector3 CardRectAnchorPos = cardRect.anchoredPosition;
@@ -116,18 +122,17 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 
 	public void OnPointerUp(PointerEventData eventData)
 	{
-		if (cardTextureDirection == CardEnum.ECardDirection.BACK)
+		if (cardTextureDirection == ECardDirection.BACK)
 			return;
-		Destroy(gameObject.GetComponent<Rigidbody2D>());
 		Move();
 	}
 	#endregion
 
 	#region Move Function
-	public void Move(Point movePoint = null, float WaitTime = 0)
+	public void Move(Point _movePoint = null, float _waitTime = 0)
 	{
 		// 플레이어가 드래그해서 PointerUp 함수가 호출 될 경우
-		if (movePoint == null)
+		if (_movePoint == null)
 		{
 			List<Card> OverlapCards = SearchCardAround();
 			if(OverlapCards.Count > 0)
@@ -141,8 +146,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 
 			if(point != prevPoint)
 			{
-				Card PrevPointLastCard = prevPoint.GetMoveableLastCard();
-				PrevPointLastCard.StartCoroutine(PrevPointLastCard.Show(CardEnum.ECardDirection.FRONT));
+				Card prevPointLastCard = prevPoint.GetMoveableLastCard();
+				prevPointLastCard.ShowCoroutine(ECardDirection.FRONT);
 			}
 
 			curPoint = point;
@@ -152,42 +157,45 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 		}
 
 		// 스크립트에서 Move 함수를 호출할 경우
-		if (movePoint.GetChildCount() == 0) // 이동할 Point에 아무 카드도 없다면
+		if (_movePoint.GetChildCount() == 0) // 이동할 Point에 아무 카드도 없다면
 		{
-			transform.SetParent(movePoint.transform);
-			StartCoroutine(MoveCard(Vector3.zero, WaitTime));
+			transform.SetParent(_movePoint.transform);
+			StartCoroutine(MoveCard(Vector3.zero, _waitTime));
 		}
 		else // 있다면
 		{
-			pCard = movePoint.GetMoveableLastCard();
+			pCard = _movePoint.GetMoveableLastCard();
 			transform.SetParent(pCard.transform);
-			StartCoroutine(MoveCard(childCardPosition, WaitTime));
+			StartCoroutine(MoveCard(childCardPosition, _waitTime));
 		}
 
-		curPoint = movePoint;
+		curPoint = _movePoint;
 	}
 
 	private const float TO_POS_TIME = 0.75f;
 
-	IEnumerator MoveCard(Vector3 ToPos, float WaitTime = 0)
+	IEnumerator MoveCard(Vector3 _toPos, float _waitTime = 0, Transform parent = null)
 	{
 		float t = 0;
 
-		cardState = CardEnum.ECardMoveState.MOVING;
+		cardState = ECardMoveState.MOVING;
 
-		yield return new WaitForSeconds(WaitTime);
+		yield return new WaitForSeconds(_waitTime);
 
 		while (TO_POS_TIME > t)
 		{
-			if (cardState == CardEnum.ECardMoveState.CLICKED)
+			if (cardState == ECardMoveState.CLICKED)
 				break;
 
 			t += Time.deltaTime;
-			cardRect.anchoredPosition = Vector2.Lerp(cardRect.anchoredPosition, ToPos, t / TO_POS_TIME);
+			cardRect.anchoredPosition = Vector2.Lerp(cardRect.anchoredPosition, _toPos, t / TO_POS_TIME);
 
-			if (Vector3.Distance(cardRect.anchoredPosition, ToPos) < 0.1f) // 카드가 목표지점에 도착할 경우
+			if (Vector3.Distance(cardRect.anchoredPosition, _toPos) < 0.1f) // 카드가 목표지점에 도착할 경우
 			{
-				cardState = CardEnum.ECardMoveState.IDLE;
+				cardRect.anchoredPosition = _toPos;
+				if (parent != null)
+					cardRect.SetParent(parent);
+				cardState = ECardMoveState.IDLE;
 				break;
 			}
 
@@ -198,13 +206,13 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 	#endregion
 
 	#region pCard(Parent Card)
-	private Card ChoosePCardFromList(List<Card> OverlapCards) // 리스트 중에서 현재 선택한 카드와 가장 가까운 카드를 반환
+	private Card ChoosePCardFromList(List<Card> overlapCards) // 리스트 중에서 현재 선택한 카드와 가장 가까운 카드를 반환
 	{
-		for (int i = OverlapCards.Count - 1; i >= 0; i--)
+		for (int i = overlapCards.Count - 1; i >= 0; i--)
 		{
-			if (OverlapCards[i].cardTextureDirection == CardEnum.ECardDirection.BACK) // 뒷면이면 pCard에서 제외
+			if (overlapCards[i].cardTextureDirection == ECardDirection.BACK) // 뒷면이면 pCard에서 제외
 			{
-				OverlapCards.Remove(OverlapCards[i]);
+				overlapCards.Remove(overlapCards[i]);
 				continue;
 			}
 
@@ -214,55 +222,55 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 
 			foreach (Card card in PointCardList) // 저번 Point와 이번 Point의 카드는 pCard에서 제외
 			{
-				if (OverlapCards[i] == card)
+				if (overlapCards[i] == card)
 				{
-					OverlapCards.RemoveAt(i);
+					overlapCards.RemoveAt(i);
 					continue;
 				}
 			}
 		}
 
-		if (OverlapCards.Count == 0)
+		if (overlapCards.Count == 0)
 		{
 			Debug.Log("OverlapCards.Count = 0");
 			return null;
 		}
 
-		Card ProximateCard = OverlapCards[0];
+		Card proximateCard = overlapCards[0];
 
-		for (int i = 0; i < OverlapCards.Count; i++)
+		for (int i = 0; i < overlapCards.Count; i++)
 		{
-			Debug.Log($"{i}번째 카드 : {OverlapCards[i].name}, 현재카드와의 Distance : {OverlapCards[i].GetDistance(this)}");
+			Debug.Log($"{i}번째 카드 : {overlapCards[i].name}, 현재카드와의 Distance : {overlapCards[i].GetDistance(this)}");
 		}
 
-		if (OverlapCards.Count > 1)
+		if (overlapCards.Count > 1)
 		{
-			for (int i = 1; i < OverlapCards.Count; i++)
+			for (int i = 1; i < overlapCards.Count; i++)
 			{
-				if (OverlapCards[i].GetDistance(this) < ProximateCard.GetDistance(this))
-					ProximateCard = OverlapCards[i];
+				if (overlapCards[i].GetDistance(this) < proximateCard.GetDistance(this))
+					proximateCard = overlapCards[i];
 			}
 		}
 
-		return ProximateCard;
+		return proximateCard;
 	}
 	#endregion
 
 	#region Interact with DifferentCard
 
-	private float GetDistance(Card DIffCard)
+	private float GetDistance(Card _diffCard)
 	{
-		Vector2 distance = transform.position - DIffCard.transform.position;
+		Vector2 distance = transform.position - _diffCard.transform.position;
 		return distance.sqrMagnitude;
 	}
 
 	private List<Card> SearchCardAround() // 자신을 제외한 주변 카드 검색 및 리스트로 반환 & pCard로 지정하는 함수는 따로 구현
 	{
-		RectTransform CardCanvasRect = GameObject.Find("CardCanvas").GetComponent<RectTransform>();
+		RectTransform cardCanvasRect = GameObject.Find("CardCanvas").GetComponent<RectTransform>();
 
-		Vector2 CanvasSize = Camera.main.ScreenToWorldPoint(CardCanvasRect.sizeDelta) * 2;
-		Vector2 CardSize = new Vector2(CanvasSize.x / (CardCanvasRect.sizeDelta.x / cardRect.sizeDelta.x),
-															  CanvasSize.y / (CardCanvasRect.sizeDelta.y / cardRect.sizeDelta.y));
+		Vector2 CanvasSize = Camera.main.ScreenToWorldPoint(cardCanvasRect.sizeDelta) * 2;
+		Vector2 CardSize = new Vector2(CanvasSize.x / (cardCanvasRect.sizeDelta.x / cardRect.sizeDelta.x),
+															  CanvasSize.y / (cardCanvasRect.sizeDelta.y / cardRect.sizeDelta.y));
 
 		Collider2D[] OverlapObjects = Physics2D.OverlapBoxAll(transform.position, CardSize, 0);
 
@@ -281,7 +289,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 	#region Gizmo
 	private void OnDrawGizmos()
 	{
-		if (cardState != CardEnum.ECardMoveState.DRAGING)
+		if (cardState != ECardMoveState.DRAGING)
 			return;
 		RectTransform CardCanvasRect = GameObject.Find("CardCanvas").GetComponent<RectTransform>();
 
