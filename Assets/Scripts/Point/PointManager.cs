@@ -18,5 +18,5 @@ public class PointManager : MonoBehaviour
 
 	public Point[] K;
 	public Point[] A;
-	public Point SelectCardPoint;
+	public Point MovingCardPoint;
 }

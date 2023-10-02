@@ -74,4 +74,10 @@ public class Point : MonoBehaviour
 
 		return cardList;
 	}
+
+	public Vector2 GetCardPos()
+	{
+		Vector2 cardOffset = new Vector2(0, transform.childCount * Card.CHILD_CARD_POS);
+		return GetComponent<RectTransform>().anchoredPosition + cardOffset;
+	}
 }

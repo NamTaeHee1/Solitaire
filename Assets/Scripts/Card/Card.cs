@@ -15,16 +15,13 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 	public ECardMoveState cardState = ECardMoveState.IDLE;
 	public ECardDirection cardTextureDirection = ECardDirection.BACK;
 
-	[Header("Parent Card")]
-	public Card pCard = null; // Parent Card
-
 	[Header("Point")]
 	[SerializeField] private Point curPoint = null;
-	[SerializeField] private Point prevPoint = null;
 
 	[Header("Hierarchy에서 관리")]
-	[SerializeField] private Vector2 childCardPosition = Vector2.zero;
 	[SerializeField] private RectTransform cardRect;
+
+	public static float CHILD_CARD_POS = -0.35f;
 
 	#region Card Propety, Init
 	public string cardName 
@@ -92,7 +89,6 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 		if (cardTextureDirection == ECardDirection.BACK)
 			return;
 		gameObject.GetOrAddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
-		prevPoint = GetPoint();
 		SetCardState(ECardMoveState.CLICKED);
 	}
 
@@ -129,73 +125,49 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 	#endregion
 
 	#region Move Function
-	public void Move(Point _movePoint = null, float _waitTime = 0)
+	public void Move(Point _movePoint = null, float _waitTime = 0f)
 	{
 		// 플레이어가 드래그해서 PointerUp 함수가 호출 될 경우
 		if (_movePoint == null)
 		{
 			List<Card> OverlapCards = SearchCardAround();
-			if(OverlapCards.Count > 0)
-				pCard = ChoosePCardFromList(OverlapCards);
-			// pCard가 있다면 PointUp이 호출된 시점에 있는 카드들 중 pCard로 적합한 카드를 찾은 뜻
 
-			if(pCard == null)
-				pCard = prevPoint.GetMoveableLastCard(); // 못 찾은 경우 저번 포인트의 마지막 카드로 pCard를 설정
+			if (OverlapCards.Count > 0)
+				curPoint = ChoicePCardFromList(OverlapCards).curPoint;
 
-			Point point = pCard.curPoint;
-
-			if(point != prevPoint)
-			{
-				Card prevPointLastCard = prevPoint.GetMoveableLastCard();
-				prevPointLastCard.ShowCoroutine(ECardDirection.FRONT);
-			}
-
-			curPoint = point;
-			Move(point);
+			Move(curPoint);
 
 			return;
 		}
 
-		// 스크립트에서 Move 함수를 호출할 경우
-		if (_movePoint.GetChildCount() == 0) // 이동할 Point에 아무 카드도 없다면
-		{
-			transform.SetParent(_movePoint.transform);
-			StartCoroutine(MoveCard(Vector3.zero, _waitTime));
-		}
-		else // 있다면
-		{
-			pCard = _movePoint.GetMoveableLastCard();
-			transform.SetParent(pCard.transform);
-			StartCoroutine(MoveCard(childCardPosition, _waitTime));
-		}
-
-		curPoint = _movePoint;
+		StartCoroutine(MoveCard(_movePoint, _waitTime));
 	}
 
 	private const float TO_POS_TIME = 0.75f;
+	private float timer = 0f;
+	private Vector2 toPos = Vector2.zero;
 
-	IEnumerator MoveCard(Vector3 _toPos, float _waitTime = 0, Transform parent = null)
+	IEnumerator MoveCard(Point _movePoint, float _waitTime = 0f)
 	{
-		float t = 0;
-
 		cardState = ECardMoveState.MOVING;
+		toPos = _movePoint.GetCardPos();
 
 		yield return new WaitForSeconds(_waitTime);
 
-		while (TO_POS_TIME > t)
+		while (TO_POS_TIME > timer)
 		{
 			if (cardState == ECardMoveState.CLICKED)
 				break;
 
-			t += Time.deltaTime;
-			cardRect.anchoredPosition = Vector2.Lerp(cardRect.anchoredPosition, _toPos, t / TO_POS_TIME);
+			timer += Time.deltaTime;
+			cardRect.anchoredPosition = Vector2.Lerp(cardRect.anchoredPosition, toPos, timer / TO_POS_TIME);
 
-			if (Vector3.Distance(cardRect.anchoredPosition, _toPos) < 0.1f) // 카드가 목표지점에 도착할 경우
+			if (Vector3.Distance(cardRect.anchoredPosition, toPos) < 0.1f) // 카드가 목표지점에 도착할 경우
 			{
-				cardRect.anchoredPosition = _toPos;
-				if (parent != null)
-					cardRect.SetParent(parent);
+				curPoint = _movePoint;
+				cardRect.anchoredPosition = toPos;
 				cardState = ECardMoveState.IDLE;
+				timer = 0f;
 				break;
 			}
 
@@ -206,7 +178,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 	#endregion
 
 	#region pCard(Parent Card)
-	private Card ChoosePCardFromList(List<Card> overlapCards) // 리스트 중에서 현재 선택한 카드와 가장 가까운 카드를 반환
+	private Card ChoicePCardFromList(List<Card> overlapCards) // 리스트 중에서 현재 선택한 카드와 가장 가까운 카드를 반환
 	{
 		for (int i = overlapCards.Count - 1; i >= 0; i--)
 		{
@@ -217,7 +189,6 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 			}
 
 			List<Card> PointCardList = new List<Card>();
-			PointCardList.AddRange(prevPoint.GetMoveableCardList());
 			PointCardList.AddRange(curPoint.GetMoveableCardList());
 
 			foreach (Card card in PointCardList) // 저번 Point와 이번 Point의 카드는 pCard에서 제외

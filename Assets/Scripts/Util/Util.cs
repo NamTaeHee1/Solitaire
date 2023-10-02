@@ -10,6 +10,6 @@ public static class Util
 		if(_component  ==  null)
 			_component = _gameObject.AddComponent<T>();
 
-		return _component;
+		return (T)_component;
 	}
 }
