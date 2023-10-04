@@ -9,6 +9,16 @@ public class Point : MonoBehaviour
 		return transform.childCount;
 	}
 
+	public Card GetLastCard()
+	{
+		int lastCardIndex = GetChildCount() - 1;
+
+		if (lastCardIndex < 0)
+			return null;
+
+		return transform.GetChild(lastCardIndex).GetComponent<Card>();
+	}
+
 	public Card GetMoveableFirstCard()
 	{
 		if (GetChildCount() == 0)
@@ -78,6 +88,6 @@ public class Point : MonoBehaviour
 	public Vector2 GetCardPos()
 	{
 		Vector2 cardOffset = new Vector2(0, transform.childCount * Card.CHILD_CARD_POS);
-		return GetComponent<RectTransform>().anchoredPosition + cardOffset;
+		return cardOffset;
 	}
 }

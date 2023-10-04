@@ -55,11 +55,9 @@ MonoBehaviour:
   cardBackTexture: {fileID: -8246103488371625927, guid: 21abfb87035730f4b8c2539f6bbfd9da, type: 3}
   cardState: 0
   cardTextureDirection: 1
-  pCard: {fileID: 0}
   curPoint: {fileID: 0}
-  prevPoint: {fileID: 0}
-  childCardPosition: {x: 0, y: -35, z: 0}
   cardRect: {fileID: 4731036666131990605}
+  cardImage: {fileID: 9208431905414267751}
 --- !u!222 &3970483134664655304
 CanvasRenderer:
   m_ObjectHideFlags: 0
