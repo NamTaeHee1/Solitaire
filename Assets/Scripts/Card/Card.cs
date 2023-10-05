@@ -22,7 +22,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 	[SerializeField] private RectTransform cardRect;
 	[SerializeField] private Image cardImage;
 
-	public static float CHILD_CARD_POS = -35f;
+	public static float CHILD_CARD_POS = -50f;
 
 	#region Card Propety, Init
 	public string cardName 
@@ -103,18 +103,12 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 	{
 		if (cardTextureDirection == ECardDirection.BACK)
 			return;
+
 		SetCardState(ECardMoveState.DRAGING);
-		//CardRect.anchoredPosition = Vector2.Lerp(CardRect.anchoredPosition, CardRect.anchoredPosition + eventData.delta, 1.0f);
 
-		Vector3 CardRectAnchorPos = cardRect.anchoredPosition;
-		CardRectAnchorPos.x += eventData.delta.x;
-		CardRectAnchorPos.y += eventData.delta.y;
+		Vector2 CardRectAnchorPos = cardRect.anchoredPosition;
+		CardRectAnchorPos += eventData.delta;
 		cardRect.anchoredPosition = CardRectAnchorPos;
-
-/*		curPoint = GetPoint();
-		for (int i = 0; i < curPoint.GetChildCount(); i++)
-			Debug.Log(curPoint.transform.GetChild(i).name);*/
-
 	}
 
 	public void OnPointerUp(PointerEventData eventData)
