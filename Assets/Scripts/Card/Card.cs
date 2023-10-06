@@ -22,12 +22,15 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 	[SerializeField] private RectTransform cardRect;
 	[SerializeField] private Image cardImage;
 
+	// 현재 카드 클릭 및 이동 가능한지 bool로 반환
+	private Func<bool> cardInputBlock;
+
 	public static float CHILD_CARD_POS = -50f;
 
 	#region Card Propety, Init
 	public string cardName 
 	{
-		get { return cardName; }
+		get { return transform.name; }
 		set { transform.name = value; }
 	}
 
@@ -40,15 +43,16 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 	private void SetCardState(ECardMoveState state) => cardState = state;
 	#endregion
 
-/*	private void Update()
+	#region Start
+	private void Start()
 	{
-		if (CardState == CardEnum.CardState.IDLE && pCard != null)
+		cardInputBlock = () =>
 		{
-			CurPoint = pCard.CurPoint;
-			PrevPoint = pCard.PrevPoint;
-			transform.localPosition = pCard.transform.localPosition + ChildCardPosition;
-		}
-	}*/
+			return (cardTextureDirection == ECardDirection.BACK ||
+						 cardState == ECardMoveState.MOVING);
+		};
+	}
+	#endregion
 
 	#region Texture
 	private IEnumerator Show(ECardDirection _direction, float _waitTime = 0)
@@ -81,10 +85,17 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 	#endregion
 
 	#region IHandler Functions
+	[SerializeField] private bool isDrag = false;
+
 	public void OnPointerDown(PointerEventData eventData)
 	{
-		if (cardTextureDirection == ECardDirection.BACK)
+		if (cardInputBlock())
 			return;
+
+		if(transform.GetSiblingIndex() != curPoint.GetChildCount() - 1) // 현재 Point의 마지막 카드가 아니라면
+		{
+
+		}
 
 		transform.SetParent(GameSceneUI.Instance.cardCanvas.transform);
 		transform.SetAsLastSibling();
@@ -95,13 +106,15 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 
 	public void OnBeginDrag(PointerEventData eventData)
 	{
-		if (cardTextureDirection == ECardDirection.BACK)
+		if (cardInputBlock())
 			return;
+
+		isDrag = true;
 	}
 
 	public void OnDrag(PointerEventData eventData)
 	{
-		if (cardTextureDirection == ECardDirection.BACK)
+		if (cardInputBlock())
 			return;
 
 		SetCardState(ECardMoveState.DRAGING);
@@ -113,8 +126,14 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 
 	public void OnPointerUp(PointerEventData eventData)
 	{
-		if (cardTextureDirection == ECardDirection.BACK)
+		if (cardInputBlock())
 			return;
+
+		if (isDrag == false)
+		{
+			//TODO
+		}
+		isDrag = false;
 
 		Move();
 	}
@@ -195,6 +214,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 	/// <returns></returns>
 	private Card ChoicePCardFromList(List<Card> overlapCards)
 	{
+		foreach (Card card in overlapCards)
+			Debug.Log($"CARD : {card}");
 		for (int i = overlapCards.Count - 1; i >= 0; i--)
 		{
 			Card _card = overlapCards[i];
