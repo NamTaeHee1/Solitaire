@@ -92,9 +92,15 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 		if (cardInputBlock())
 			return;
 
-		if(transform.GetSiblingIndex() != curPoint.GetChildCount() - 1) // 현재 Point의 마지막 카드가 아니라면
-		{
+		int pointChildCount = curPoint.GetChildCount() - 1;
+		int cardSliblingIndex = transform.GetSiblingIndex();
 
+		if(cardSliblingIndex != pointChildCount) // 현재 Point의 마지막 카드가 아니라면
+		{
+			for(int i = cardSliblingIndex + 1; i < pointChildCount; i++)
+			{
+				curPoint.transform.GetChild(i).SetParent(this.transform);
+			}
 		}
 
 		transform.SetParent(GameSceneUI.Instance.cardCanvas.transform);
