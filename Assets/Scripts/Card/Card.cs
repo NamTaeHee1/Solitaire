@@ -92,14 +92,18 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 		if (cardInputBlock())
 			return;
 
-		int pointChildCount = curPoint.GetChildCount() - 1;
 		int cardSliblingIndex = transform.GetSiblingIndex();
+		int pointChildCount = curPoint.GetChildCount() - 1;
 
-		if(cardSliblingIndex != pointChildCount) // 현재 Point의 마지막 카드가 아니라면
+		if (cardSliblingIndex != pointChildCount) // 현재 Point의 마지막 카드가 아니라면
 		{
-			for(int i = cardSliblingIndex + 1; i < pointChildCount; i++)
+			Debug.Log($"Slib : {cardSliblingIndex}, point : {pointChildCount}");
+			for(int i = pointChildCount + 1; i <= cardSliblingIndex + 1; i--)
 			{
-				curPoint.transform.GetChild(i).SetParent(this.transform);
+				Transform childCard = curPoint.transform.GetChild(i);
+				Debug.Log($"cardName : {curPoint.transform.GetChild(i).name}");
+				childCard.SetParent(this.transform);
+				childCard.SetAsFirstSibling();
 			}
 		}
 
