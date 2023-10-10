@@ -22,6 +22,9 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 	[SerializeField] private RectTransform cardRect;
 	[SerializeField] private Image cardImage;
 
+	[Header("자식 카드들 (내가 클릭한 카드일때 밑에 있던 카드들")]
+	[SerializeField] private List<Transform> childCardList = new List<Transform>();
+
 	// 현재 카드 클릭 및 이동 가능한지 bool로 반환
 	private Func<bool> cardInputBlock;
 
@@ -97,14 +100,20 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 
 		if (cardSliblingIndex != pointChildCount) // 현재 Point의 마지막 카드가 아니라면
 		{
-			Debug.Log($"Slib : {cardSliblingIndex}, point : {pointChildCount}");
-			for(int i = pointChildCount; i >= cardSliblingIndex + 1; i--)
+/*			for(int i = pointChildCount; i >= cardSliblingIndex + 1; i--)
 			{
 				Transform childCard = curPoint.transform.GetChild(i);
-				Debug.Log($"cardName : {curPoint.transform.GetChild(i).name}");
 				childCard.SetParent(this.transform);
 				childCard.SetAsFirstSibling();
+			}*/
+
+			for(int i = cardSliblingIndex + 1; i < pointChildCount + 1; i++)
+			{
+				Transform childCard = curPoint.transform.GetChild(i);
+				childCardList.Add(childCard);
 			}
+
+			SetParentChilds(this.transform, ECardSlibDirection.LAST);
 		}
 
 		transform.SetParent(GameSceneUI.Instance.cardCanvas.transform);
@@ -139,7 +148,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 		if (cardInputBlock())
 			return;
 
-		if (isDrag == false)
+		if (isDrag == false) // Down부터 Drag 하지 않고 Up에 도달했을때
 		{
 			//TODO
 		}
@@ -160,6 +169,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 			if (_overlapCards.Count > 0)
 			{
 				Card _pCard = ChoicePCardFromList(_overlapCards);
+
 				if (_pCard != null)
 				{
 					if(_pCard.curPoint != curPoint) // 이동하는 Point가 현재 Point와 다르다면 원래 Point의 마지막 카드를 앞면이 보이도록 수정
@@ -178,6 +188,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 			return;
 		}
 
+		curPoint = _movePoint;
 		StartCoroutine(MoveCard(_movePoint, _waitTime));
 	}
 
@@ -203,10 +214,26 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 
 			if (Vector3.Distance(cardRect.anchoredPosition, toPos) < 0.1f) // 카드가 목표지점에 도착할 경우
 			{
-				curPoint = _movePoint;
 				cardRect.anchoredPosition = toPos;
 				SetCardState(ECardMoveState.IDLE);
 				timer = 0f;
+
+/*				if(transform.childCount > 0)
+				{
+					for(int i = 0; i < transform.childCount; i++)
+					{
+						Transform childCard = transform.GetChild(i);
+						childCard.SetParent(_movePoint.transform);
+						childCard.SetAsLastSibling();
+					}
+				}
+*/
+				if(childCardList.Count > 0)
+				{
+					SetParentChilds(_movePoint.transform, ECardSlibDirection.LAST);
+					childCardList.Clear();
+				}
+
 				break;
 			}
 
@@ -224,27 +251,21 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 	/// <returns></returns>
 	private Card ChoicePCardFromList(List<Card> overlapCards)
 	{
-		foreach (Card card in overlapCards)
-			Debug.Log($"CARD : {card}");
 		for (int i = overlapCards.Count - 1; i >= 0; i--)
 		{
 			Card _card = overlapCards[i];
-			if (_card.cardTextureDirection == ECardDirection.BACK) // 뒷면이면 pCard에서 제외
+			if (_card.cardTextureDirection == ECardDirection.BACK || // 뒷면이면 pCard에서 제외
+				_card.curPoint == curPoint) // 현재 내 Point와 같은 Point에 있는 카드거나
 			{
 				overlapCards.Remove(overlapCards[i]);
 				continue;
 			}
 		}
 
-		if (overlapCards.Count == 0) // 적합한 
+		if (overlapCards.Count == 0) // 적합한 카드가 없다면
 			return null;
 
 		Card proximateCard = overlapCards[0];
-
-		for (int i = 0; i < overlapCards.Count; i++)
-		{
-			Debug.Log($"{i}번째 카드 : {overlapCards[i].name}, 현재카드와의 Distance : {overlapCards[i].GetDistance(this)}");
-		}
 
 		if (overlapCards.Count > 1)
 		{
@@ -257,6 +278,26 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 
 		return proximateCard;
 	}
+	#endregion
+
+	#region Child Card
+
+	public void SetParentChilds(Transform _parent, ECardSlibDirection _direction)
+	{
+		for(int i = 0; i < childCardList.Count; i++)
+		{
+			Transform child = childCardList[i];
+			child.SetParent(_parent);
+
+			child.GetComponent<Card>().curPoint = this.curPoint;
+
+			if (_direction == ECardSlibDirection.FIRST)
+				child.SetAsFirstSibling();
+			else
+				child.SetAsLastSibling();
+		}
+	}
+
 	#endregion
 
 	#region Interact with DifferentCard
@@ -290,6 +331,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 	#endregion
 
 	#region Gizmo
+#if UNITY_EDITOR
 	private void OnDrawGizmos()
 	{
 		if (cardState != ECardMoveState.DRAGING)
@@ -303,5 +345,6 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 		Gizmos.color = Color.red;
 		Gizmos.DrawWireCube(transform.position, CardSize);
 	}
+#endif
 	#endregion
 }

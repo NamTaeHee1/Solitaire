@@ -3,11 +3,20 @@ public enum ECardMoveState
 	IDLE,
 	CLICKED,
 	DRAGING,
-	MOVING
+	MOVING,
+	COUNT
 }
 
 public enum ECardDirection
 {
 	FRONT,
-	BACK
+	BACK,
+	COUNT
+}
+
+public enum ECardSlibDirection
+{
+	FIRST,
+	LAST,
+	COUNT
 }
