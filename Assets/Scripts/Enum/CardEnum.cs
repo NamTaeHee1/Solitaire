@@ -20,3 +20,12 @@ public enum ECardSlibDirection
 	LAST,
 	COUNT
 }
+
+public enum ECardSuit
+{
+	SPADE,
+	HEART,
+	DIAMOND,
+	CLUB,
+	COUNT
+}
