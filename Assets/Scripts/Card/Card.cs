@@ -5,6 +5,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+[Serializable]
+public struct CardInfo
+{
+	public ECardSuit cardSuit;
+	public int cardNumber;
+}
+
 public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IPointerUpHandler
 {
 	[Header("카드 Texture")]
@@ -28,6 +35,9 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 	// 현재 카드 클릭 및 이동 가능한지 bool로 반환
 	private Func<bool> cardInputBlock;
 
+	[Header("카드 정보")]
+	public CardInfo cardInfo;
+
 	public static float CHILD_CARD_POS = -50f;
 
 	#region Card Propety, Init
@@ -37,10 +47,14 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 		set { transform.name = value; }
 	}
 
-	public void SetCardInfo(Sprite CardFrontTexure, string CardName)
+	public void SetCardInfo(Sprite _cardFrontTexure, string _cardName)
 	{
-		this.cardFrontTexture = CardFrontTexure;
-		this.cardName = CardName;
+		this.cardFrontTexture = _cardFrontTexure;
+		this.cardName = _cardName;
+
+		string[] cardInfoArr = _cardName.Split('_'); // [1] : Suit, [2] : Number
+		cardInfo.cardSuit = (ECardSuit)Enum.Parse(typeof(ECardSuit), cardInfoArr[1].ToUpper());
+		cardInfo.cardNumber = int.Parse(cardInfoArr[2]);
 	}
 
 	private void SetCardState(ECardMoveState state) => cardState = state;

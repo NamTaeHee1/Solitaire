@@ -23,9 +23,26 @@ public enum ECardSlibDirection
 
 public enum ECardSuit
 {
-	SPADE,
-	HEART,
-	DIAMOND,
-	CLUB,
+	SPADES,
+	HEARTS,
+	DIAMONDS,
+	CLUBS,
 	COUNT
+}
+
+public enum ECardOrder
+{
+	A = 1,
+	TWO,
+	THREE,
+	FOUR,
+	FIVE,
+	SIX,
+	SEVEN,
+	EIGHT,
+	NINE,
+	TEN,
+	J,
+	Q,
+	K
 }
