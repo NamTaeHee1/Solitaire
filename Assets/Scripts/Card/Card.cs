@@ -114,13 +114,6 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 
 		if (cardSliblingIndex != pointChildCount) // 현재 Point의 마지막 카드가 아니라면
 		{
-/*			for(int i = pointChildCount; i >= cardSliblingIndex + 1; i--)
-			{
-				Transform childCard = curPoint.transform.GetChild(i);
-				childCard.SetParent(this.transform);
-				childCard.SetAsFirstSibling();
-			}*/
-
 			for(int i = cardSliblingIndex + 1; i < pointChildCount + 1; i++)
 			{
 				Transform childCard = curPoint.transform.GetChild(i);
@@ -166,6 +159,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 		{
 			//TODO
 		}
+
 		isDrag = false;
 
 		Move();
