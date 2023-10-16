@@ -10,32 +10,33 @@ public struct CardInfo
 {
 	public ECardSuit cardSuit;
 	public int cardNumber;
+	
 }
 
 public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IPointerUpHandler
 {
-	[Header("Ä«µå Texture")]
+	[Header("ì¹´ë“œ Texture")]
 	[SerializeField] private Sprite cardFrontTexture;
 	[SerializeField] private Sprite cardBackTexture;
 
-	[Header("Ä«µå Enum")]
+	[Header("ì¹´ë“œ Enum")]
 	public ECardMoveState cardState = ECardMoveState.IDLE;
 	public ECardDirection cardTextureDirection = ECardDirection.BACK;
 
 	[Header("Point")]
 	[SerializeField] private Point curPoint = null;
 
-	[Header("Hierarchy¿¡¼­ °ü¸®")]
+	[Header("Hierarchyì—ì„œ ê´€ë¦¬")]
 	[SerializeField] private RectTransform cardRect;
 	[SerializeField] private Image cardImage;
 
-	[Header("ÀÚ½Ä Ä«µåµé (³»°¡ Å¬¸¯ÇÑ Ä«µåÀÏ¶§ ¹Ø¿¡ ÀÖ´ø Ä«µåµé")]
+	[Header("ìì‹ ì¹´ë“œë“¤ (ë‚´ê°€ í´ë¦­í•œ ì¹´ë“œì¼ë•Œ ë°‘ì— ìˆë˜ ì¹´ë“œë“¤")]
 	[SerializeField] private List<Transform> childCardList = new List<Transform>();
 
-	// ÇöÀç Ä«µå Å¬¸¯ ¹× ÀÌµ¿ °¡´ÉÇÑÁö bool·Î ¹İÈ¯
+	// í˜„ì¬ ì¹´ë“œ í´ë¦­ ë° ì´ë™ ê°€ëŠ¥í•œì§€ boolë¡œ ë°˜í™˜
 	private Func<bool> cardInputBlock;
 
-	[Header("Ä«µå Á¤º¸")]
+	[Header("ì¹´ë“œ ì •ë³´")]
 	public CardInfo cardInfo;
 
 	public static float CHILD_CARD_POS = -50f;
@@ -112,7 +113,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 		int cardSliblingIndex = transform.GetSiblingIndex();
 		int pointChildCount = curPoint.GetChildCount() - 1;
 
-		if (cardSliblingIndex != pointChildCount) // ÇöÀç PointÀÇ ¸¶Áö¸· Ä«µå°¡ ¾Æ´Ï¶ó¸é
+		if (cardSliblingIndex != pointChildCount) // í˜„ì¬ Pointì˜ ë§ˆì§€ë§‰ ì¹´ë“œê°€ ì•„ë‹ˆë¼ë©´
 		{
 			for(int i = cardSliblingIndex + 1; i < pointChildCount + 1; i++)
 			{
@@ -155,7 +156,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 		if (cardInputBlock())
 			return;
 
-		if (isDrag == false) // DownºÎÅÍ Drag ÇÏÁö ¾Ê°í Up¿¡ µµ´ŞÇßÀ»¶§
+		if (isDrag == false) // Downë¶€í„° Drag í•˜ì§€ ì•Šê³  Upì— ë„ë‹¬í–ˆì„ë•Œ
 		{
 			//TODO
 		}
@@ -169,7 +170,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 	#region Move Function
 	public void Move(Point _movePoint = null, float _waitTime = 0f)
 	{
-		// ÇÃ·¹ÀÌ¾î°¡ µå·¡±×ÇØ¼­ PointerUp ÇÔ¼ö°¡ È£Ãâ µÉ °æ¿ì
+		// í”Œë ˆì´ì–´ê°€ ë“œë˜ê·¸í•´ì„œ PointerUp í•¨ìˆ˜ê°€ í˜¸ì¶œ ë  ê²½ìš°
 		if (_movePoint == null)
 		{
 			List<Card> _overlapCards = SearchCardAround();
@@ -180,7 +181,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 
 				if (_pCard != null)
 				{
-					if(_pCard.curPoint != curPoint) // ÀÌµ¿ÇÏ´Â Point°¡ ÇöÀç Point¿Í ´Ù¸£´Ù¸é ¿ø·¡ PointÀÇ ¸¶Áö¸· Ä«µå¸¦ ¾Õ¸éÀÌ º¸ÀÌµµ·Ï ¼öÁ¤
+					if(_pCard.curPoint != curPoint) // ì´ë™í•˜ëŠ” Pointê°€ í˜„ì¬ Pointì™€ ë‹¤ë¥´ë‹¤ë©´ ì›ë˜ Pointì˜ ë§ˆì§€ë§‰ ì¹´ë“œë¥¼ ì•ë©´ì´ ë³´ì´ë„ë¡ ìˆ˜ì •
 					{
 						Card _pointLastCard = curPoint.GetLastCard();
 						if (_pointLastCard != null)
@@ -220,7 +221,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 			timer += Time.deltaTime;
 			cardRect.anchoredPosition = Vector2.Lerp(cardRect.anchoredPosition, toPos, timer / TO_POS_TIME);
 
-			if (Vector3.Distance(cardRect.anchoredPosition, toPos) < 0.1f) // Ä«µå°¡ ¸ñÇ¥ÁöÁ¡¿¡ µµÂøÇÒ °æ¿ì
+			if (Vector3.Distance(cardRect.anchoredPosition, toPos) < 0.1f) // ì¹´ë“œê°€ ëª©í‘œì§€ì ì— ë„ì°©í•  ê²½ìš°
 			{
 				cardRect.anchoredPosition = toPos;
 				SetCardState(ECardMoveState.IDLE);
@@ -253,7 +254,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 
 	#region pCard(Parent Card)
 	/// <summary>
-	/// overlapCards ¸®½ºÆ®¿¡¼­ Á¶°Ç¿¡ ¾Ë¸Â°í °¡Àå °¡±î¿î Ä«µå¸¦ ¹İÈ¯
+	/// overlapCards ë¦¬ìŠ¤íŠ¸ì—ì„œ ì¡°ê±´ì— ì•Œë§ê³  ê°€ì¥ ê°€ê¹Œìš´ ì¹´ë“œë¥¼ ë°˜í™˜
 	/// </summary>
 	/// <param name="overlapCards"></param>
 	/// <returns></returns>
@@ -262,15 +263,15 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 		for (int i = overlapCards.Count - 1; i >= 0; i--)
 		{
 			Card _card = overlapCards[i];
-			if (_card.cardTextureDirection == ECardDirection.BACK || // µŞ¸éÀÌ¸é pCard¿¡¼­ Á¦¿Ü
-				_card.curPoint == curPoint) // ÇöÀç ³» Point¿Í °°Àº Point¿¡ ÀÖ´Â Ä«µå°Å³ª
+			if (_card.cardTextureDirection == ECardDirection.BACK || // ë’·ë©´ì´ë©´ pCardì—ì„œ ì œì™¸
+				_card.curPoint == curPoint) // í˜„ì¬ ë‚´ Pointì™€ ê°™ì€ Pointì— ìˆëŠ” ì¹´ë“œê±°ë‚˜
 			{
 				overlapCards.Remove(overlapCards[i]);
 				continue;
 			}
 		}
 
-		if (overlapCards.Count == 0) // ÀûÇÕÇÑ Ä«µå°¡ ¾ø´Ù¸é
+		if (overlapCards.Count == 0) // ì í•©í•œ ì¹´ë“œê°€ ì—†ë‹¤ë©´
 			return null;
 
 		Card proximateCard = overlapCards[0];
@@ -316,7 +317,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 		return distance.sqrMagnitude;
 	}
 
-	private List<Card> SearchCardAround() // ÀÚ½ÅÀ» Á¦¿ÜÇÑ ÁÖº¯ Ä«µå °Ë»ö ¹× ¸®½ºÆ®·Î ¹İÈ¯ & pCard·Î ÁöÁ¤ÇÏ´Â ÇÔ¼ö´Â µû·Î ±¸Çö
+	private List<Card> SearchCardAround() // ìì‹ ì„ ì œì™¸í•œ ì£¼ë³€ ì¹´ë“œ ê²€ìƒ‰ ë° ë¦¬ìŠ¤íŠ¸ë¡œ ë°˜í™˜ & pCardë¡œ ì§€ì •í•˜ëŠ” í•¨ìˆ˜ëŠ” ë”°ë¡œ êµ¬í˜„
 	{
 		RectTransform cardCanvasRect = GameObject.Find("CardCanvas").GetComponent<RectTransform>();
 
