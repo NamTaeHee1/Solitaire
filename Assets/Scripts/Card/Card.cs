@@ -10,7 +10,6 @@ public struct CardInfo
 {
 	public ECardSuit cardSuit;
 	public int cardNumber;
-	
 }
 
 public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IPointerUpHandler
