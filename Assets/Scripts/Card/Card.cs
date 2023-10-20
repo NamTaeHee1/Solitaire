@@ -9,8 +9,7 @@ using UnityEngine.EventSystems;
 public struct CardInfo
 {
 	public ECardSuit cardSuit;
-	public int cardNumber;
-	
+	public ECardOrder cardOrder;
 }
 
 public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IPointerUpHandler
@@ -55,7 +54,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 
 		string[] cardInfoArr = _cardName.Split('_'); // [1] : Suit, [2] : Number
 		cardInfo.cardSuit = (ECardSuit)Enum.Parse(typeof(ECardSuit), cardInfoArr[1].ToUpper());
-		cardInfo.cardNumber = int.Parse(cardInfoArr[2]);
+		cardInfo.cardOrder = (ECardOrder)Enum.Parse(typeof(ECardOrder), cardInfoArr[2]);
 	}
 
 	private void SetCardState(ECardMoveState state) => cardState = state;
