@@ -54,7 +54,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 
 		string[] cardInfoArr = _cardName.Split('_'); // [1] : Suit, [2] : Number
 		cardInfo.cardSuit = (ECardSuit)Enum.Parse(typeof(ECardSuit), cardInfoArr[1].ToUpper());
-		cardInfo.cardOrder = (ECardOrder)Enum.Parse(typeof(ECardOrder), cardInfoArr[2]);
+		cardInfo.cardOrder = (ECardOrder)Enum.Parse(typeof(ECardOrder), cardInfoArr[2].ToUpper());
 	}
 
 	private void SetCardState(ECardMoveState state) => cardState = state;
