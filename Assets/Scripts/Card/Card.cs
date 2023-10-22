@@ -10,6 +10,7 @@ public struct CardInfo
 {
 	public ECardSuit cardSuit;
 	public ECardOrder cardOrder;
+	public ECardColor cardColor;
 }
 
 public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IPointerUpHandler
@@ -52,9 +53,12 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 		this.cardFrontTexture = _cardFrontTexure;
 		this.cardName = _cardName;
 
-		string[] cardInfoArr = _cardName.Split('_'); // [1] : Suit, [2] : Number
+		Debug.Log($"_cardName : {_cardName}");
+		string[] cardInfoArr = _cardName.Split('_'); // [1] : Suit, [2] : Order, [3] : Color
 		cardInfo.cardSuit = (ECardSuit)Enum.Parse(typeof(ECardSuit), cardInfoArr[1].ToUpper());
 		cardInfo.cardOrder = (ECardOrder)Enum.Parse(typeof(ECardOrder), cardInfoArr[2].ToUpper());
+		cardInfo.cardColor = (ECardColor)Enum.Parse(typeof(ECardColor), cardInfoArr[3].ToUpper());
+		Debug.Log($"cardInfoArr[3].ToUpper() : {cardInfoArr[3].ToUpper()}");
 	}
 
 	private void SetCardState(ECardMoveState state) => cardState = state;
@@ -336,6 +340,25 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 
 		return OverlapCards;
 	}
+	#endregion
+
+	#region RuleCheck
+
+	private bool RuleCheck(Card _diffCard)
+	{
+		// 1.  _diffCard의 cardOrder가 현재 내 카드의 cardOrder보다 한 단계 높아야 함
+
+		// 2. 같은 Suit의 카트여야 함
+		if (cardInfo.cardSuit != _diffCard.cardInfo.cardSuit)
+			return false;
+
+		// 3. 다른색이어야 함
+		if (cardInfo.cardColor == _diffCard.cardInfo.cardColor)
+			return false;
+
+		return true;
+	}
+
 	#endregion
 
 	#region Gizmo

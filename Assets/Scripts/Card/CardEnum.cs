@@ -44,5 +44,13 @@ public enum ECardOrder
 	TEN,
 	J,
 	Q,
-	K
+	K,
+	COUNT
+}
+
+public enum ECardColor
+{
+	RED,
+	BLACK,
+	COUNT
 }

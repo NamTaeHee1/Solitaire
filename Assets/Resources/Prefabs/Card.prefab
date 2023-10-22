@@ -58,6 +58,12 @@ MonoBehaviour:
   curPoint: {fileID: 0}
   cardRect: {fileID: 4731036666131990605}
   cardImage: {fileID: 9208431905414267751}
+  childCardList: []
+  cardInfo:
+    cardSuit: 0
+    cardOrder: 1
+    cardColor: 0
+  isDrag: 0
 --- !u!222 &3970483134664655304
 CanvasRenderer:
   m_ObjectHideFlags: 0
