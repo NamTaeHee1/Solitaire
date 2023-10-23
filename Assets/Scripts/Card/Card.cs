@@ -11,6 +11,7 @@ public struct CardInfo
 	public ECardSuit cardSuit;
 	public ECardOrder cardOrder;
 	public ECardColor cardColor;
+	
 }
 
 public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IPointerUpHandler
