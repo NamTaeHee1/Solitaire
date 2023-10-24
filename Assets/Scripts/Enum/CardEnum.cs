@@ -45,6 +45,7 @@ public enum ECardOrder
 	J,
 	Q,
 	K,
+	Dummy,
 	COUNT
 }
 
