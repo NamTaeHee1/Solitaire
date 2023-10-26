@@ -37,7 +37,7 @@ public class CardSpawner : MonoBehaviour
     private void MoveCardToPoints()
 	{
         float waitTime = 0;
-        Point[] kPoints = PointManager.Instance.K;
+        Point[] kPoints = PointManager.Instance.tableau;
 
         for (int i = 0; i < kPoints.Length; i++)
 		{

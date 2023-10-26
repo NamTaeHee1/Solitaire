@@ -16,6 +16,8 @@ public class PointManager : MonoBehaviour
 
 	private static PointManager _instance;
 
-	public Point[] K;
-	public Point[] A;
+	public Point[] tableau;
+	public Point[] foundation;
+	public Point stock;
+	public Point waste;
 }
