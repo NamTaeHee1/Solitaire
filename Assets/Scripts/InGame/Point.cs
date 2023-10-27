@@ -5,6 +5,7 @@ using UnityEngine;
 public enum PointType
 {
 	CARD,
+	TABLEAU,
 	WASTE,
 	STOCK,
 	FOUNDATION,
