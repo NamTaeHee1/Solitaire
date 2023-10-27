@@ -2,11 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum PointType
+{
+	CARD,
+	WASTE,
+	STOCK,
+	FOUNDATION,
+}
+
 public class Point : MonoBehaviour
 {
+	public PointType pointType;
+
 	public int GetChildCount()
 	{
- 
 		return transform.childCount;
 	}
 
