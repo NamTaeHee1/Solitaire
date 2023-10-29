@@ -15,6 +15,8 @@ public class Point : MonoBehaviour
 {
 	public PointType pointType;
 
+	public float childCardOffset = -50f;
+
 	public int GetChildCount()
 	{
 		return transform.childCount;
@@ -32,7 +34,7 @@ public class Point : MonoBehaviour
 
 	public Vector2 GetCardPos()
 	{
-		Vector2 cardOffset = new Vector2(0, transform.childCount * Card.CHILD_CARD_POS);
+		Vector2 cardOffset = new Vector2(0, transform.childCount * childCardOffset);
 		return cardOffset;
 	}
 }

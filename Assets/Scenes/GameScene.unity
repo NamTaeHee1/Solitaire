@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e4782db4afb8634694726e9962890be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  K:
+  tableau:
   - {fileID: 1106841351}
   - {fileID: 981747159}
   - {fileID: 1199971299}
@@ -160,7 +160,9 @@ MonoBehaviour:
   - {fileID: 1752882568}
   - {fileID: 357776942}
   - {fileID: 894684774}
-  A: []
+  foundation: []
+  stock: {fileID: 0}
+  waste: {fileID: 0}
 --- !u!4 &12260724
 Transform:
   m_ObjectHideFlags: 0
@@ -187,7 +189,7 @@ GameObject:
   - component: {fileID: 107387712}
   - component: {fileID: 107387711}
   m_Layer: 5
-  m_Name: A
+  m_Name: Foundation_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -342,7 +344,7 @@ GameObject:
   - component: {fileID: 357776942}
   - component: {fileID: 357776943}
   m_Layer: 5
-  m_Name: K_6
+  m_Name: Tableau_6
   m_TagString: Card
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -379,6 +381,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bce13db71bd1954ebf6456b17236763, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pointType: 0
+  childCardOffset: -50
 --- !u!61 &357776943
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -417,7 +421,7 @@ GameObject:
   - component: {fileID: 388061310}
   - component: {fileID: 388061309}
   m_Layer: 5
-  m_Name: K
+  m_Name: Tableau_6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -889,7 +893,7 @@ GameObject:
   - component: {fileID: 735006974}
   - component: {fileID: 735006973}
   m_Layer: 5
-  m_Name: K
+  m_Name: Tableau_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1086,7 +1090,7 @@ GameObject:
   - component: {fileID: 850560196}
   - component: {fileID: 850560197}
   m_Layer: 5
-  m_Name: K_4
+  m_Name: Tableau_4
   m_TagString: Card
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1123,6 +1127,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bce13db71bd1954ebf6456b17236763, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pointType: 0
+  childCardOffset: -50
 --- !u!61 &850560197
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1209,7 +1215,7 @@ GameObject:
   - component: {fileID: 857655334}
   - component: {fileID: 857655333}
   m_Layer: 5
-  m_Name: K
+  m_Name: Tableau_7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1285,7 +1291,7 @@ GameObject:
   - component: {fileID: 894684774}
   - component: {fileID: 894684775}
   m_Layer: 5
-  m_Name: K_7
+  m_Name: Tableau_7
   m_TagString: Card
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1322,6 +1328,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bce13db71bd1954ebf6456b17236763, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pointType: 0
+  childCardOffset: -50
 --- !u!61 &894684775
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1360,7 +1368,7 @@ GameObject:
   - component: {fileID: 973844546}
   - component: {fileID: 973844545}
   m_Layer: 5
-  m_Name: K
+  m_Name: Tableau_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1436,7 +1444,7 @@ GameObject:
   - component: {fileID: 981747159}
   - component: {fileID: 981747160}
   m_Layer: 5
-  m_Name: K_2
+  m_Name: Tableau_2
   m_TagString: Card
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1473,6 +1481,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bce13db71bd1954ebf6456b17236763, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pointType: 0
+  childCardOffset: -50
 --- !u!61 &981747160
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1590,7 +1600,7 @@ GameObject:
   - component: {fileID: 1106841351}
   - component: {fileID: 1106841352}
   m_Layer: 5
-  m_Name: K_1
+  m_Name: Tableau_1
   m_TagString: Card
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1627,6 +1637,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bce13db71bd1954ebf6456b17236763, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pointType: 0
+  childCardOffset: -50
 --- !u!61 &1106841352
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1744,7 +1756,7 @@ GameObject:
   - component: {fileID: 1199971299}
   - component: {fileID: 1199971300}
   m_Layer: 5
-  m_Name: K_3
+  m_Name: Tableau_3
   m_TagString: Card
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1781,6 +1793,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bce13db71bd1954ebf6456b17236763, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pointType: 0
+  childCardOffset: -50
 --- !u!61 &1199971300
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1977,7 +1991,7 @@ GameObject:
   - component: {fileID: 1306968331}
   - component: {fileID: 1306968330}
   m_Layer: 5
-  m_Name: K
+  m_Name: Tableau_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2730,7 +2744,7 @@ GameObject:
   - component: {fileID: 1752882568}
   - component: {fileID: 1752882569}
   m_Layer: 5
-  m_Name: K_5
+  m_Name: Tableau_5
   m_TagString: Card
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2767,6 +2781,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bce13db71bd1954ebf6456b17236763, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pointType: 0
+  childCardOffset: -50
 --- !u!61 &1752882569
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3006,7 +3022,7 @@ GameObject:
   - component: {fileID: 1917725897}
   - component: {fileID: 1917725896}
   m_Layer: 5
-  m_Name: A
+  m_Name: Foundation_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3193,7 +3209,7 @@ GameObject:
   - component: {fileID: 1974504234}
   - component: {fileID: 1974504233}
   m_Layer: 5
-  m_Name: K
+  m_Name: Tableau_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3269,7 +3285,7 @@ GameObject:
   - component: {fileID: 2017686804}
   - component: {fileID: 2017686803}
   m_Layer: 5
-  m_Name: S
+  m_Name: Stock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3345,7 +3361,7 @@ GameObject:
   - component: {fileID: 2126768691}
   - component: {fileID: 2126768690}
   m_Layer: 5
-  m_Name: K
+  m_Name: Tableau_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3421,7 +3437,7 @@ GameObject:
   - component: {fileID: 2144506566}
   - component: {fileID: 2144506565}
   m_Layer: 5
-  m_Name: A
+  m_Name: Foundation_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3555,7 +3571,7 @@ GameObject:
   - component: {fileID: 2949156133082962734}
   - component: {fileID: 4978645851660637235}
   m_Layer: 5
-  m_Name: A
+  m_Name: Foundation_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

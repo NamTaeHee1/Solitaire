@@ -14,7 +14,7 @@ public struct CardInfo
 	
 }
 
-public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IPointerUpHandler
+public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler, IPointerUpHandler
 {
 	[Header("카드 Texture")]
 	[SerializeField] private Sprite cardFrontTexture;
@@ -39,8 +39,6 @@ public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDrag
 
 	[Header("카드 정보")]
 	public CardInfo cardInfo;
-
-	public static float CHILD_CARD_POS = -50f;
 
 	#region Card Propety, Init
 	public string cardName 

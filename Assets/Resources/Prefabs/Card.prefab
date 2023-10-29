@@ -48,7 +48,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7121862259997278454}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80a010e7af6cc984abc3020c3bb03129, type: 3}
+  m_Script: {fileID: 11500000, guid: 532bb5a0ee0ae454180ee1f828a2e6ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cardFrontTexture: {fileID: 0}
@@ -61,7 +61,7 @@ MonoBehaviour:
   childCardList: []
   cardInfo:
     cardSuit: 0
-    cardOrder: 1
+    cardOrder: 0
     cardColor: 0
   isDrag: 0
 --- !u!222 &3970483134664655304
