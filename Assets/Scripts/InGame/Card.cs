@@ -52,12 +52,10 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 		this.cardFrontTexture = _cardFrontTexure;
 		this.cardName = _cardName;
 
-		Debug.Log($"_cardName : {_cardName}");
 		string[] cardInfoArr = _cardName.Split('_'); // [1] : Suit, [2] : Order, [3] : Color
 		cardInfo.cardSuit = (ECardSuit)Enum.Parse(typeof(ECardSuit), cardInfoArr[1].ToUpper());
 		cardInfo.cardOrder = (ECardOrder)Enum.Parse(typeof(ECardOrder), cardInfoArr[2].ToUpper());
 		cardInfo.cardColor = (ECardColor)Enum.Parse(typeof(ECardColor), cardInfoArr[3].ToUpper());
-		Debug.Log($"cardInfoArr[3].ToUpper() : {cardInfoArr[3].ToUpper()}");
 	}
 
 	private void SetCardState(ECardMoveState state) => cardState = state;
