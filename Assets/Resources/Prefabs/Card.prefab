@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1169763643408835533}
   m_Layer: 5
   m_Name: Card
-  m_TagString: Card
+  m_TagString: Point
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -51,6 +51,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532bb5a0ee0ae454180ee1f828a2e6ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pointType: 0
+  childCardOffset: -50
   cardFrontTexture: {fileID: 0}
   cardBackTexture: {fileID: -8246103488371625927, guid: 21abfb87035730f4b8c2539f6bbfd9da, type: 3}
   cardState: 0

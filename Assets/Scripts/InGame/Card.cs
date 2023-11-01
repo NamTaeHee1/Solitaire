@@ -11,7 +11,6 @@ public struct CardInfo
 	public ECardSuit cardSuit;
 	public ECardOrder cardOrder;
 	public ECardColor cardColor;
-	
 }
 
 public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler, IPointerUpHandler
@@ -260,6 +259,8 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 	/// <returns></returns>
 	private Card ChoicePCardFromList(List<Card> overlapCards)
 	{
+		foreach (Card card in overlapCards)
+			Debug.Log($"Card : {card.name}");
 		for (int i = overlapCards.Count - 1; i >= 0; i--)
 		{
 			Card _card = overlapCards[i];
@@ -321,21 +322,21 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 	{
 		RectTransform cardCanvasRect = GameObject.Find("CardCanvas").GetComponent<RectTransform>();
 
-		Vector2 CanvasSize = Camera.main.ScreenToWorldPoint(cardCanvasRect.sizeDelta) * 2;
-		Vector2 CardSize = new Vector2(CanvasSize.x / (cardCanvasRect.sizeDelta.x / cardRect.sizeDelta.x),
-															  CanvasSize.y / (cardCanvasRect.sizeDelta.y / cardRect.sizeDelta.y));
+		Vector2 canvasSize = Camera.main.ScreenToWorldPoint(cardCanvasRect.sizeDelta) * 2;
+		Vector2 cardSize = new Vector2(canvasSize.x / (cardCanvasRect.sizeDelta.x / cardRect.sizeDelta.x),
+															  canvasSize.y / (cardCanvasRect.sizeDelta.y / cardRect.sizeDelta.y));
 
-		Collider2D[] OverlapObjects = Physics2D.OverlapBoxAll(transform.position, CardSize, 0);
+		Collider2D[] overlapObjects = Physics2D.OverlapBoxAll(transform.position, cardSize, 0);
 
-		List<Card> OverlapCards = new List<Card>();
+		List<Card> overlapCards = new List<Card>();
 
-		foreach (Collider2D Object in OverlapObjects)
+		foreach (Collider2D obj in overlapObjects)
 		{
-			if (Object.CompareTag("Card") && Object.GetComponent<Card>() != this)
-				OverlapCards.Add(Object.GetComponent<Card>());
+			if (obj.CompareTag("Point") && obj.GetComponent<Card>() != this && obj)
+				overlapCards.Add(obj.GetComponent<Card>());
 		}
 
-		return OverlapCards;
+		return overlapCards;
 	}
 	#endregion
 
