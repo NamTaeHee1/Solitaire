@@ -176,7 +176,7 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 
 			if (_overlapCards.Count > 0)
 			{
-				Card _pCard = ChoicePCardFromList(_overlapCards);
+				Card _pCard = ChoicePointFromList(_overlapCards);
 
 				if (_pCard != null)
 				{
@@ -257,18 +257,19 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 	/// </summary>
 	/// <param name="overlapCards"></param>
 	/// <returns></returns>
-	private Card ChoicePCardFromList(List<Card> overlapCards)
+	private Card ChoicePointFromList(List<Point> overlapCards)
 	{
-		foreach (Card card in overlapCards)
-			Debug.Log($"Card : {card.name}");
 		for (int i = overlapCards.Count - 1; i >= 0; i--)
 		{
-			Card _card = overlapCards[i];
-			if (_card.cardTextureDirection == ECardDirection.BACK || // 뒷면이면 pCard에서 제외
-				_card.curPoint == curPoint) // 현재 내 Point와 같은 Point에 있는 카드거나
+			if(overlapCards[i] is Card)
 			{
-				overlapCards.Remove(overlapCards[i]);
-				continue;
+				Card _card = overlapCards[i] as Card;
+				if (_card.cardTextureDirection == ECardDirection.BACK || // 뒷면이면 pCard에서 제외
+					_card.curPoint == curPoint) // 현재 내 Point와 같은 Point에 있는 카드거나
+				{
+					overlapCards.Remove(overlapCards[i]);
+					continue;
+				}
 			}
 		}
 
