@@ -22,6 +22,12 @@ public class Point : MonoBehaviour
 		return transform.childCount;
 	}
 
+	public float GetDistance(Point _diffPoint)
+	{
+		Vector2 distance = transform.position - _diffPoint.transform.position;
+		return distance.sqrMagnitude;
+	}
+
 	public Card GetLastCard()
 	{
 		int lastCardIndex = GetChildCount() - 1;
@@ -32,7 +38,7 @@ public class Point : MonoBehaviour
 		return transform.GetChild(lastCardIndex).GetComponent<Card>();
 	}
 
-	public Vector2 GetCardPos()
+	public Vector2 GetChildPos()
 	{
 		Vector2 cardOffset = new Vector2(0, transform.childCount * childCardOffset);
 		return cardOffset;

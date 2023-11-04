@@ -172,22 +172,26 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 		// 플레이어가 드래그해서 PointerUp 함수가 호출 될 경우
 		if (_movePoint == null)
 		{
-			List<Card> _overlapCards = SearchCardAround();
+			List<Point> _overlapPoints = SearchPointAround();
 
-			if (_overlapCards.Count > 0)
+			if (_overlapPoints.Count > 0)
 			{
-				Card _pCard = ChoicePointFromList(_overlapCards);
+				Point _pCard = ChoicePointFromList(_overlapPoints);
 
 				if (_pCard != null)
 				{
-					if(_pCard.curPoint != curPoint) // 이동하는 Point가 현재 Point와 다르다면 원래 Point의 마지막 카드를 앞면이 보이도록 수정
+					if(_pCard is Card)
 					{
-						Card _pointLastCard = curPoint.GetLastCard();
-						if (_pointLastCard != null)
-							_pointLastCard.Show(ECardDirection.FRONT);
-					}
+						Card card = (Card)_pCard;
+						if (card.curPoint != curPoint) // 이동하는 Point가 현재 Point와 다르다면 원래 Point의 마지막 카드를 앞면이 보이도록 수정
+						{
+							Card _pointLastCard = curPoint.GetLastCard();
+							if (_pointLastCard != null)
+								_pointLastCard.Show(ECardDirection.FRONT);
+						}
 
-					curPoint = _pCard.curPoint;
+						curPoint = card.curPoint;
+					}
 				}
 			}
 
@@ -208,7 +212,7 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 	{
 		transform.SetParent(_movePoint.transform);
 		SetCardState(ECardMoveState.MOVING);
-		toPos = _movePoint.GetCardPos();
+		toPos = _movePoint.GetChildPos();
 
 		yield return new WaitForSeconds(_waitTime);
 
@@ -257,7 +261,7 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 	/// </summary>
 	/// <param name="overlapCards"></param>
 	/// <returns></returns>
-	private Card ChoicePointFromList(List<Point> overlapCards)
+	private Point ChoicePointFromList(List<Point> overlapCards)
 	{
 		for (int i = overlapCards.Count - 1; i >= 0; i--)
 		{
@@ -276,7 +280,7 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 		if (overlapCards.Count == 0) // 적합한 카드가 없다면
 			return null;
 
-		Card proximateCard = overlapCards[0];
+		Point proximateCard = overlapCards[0];
 
 		if (overlapCards.Count > 1)
 		{
@@ -313,13 +317,7 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 
 	#region Interact with DifferentCard
 
-	private float GetDistance(Card _diffCard)
-	{
-		Vector2 distance = transform.position - _diffCard.transform.position;
-		return distance.sqrMagnitude;
-	}
-
-	private List<Card> SearchCardAround() // 자신을 제외한 주변 카드 검색 및 리스트로 반환 & pCard로 지정하는 함수는 따로 구현
+	private List<Point> SearchPointAround() // 자신을 제외한 주변 카드 검색 및 리스트로 반환 & pCard로 지정하는 함수는 따로 구현
 	{
 		RectTransform cardCanvasRect = GameObject.Find("CardCanvas").GetComponent<RectTransform>();
 
@@ -329,12 +327,12 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 
 		Collider2D[] overlapObjects = Physics2D.OverlapBoxAll(transform.position, cardSize, 0);
 
-		List<Card> overlapCards = new List<Card>();
+		List<Point> overlapCards = new List<Point>();
 
 		foreach (Collider2D obj in overlapObjects)
 		{
-			if (obj.CompareTag("Point") && obj.GetComponent<Card>() != this && obj)
-				overlapCards.Add(obj.GetComponent<Card>());
+			if (obj.CompareTag("Point") && obj.GetComponent<Point>() != this && obj)
+				overlapCards.Add(obj.GetComponent<Point>());
 		}
 
 		return overlapCards;
