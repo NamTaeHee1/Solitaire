@@ -33,9 +33,6 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 	[Header("자식 카드들 (내가 클릭한 카드일때 밑에 있던 카드들")]
 	[SerializeField] private List<Transform> childCardList = new List<Transform>();
 
-	// 현재 카드 클릭 및 이동 가능한지 bool로 반환
-	private Func<bool> cardInputBlock;
-
 	[Header("카드 정보")]
 	public CardInfo cardInfo;
 
@@ -58,17 +55,6 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 	}
 
 	private void SetCardState(ECardMoveState state) => cardState = state;
-	#endregion
-
-	#region Start
-	private void Start()
-	{
-		cardInputBlock = () =>
-		{
-			return (cardTextureDirection == ECardDirection.BACK ||
-						 cardState == ECardMoveState.MOVING);
-		};
-	}
 	#endregion
 
 	#region Texture
@@ -106,7 +92,7 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 
 	public void OnPointerDown(PointerEventData eventData)
 	{
-		if (cardInputBlock())
+		if (CheckInputBlocking())
 			return;
 
 		int cardSliblingIndex = transform.GetSiblingIndex();
@@ -132,7 +118,7 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 
 	public void OnBeginDrag(PointerEventData eventData)
 	{
-		if (cardInputBlock())
+		if (CheckInputBlocking())
 			return;
 
 		isDrag = true;
@@ -140,7 +126,7 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 
 	public void OnDrag(PointerEventData eventData)
 	{
-		if (cardInputBlock())
+		if (CheckInputBlocking())
 			return;
 
 		SetCardState(ECardMoveState.DRAGING);
@@ -152,7 +138,7 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 
 	public void OnPointerUp(PointerEventData eventData)
 	{
-		if (cardInputBlock())
+		if (CheckInputBlocking())
 			return;
 
 		if (isDrag == false) // Down부터 Drag 하지 않고 Up에 도달했을때
@@ -342,6 +328,8 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 	}
 	#endregion
 
+	#region Check
+
 	#region RuleCheck
 
 	private bool RuleCheck(Card _diffCard)
@@ -358,6 +346,18 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 
 		return true;
 	}
+
+	#endregion
+
+	#region InputBlockCheck
+
+	public bool CheckInputBlocking()
+	{
+		return (cardTextureDirection == ECardDirection.BACK ||
+					 cardState == ECardMoveState.MOVING);
+	}
+
+	#endregion
 
 	#endregion
 
