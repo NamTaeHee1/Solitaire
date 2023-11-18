@@ -169,12 +169,14 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 					if(_toPoint is Card)
 					{
 						Card card = (Card)_toPoint;
+
 						if (card.curPoint != curPoint) // 이동하는 Point가 현재 Point와 다르다면 원래 Point의 마지막 카드를 앞면이 보이도록 수정
 						{
 							Card _pointLastCard = curPoint.GetLastCard();
 							if (_pointLastCard != null)
 								_pointLastCard.Show(ECardDirection.FRONT);
 						}
+
 						curPoint = card.curPoint;
 					}
 					else if(_toPoint is Point)
