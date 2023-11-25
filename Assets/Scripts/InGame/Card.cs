@@ -153,10 +153,10 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 	#endregion
 
 	#region Move Function
-	public void Move(Point _movePoint = null, float _waitTime = 0f)
+	public void Move(Point movePoint = null, float waitTime = 0f)
 	{
 		// 플레이어가 드래그해서 PointerUp 함수가 호출 될 경우
-		if (_movePoint == null)
+		if (movePoint == null)
 		{
 			List<Point> _overlapPoints = SearchPointAround();
 			
@@ -191,8 +191,8 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 			return;
 		}
 
-		curPoint = _movePoint;
-		StartCoroutine(MoveCard(_movePoint, _waitTime));
+		curPoint = movePoint;
+		StartCoroutine(MoveCard(movePoint, waitTime));
 	}
 
 	private const float TO_POS_TIME = 0.75f;
