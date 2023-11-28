@@ -201,9 +201,9 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 
 	IEnumerator MoveCard(Point _movePoint, float _waitTime = 0f)
 	{
-		transform.SetParent(_movePoint.transform);
+		//transform.SetParent(_movePoint.transform);
 		SetCardState(ECardMoveState.MOVING);
-		toPos = _movePoint.GetChildPos();
+		toPos = _movePoint.GetComponent<RectTransform>().anchoredPosition + _movePoint.GetChildPos();
 
 		yield return new WaitForSeconds(_waitTime);
 
@@ -218,19 +218,10 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 			if (Vector3.Distance(cardRect.anchoredPosition, toPos) < 0.1f) // 카드가 목표지점에 도착할 경우
 			{
 				cardRect.anchoredPosition = toPos;
+				transform.SetParent(_movePoint.transform);
 				SetCardState(ECardMoveState.IDLE);
 				timer = 0f;
 
-/*				if(transform.childCount > 0)
-				{
-					for(int i = 0; i < transform.childCount; i++)
-					{
-						Transform childCard = transform.GetChild(i);
-						childCard.SetParent(_movePoint.transform);
-						childCard.SetAsLastSibling();
-					}
-				}
-*/
 				if(childCardList.Count > 0)
 				{
 					SetParentChilds(_movePoint.transform, ECardSlibDirection.LAST);
