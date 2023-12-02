@@ -203,7 +203,7 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 	{
 		//transform.SetParent(_movePoint.transform);
 		SetCardState(ECardMoveState.MOVING);
-		toPos = _movePoint.GetComponent<RectTransform>().anchoredPosition + _movePoint.GetChildPos();
+		toPos = _movePoint.GetLastCard().cardRect.anchoredPosition + new Vector2(0, childCardOffset);
 
 		yield return new WaitForSeconds(_waitTime);
 
