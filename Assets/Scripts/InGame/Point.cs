@@ -19,6 +19,7 @@ public class Point : MonoBehaviour
 
 	public int GetChildCount()
 	{
+ 
 		return transform.childCount;
 	}
 
