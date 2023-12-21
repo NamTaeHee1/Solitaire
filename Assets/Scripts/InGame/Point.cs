@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum PointType
 {
+	DUMMY,
 	CARD,
 	TABLEAU,
 	WASTE,
@@ -30,7 +31,7 @@ public class Point : MonoBehaviour
 
 	public Card GetLastCard()
 	{
-		int lastCardIndex = GetChildCount() - 1;
+		int lastCardIndex = transform.childCount - 1;
 
 		if (lastCardIndex < 0)
 			return null;

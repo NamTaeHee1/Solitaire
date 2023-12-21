@@ -16,5 +16,5 @@ public class GameSceneUI : MonoBehaviour
 	}
 	private static GameSceneUI _instance;
 
-	public Canvas cardCanvas;
+	public RectTransform selectCardPoint;
 }

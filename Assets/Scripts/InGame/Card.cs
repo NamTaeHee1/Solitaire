@@ -96,7 +96,7 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 			return;
 
 		int cardSliblingIndex = transform.GetSiblingIndex();
-		int pointChildCount = curPoint.GetChildCount() - 1;
+		int pointChildCount = curPoint.transform.childCount - 1;
 
 		if (cardSliblingIndex != pointChildCount) // 현재 Point의 마지막 카드가 아니라면
 		{
@@ -109,7 +109,7 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 			SetParentChilds(this.transform, ECardSlibDirection.LAST);
 		}
 
-		transform.SetParent(GameSceneUI.Instance.cardCanvas.transform);
+		transform.SetParent(GameSceneUI.Instance.selectCardPoint.transform);
 		transform.SetAsLastSibling();
 
 		gameObject.GetOrAddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
@@ -158,17 +158,17 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 		// 플레이어가 드래그해서 PointerUp 함수가 호출 될 경우
 		if (movePoint == null)
 		{
-			List<Point> _overlapPoints = SearchPointAround();
+			List<Point> overlapPoints = SearchPointAround();
 			
-			if (_overlapPoints.Count > 0)
+			if (overlapPoints.Count > 0)
 			{
-				Point _toPoint = ChoiceToPointFromList(_overlapPoints);
+				Point toPoint = ChoiceToPointFromList(overlapPoints);
 				
-				if (_toPoint != null)
+				if (toPoint != null)
 				{
-					if(_toPoint is Card)
+					if(toPoint is Card)
 					{
-						Card card = (Card)_toPoint;
+						Card card = (Card)toPoint;
 
 						if (card.curPoint != curPoint) // 이동하는 Point가 현재 Point와 다르다면 원래 Point의 마지막 카드를 앞면이 보이도록 수정
 						{
@@ -179,9 +179,9 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 
 						curPoint = card.curPoint;
 					}
-					else if(_toPoint is Point)
+					else if(toPoint is Point)
 					{
-						curPoint = _toPoint;
+						curPoint = toPoint;
 					}
 				}
 			}
@@ -199,11 +199,16 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 	private float timer = 0f;
 	private Vector2 toPos = Vector2.zero;
 
-	IEnumerator MoveCard(Point _movePoint, float _waitTime = 0f)
+	IEnumerator MoveCard(Point movePoint, float _waitTime = 0f)
 	{
-		//transform.SetParent(_movePoint.transform);
+		transform.SetParent(movePoint.transform);
 		SetCardState(ECardMoveState.MOVING);
-		toPos = _movePoint.GetLastCard().cardRect.anchoredPosition + new Vector2(0, childCardOffset);
+
+		toPos = new Vector2(0, childCardOffset);
+
+		Card movePointLastCard = movePoint.GetLastCard();
+		if (movePointLastCard != null)
+			toPos += movePoint.GetLastCard().cardRect.anchoredPosition;
 
 		yield return new WaitForSeconds(_waitTime);
 
@@ -218,13 +223,13 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 			if (Vector3.Distance(cardRect.anchoredPosition, toPos) < 0.1f) // 카드가 목표지점에 도착할 경우
 			{
 				cardRect.anchoredPosition = toPos;
-				transform.SetParent(_movePoint.transform);
+				//transform.SetParent(movePoint.transform);
 				SetCardState(ECardMoveState.IDLE);
 				timer = 0f;
 
 				if(childCardList.Count > 0)
 				{
-					SetParentChilds(_movePoint.transform, ECardSlibDirection.LAST);
+					SetParentChilds(movePoint.transform, ECardSlibDirection.LAST);
 					childCardList.Clear();
 				}
 

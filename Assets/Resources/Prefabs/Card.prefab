@@ -51,8 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532bb5a0ee0ae454180ee1f828a2e6ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointType: 0
-  childCardOffset: -50
+  pointType: 1
   cardFrontTexture: {fileID: 0}
   cardBackTexture: {fileID: -8246103488371625927, guid: 21abfb87035730f4b8c2539f6bbfd9da, type: 3}
   cardState: 0
