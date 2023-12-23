@@ -110,7 +110,6 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 		}
 
 		transform.SetParent(GameSceneUI.Instance.selectCardPoint.transform);
-		transform.SetAsLastSibling();
 
 		gameObject.GetOrAddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
 		SetCardState(ECardMoveState.CLICKED);
