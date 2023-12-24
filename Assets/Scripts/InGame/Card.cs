@@ -200,7 +200,7 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 
 	IEnumerator MoveCard(Point movePoint, float _waitTime = 0f)
 	{
-		transform.SetParent(movePoint.transform);
+		//transform.SetParent(movePoint.transform);
 		SetCardState(ECardMoveState.MOVING);
 
 		toPos = new Vector2(0, childCardOffset);
