@@ -176,7 +176,7 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 								_pointLastCard.Show(ECardDirection.FRONT);
 						}
 
-						curPoint = card.curPoint;
+						curPoint = card;
 					}
 					else if(toPoint is Point)
 					{
@@ -200,14 +200,7 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 
 	IEnumerator MoveCard(Point movePoint, float _waitTime = 0f)
 	{
-		//transform.SetParent(movePoint.transform);
 		SetCardState(ECardMoveState.MOVING);
-
-		toPos = new Vector2(0, childCardOffset);
-
-		Card movePointLastCard = movePoint.GetLastCard();
-		if (movePointLastCard != null)
-			toPos += movePoint.GetLastCard().cardRect.anchoredPosition;
 
 		yield return new WaitForSeconds(_waitTime);
 
@@ -217,6 +210,7 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 				break;
 
 			timer += Time.deltaTime;
+			toPos = movePoint.GetComponent<RectTransform>().anchoredPosition + new Vector2(0, movePoint.childCardOffset);
 			cardRect.anchoredPosition = Vector2.Lerp(cardRect.anchoredPosition, toPos, timer / TO_POS_TIME);
 
 			if (Vector3.Distance(cardRect.anchoredPosition, toPos) < 0.1f) // 카드가 목표지점에 도착할 경우
