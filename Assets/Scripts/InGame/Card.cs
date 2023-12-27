@@ -185,7 +185,6 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 				}
 			}
 
-
 			Move(curPoint);
 
 			return;
