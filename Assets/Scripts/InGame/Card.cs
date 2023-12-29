@@ -176,7 +176,6 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 								_pointLastCard.Show(ECardDirection.FRONT);
 						}
 
-
 						curPoint = card;
 					}
 					else if(toPoint is Point)
