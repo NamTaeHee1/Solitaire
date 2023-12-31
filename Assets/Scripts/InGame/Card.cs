@@ -176,7 +176,6 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 								_pointLastCard.Show(ECardDirection.FRONT);
 						}
 
-
 						curPoint = card;
 					}
 					else if(toPoint is Point)
@@ -217,7 +216,6 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 			if (Vector3.Distance(cardRect.anchoredPosition, toPos) < 0.1f) // 카드가 목표지점에 도착할 경우
 			{
 				cardRect.anchoredPosition = toPos;
-				//transform.SetParent(movePoint.transform);
 				SetCardState(ECardMoveState.IDLE);
 				timer = 0f;
 
