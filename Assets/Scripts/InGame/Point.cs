@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,9 +19,11 @@ public class Point : MonoBehaviour
 
 	public float childCardOffset = -50f;
 
-	public int GetChildCount()
+	protected RectTransform rect;
+
+	private void Awake()
 	{
-		return transform.childCount;
+		rect = GetComponent<RectTransform>();
 	}
 
 	public float GetDistance(Point _diffPoint)
@@ -37,11 +40,5 @@ public class Point : MonoBehaviour
 			return null;
 
 		return transform.GetChild(lastCardIndex).GetComponent<Card>();
-	}
-
-	public Vector2 GetChildPos()
-	{
-		Vector2 cardOffset = new Vector2(0, transform.childCount * childCardOffset);
-		return cardOffset;
 	}
 }

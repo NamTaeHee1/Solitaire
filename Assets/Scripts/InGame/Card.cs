@@ -2,8 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 [Serializable]
 public struct CardInfo
@@ -27,7 +27,6 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 	[SerializeField] private Point curPoint = null;
 
 	[Header("Hierarchy에서 관리")]
-	[SerializeField] private RectTransform cardRect;
 	[SerializeField] private Image cardImage;
 
 	[Header("자식 카드들 (내가 클릭한 카드일때 밑에 있던 카드들")]
@@ -130,9 +129,9 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 
 		SetCardState(ECardMoveState.DRAGING);
 
-		Vector2 CardRectAnchorPos = cardRect.anchoredPosition;
+		Vector2 CardRectAnchorPos = rect.anchoredPosition;
 		CardRectAnchorPos += eventData.delta;
-		cardRect.anchoredPosition = CardRectAnchorPos;
+		rect.anchoredPosition = CardRectAnchorPos;
 	}
 
 	public void OnPointerUp(PointerEventData eventData)
@@ -200,6 +199,9 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 
 	IEnumerator MoveCard(Point movePoint, float _waitTime = 0f)
 	{
+		if (rect.parent != GameSceneUI.Instance.selectCardPoint)
+			rect.SetParent(GameSceneUI.Instance.selectCardPoint);
+
 		SetCardState(ECardMoveState.MOVING);
 
 		yield return new WaitForSeconds(_waitTime);
@@ -211,11 +213,11 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 
 			timer += Time.deltaTime;
 			toPos = movePoint.GetComponent<RectTransform>().anchoredPosition + new Vector2(0, movePoint.childCardOffset);
-			cardRect.anchoredPosition = Vector2.Lerp(cardRect.anchoredPosition, toPos, timer / TO_POS_TIME);
+			rect.anchoredPosition = Vector2.Lerp(rect.anchoredPosition, toPos, timer / TO_POS_TIME);
 
-			if (Vector3.Distance(cardRect.anchoredPosition, toPos) < 0.1f) // 카드가 목표지점에 도착할 경우
+			if (Vector3.Distance(rect.anchoredPosition, toPos) < 0.1f) // 카드가 목표지점에 도착할 경우
 			{
-				cardRect.anchoredPosition = toPos;
+				rect.anchoredPosition = toPos;
 				SetCardState(ECardMoveState.IDLE);
 				timer = 0f;
 
@@ -301,8 +303,8 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 		RectTransform cardCanvasRect = GameObject.Find("CardCanvas").GetComponent<RectTransform>();
 
 		Vector2 canvasSize = Camera.main.ScreenToWorldPoint(cardCanvasRect.sizeDelta) * 2;
-		Vector2 cardSize = new Vector2(canvasSize.x / (cardCanvasRect.sizeDelta.x / cardRect.sizeDelta.x),
-															  canvasSize.y / (cardCanvasRect.sizeDelta.y / cardRect.sizeDelta.y));
+		Vector2 cardSize = new Vector2(canvasSize.x / (cardCanvasRect.sizeDelta.x / rect.sizeDelta.x),
+															  canvasSize.y / (cardCanvasRect.sizeDelta.y / rect.sizeDelta.y));
 
 		Collider2D[] overlapObjects = Physics2D.OverlapBoxAll(transform.position, cardSize, 0);
 
@@ -360,8 +362,8 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 		RectTransform CardCanvasRect = GameObject.Find("CardCanvas").GetComponent<RectTransform>();
 
 		Vector2 CanvasSize = Camera.main.ScreenToWorldPoint(CardCanvasRect.sizeDelta) * 2;
-		Vector2 CardSize = new Vector2(CanvasSize.x / (CardCanvasRect.sizeDelta.x / cardRect.sizeDelta.x),
-															  CanvasSize.y / (CardCanvasRect.sizeDelta.y / cardRect.sizeDelta.y));
+		Vector2 CardSize = new Vector2(CanvasSize.x / (CardCanvasRect.sizeDelta.x / rect.sizeDelta.x),
+															  CanvasSize.y / (CardCanvasRect.sizeDelta.y / rect.sizeDelta.y));
 
 		Gizmos.color = Color.red;
 		Gizmos.DrawWireCube(transform.position, CardSize);
