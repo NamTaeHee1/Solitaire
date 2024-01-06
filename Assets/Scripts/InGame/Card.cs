@@ -175,7 +175,6 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 								_pointLastCard.Show(ECardDirection.FRONT);
 						}
 
-
 						curPoint = card;
 					}
 					else if(toPoint is Point)
@@ -214,10 +213,10 @@ public class Card : Point, IPointerDownHandler, IBeginDragHandler, IDragHandler,
 				break;
 
 			timer += Time.deltaTime;
-			toPos = movePoint.GetComponent<RectTransform>().anchoredPosition + new Vector2(0, movePoint.childCardOffset);
+			toPos = movePoint.rect.anchoredPosition + new Vector2(0, movePoint.childCardOffset);
 			rect.anchoredPosition = Vector2.Lerp(rect.anchoredPosition, toPos, timer / TO_POS_TIME);
 
-			if (Vector3.Distance(rect.anchoredPosition, toPos) < 0.1f) // 카드가 목표지점에 도착할 경우
+			if (Vector2.Distance(rect.anchoredPosition, toPos) < 0.1f) // 카드가 목표지점에 도착할 경우
 			{
 				rect.anchoredPosition = toPos;
 				SetCardState(ECardMoveState.IDLE);

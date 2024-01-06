@@ -19,7 +19,7 @@ public class Point : MonoBehaviour
 
 	public float childCardOffset = -50f;
 
-	protected RectTransform rect;
+	public RectTransform rect;
 
 	private void Awake()
 	{
