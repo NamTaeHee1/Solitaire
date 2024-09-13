@@ -30,7 +30,7 @@ public enum ECardSuit
 	COUNT
 }
 
-public enum ECardOrder
+public enum ECardRank
 {
 	A = 1,
 	TWO,
