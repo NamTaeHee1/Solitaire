@@ -2,8 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.Tilemaps;
 
 [Serializable]
 public struct CardInfo
@@ -12,7 +10,6 @@ public struct CardInfo
 	public ECardRank cardRank;
 	public ECardColor cardColor;
 }
-
 public class Card : Point
 {
 	[Header("카드 Texture")]
@@ -31,21 +28,15 @@ public class Card : Point
 	public SpriteRenderer cardSR;
 	public Collider2D cardCollider;
 
-	[Header("카드 정보")]
+    #region Card Info
+
+    [Header("카드 정보")]
 	public CardInfo cardInfo;
-
-	#region Card Propety
-
-	public string CardName 
-	{
-		get { return transform.name; }
-		set { transform.name = value; }
-	}
 
 	public void SetCardInfo(Sprite cardFrontTexure, string cardName)
 	{
 		this.cardFrontTexture = cardFrontTexure;
-		this.CardName = cardName;
+		transform.name = cardName;
 
 		string[] cardInfoArr = cardName.Split('_'); // [1] : Suit, [2] : Rank, [3] : Color
 		cardInfo.cardSuit = (ECardSuit)Enum.Parse(typeof(ECardSuit), cardInfoArr[1].ToUpper());

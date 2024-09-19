@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,6 +6,7 @@ using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -50,150 +52,257 @@ public class GameManager : MonoBehaviour
 
 		ShuffleDeck();
 
-		int count = 0;
+/*		int count = 0;
 		while (IsSovable() == false)
 		{
 			ShuffleDeck();
 			count++;
 		}
 
-		Debug.Log($"Count : {count}");
+		Debug.Log($"Count : {count}");*/
 	}
 
 	private const int MoveToTableauCardCount = 28;
 
-	private bool IsSovable()
+	private bool IsSolvable()
 	{
-		int checkCount = 0, i;
+		/*int checkCount = 0, i = 0;
 
-		#region Check Color
+        #region Check K
 
-		// 1. Ä«µåÀÇ »ö»óÀÌ 4¹ø ÀÌ»ó °ãÄ¡´ÂÁö È®ÀÎ
+        for(i = 0; i < MoveToTableauCardCount; i++)
+        {
+            if (deck[i].cardInfo.cardRank == ECardRank.K) checkCount++;
+        }
 
-		bool isCurrentRed, isNextRed;
+        if (checkCount >= 2) return false;
 
-		for (i = 0; i < deck.Count - 1; i++)
-		{
-			isCurrentRed = deck[i].cardInfo.cardColor == ECardColor.RED;
-			isNextRed = deck[i + 1].cardInfo.cardColor == ECardColor.RED;
+        checkCount = 0;
 
-			if (isCurrentRed && isNextRed) checkCount++;
-			else checkCount = 0;
-		}
+        #endregion
 
-		if (checkCount >= 4) return false;
+        #region Check Ace
 
-		checkCount = 0;
+        for (i = 0; i < MoveToTableauCardCount; i++)
+        {
+            if (deck[i].cardInfo.cardRank == ECardRank.A) checkCount++;
+        }
 
-		#endregion
+        if (checkCount == 4) return false;
 
-		#region Check Rank
+        checkCount = 0;
 
-		// 2. Rank°¡ °°Àº Ä«µå°¡ 2¹ø ÀÌ»ó °ãÄ¡´ÂÁö È®ÀÎ
+        // Tableauì— ì´ë™ í›„ í•˜ë‹¨ì— ë°”ë¡œ ë§ì¶œ ìˆ˜ ìˆëŠ” ì¹´ë“œë“¤ì´ í•œ ì„¸íŠ¸ë¼ë„ ìˆëŠ”ì§€ í™•ì¸
 
-		ECardRank currentRank, nextRank;
+        int tableauLastCardIndex = 0;
+        int tableausLength = Managers.Point.tableaus.Length;
+        int highNumCount = 0;
+        int rankCount = 0;
 
-		for (i = 0; i < deck.Count - 1; i++)
-		{
-			currentRank = deck[i].cardInfo.cardRank;
-			nextRank = deck[i + 1].cardInfo.cardRank;
+        Card beforeCard = null, currentCard = null;
 
-			if (currentRank == nextRank) checkCount++;
-			else checkCount = 0;
-		}
+        for (i = 0; i < tableausLength - 1; i++)
+        {
+            beforeCard = deck[tableauLastCardIndex];
 
-		if (checkCount >= 2) return false;
+            tableauLastCardIndex += tableausLength - i;
 
-		checkCount = 0;
+            currentCard = deck[tableauLastCardIndex];
 
-		#endregion
+            if (beforeCard == null || currentCard == null) continue;
 
-		#region Check Suit
+            int rankDistance = Mathf.Abs(beforeCard.cardInfo.cardRank - currentCard.cardInfo.cardRank);
+            bool isSameColor = beforeCard.cardInfo.cardColor == currentCard.cardInfo.cardColor;
 
-		// 3. ¹«´Ì°¡ °°Àº Ä«µå°¡ 3¹ø ÀÌ»ó °ãÄ¡´ÂÁö È®ÀÎ
+            if ((int)beforeCard.cardInfo.cardRank >= (int)ECardRank.NINE) highNumCount++;
+            rankCount += (int)beforeCard.cardInfo.cardRank;
 
-		ECardSuit currentSuit, nextSuit;
+            if (rankDistance == 1 && isSameColor == false)
+            {
+                checkCount++;
+            }
+        }
 
-		for (i = 0; i < deck.Count - 1; i++)
-		{
-			currentSuit = deck[i].cardInfo.cardSuit;
-			nextSuit = deck[i + 1].cardInfo.cardSuit;
+        if (highNumCount < 2) return false;
 
-			if (currentSuit == nextSuit) checkCount++;
-			else checkCount = 0;
-		}
+        if (rankCount < 30) return false;
 
-		if (checkCount >= 3) return false;
+        if (checkCount == 0) return false;
 
-		checkCount = 0;
+        checkCount = highNumCount = rankCount = 0;
 
-		#endregion
+        #endregion
 
-		#region Check Ace
+        #region Overlap Check
 
-		// Tableau·Î Ace Ä«µå°¡ 2Àå ÀÌ»ó ÀÌµ¿Çß´ÂÁö È®ÀÎ
+        // ê°™ì€ Tableau ë‚´ì— ìƒ‰ìƒê³¼ ë“±ê¸‰ì´ ê°™ì€ ì¹´ë“œê°€ ê³µì¡´í•˜ëŠ”ì§€ í™•ì¸
 
-		for (i = 0; i < MoveToTableauCardCount; i++)
-		{
-			if (deck[i].cardInfo.cardRank == ECardRank.A)
-				checkCount++;
-		}
+        List<string>[] moveTableauCards = new List<string>[tableausLength];
+        List<Card> deckCopy = deck.ToList();
 
-		if (checkCount >= 2) return false;
+        for (i = 0; i < tableausLength; i++)
+            moveTableauCards[i] = new List<string>();
 
-		checkCount = 0;
+        for (i = 0; i < tableausLength; i++)
+        {
+            for (int j = i; j < tableausLength; j++)
+            {
+                Card card = deckCopy.First();
+                string cardInfo = $"{card.cardInfo.cardRank}_{card.cardInfo.cardColor}";
 
-		// Tableau¿¡ ÀÌµ¿ ÈÄ ÇÏ´Ü¿¡ ¹Ù·Î ¸ÂÃâ ¼ö ÀÖ´Â Ä«µåµéÀÌ ÇÑ ¼¼Æ®¶óµµ ÀÖ´ÂÁö È®ÀÎ
+                // 2 : Rank, 3 : Color
+                moveTableauCards[j].Add(cardInfo);
 
-		int tableausLength = Managers.Point.tableaus.Length;
-		int tableauLastCardIndex = 0;
+                deckCopy.Remove(card);
+            }
+        }
 
-		Card beforeCard, currentCard;
-		beforeCard = currentCard = null;
+        for (i = 0; i < tableausLength; i++)
+        {
+            // [0] : Rank, [1] : Color
+            string[] cardInfo = moveTableauCards[i].First().Split('_');
 
-		for(i = 0; i < tableausLength - 1; i++)
-		{
-			beforeCard = deck[tableauLastCardIndex];
+            if (cardInfo[1].Equals("RED")) checkCount++;
 
-			tableauLastCardIndex += tableausLength - i;
+            rankCount += (int)Enum.Parse(typeof(ECardRank), cardInfo[0]);
 
-			currentCard = deck[tableauLastCardIndex];
+*//*            int cardsCount = moveTableauCards[i].Count;
 
-			if (beforeCard == null || currentCard == null) continue;
+            for (int j = 0; j < cardsCount; j++)
+            {
+                cardInfo = moveTableauCards[i].First().Split('_');
 
-			int rankDistance = Mathf.Abs(beforeCard.cardInfo.cardRank - currentCard.cardInfo.cardRank);
-			bool isSameColor = beforeCard.cardInfo.cardColor == currentCard.cardInfo.cardColor;
+                moveTableauCards[i].Remove(moveTableauCards[i].First());
 
-			if (rankDistance == 1 && isSameColor == false)
-			{
-				checkCount++;
-			}
-		}
+                if (moveTableauCards[i].Contains($"{cardInfo[0]}_{cardInfo[1]}"))
+                    return false;
 
-		if (checkCount == 0) return false;
+                if (moveTableauCards[i].Count == 0) break;
+            }*//*
+        }
 
-		checkCount = 0;
+        if (checkCount == tableausLength) return false;
 
-		#endregion
+        //if (rankCount < 45) return false;
 
-		#region Overlap Check
+        int lowNumCount = 0;
 
-		int[] cardRankCounts = new int[(int)ECardRank.COUNT];
+        for (i = 0; i < MoveToTableauCardCount; i++)
+        {
+            ECardRank rank = deck[i].cardInfo.cardRank;
 
-		for(i = 0; i < MoveToTableauCardCount; i++)
-		{
-			cardRankCounts[(int)deck[i].cardInfo.cardRank]++;
-		}
+            if (rank == ECardRank.A ||
+                rank == ECardRank.TWO ||
+                rank == ECardRank.THREE) lowNumCount++;
 
-		for(i = 0; i < cardRankCounts.Length; i++)
-		{
-			if (cardRankCounts[i] >= 4) return false;
-		}
+            if (rank == ECardRank.J ||
+               rank == ECardRank.Q ||
+               rank == ECardRank.K) highNumCount++;
+        }
 
-		#endregion
+        if (lowNumCount > 10) return false;
 
-		return true;
+        if (highNumCount < 4) return false;
+
+        if (GetSuitableCardsCount(ECardColor.RED) < 11 &&
+            GetSuitableCardsCount(ECardColor.BLACK) < 11) return false;
+
+        checkCount = 0;
+
+        int redCount = 0, blackCount = 0;
+
+        for(i = 0; i < MoveToTableauCardCount; i++)
+        {
+            if (deck[i].cardInfo.cardColor == ECardColor.RED) redCount++;
+            else blackCount++;
+        }
+
+        if (Mathf.Max(redCount, blackCount) - Mathf.Min(redCount, blackCount) > 4)
+            return false;
+
+        redCount = blackCount = 0;
+
+        if (GetSuitableColorCardsCount(ECardColor.RED) < (int)ECardRank.COUNT - 4 ||
+            GetSuitableColorCardsCount(ECardColor.BLACK) < (int)ECardRank.COUNT - 4) return false;
+
+        #endregion
+
+        List<string> stockCardRanks = new List<string>();
+        List<string> overlapCardSuits = new List<string>();
+
+        for(i = MoveToTableauCardCount; i < deck.Count; i++)
+        {
+            string cardInfo = $"{deck[i].cardInfo.cardRank}_{deck[i].cardInfo.cardColor}";
+            
+            if(stockCardRanks.Contains(cardInfo) && overlapCardSuits.Contains(cardInfo) == false)
+            {
+                overlapCardSuits.Add(cardInfo);
+            }
+
+            stockCardRanks.Add(cardInfo);
+        }
+
+        if (overlapCardSuits.Count < 4) return false;
+
+        for (i = 0; i < (int)ECardRank.COUNT; i++)
+        {
+            if (stockCardRanks.Contains($"{(ECardRank)i}_RED") ||
+                stockCardRanks.Contains($"{(ECardRank)i}_BLACK")) checkCount++;
+        }
+
+        if (checkCount < (int)ECardRank.K) return false;
+
+        redCount = blackCount = 0;
+
+        for (i = 0; i < stockCardRanks.Count; i++)
+            if (stockCardRanks[i].Contains("RED")) redCount++;
+
+        blackCount = 24 - redCount;
+
+        if (Mathf.Max(redCount, blackCount) - Mathf.Min(redCount, blackCount) > 6) return false;
+*/
+        return true;
 	}
+
+    private int GetSuitableCardsCount(ECardColor aceColor)
+    {
+        List<string> moveTableauCardsToString = new List<string>();
+        int checkCount = 0, i = 0;
+
+        for (i = 0; i < MoveToTableauCardCount; i++)
+            moveTableauCardsToString.Add($"{deck[i].cardInfo.cardRank}_{deck[i].cardInfo.cardColor}");
+
+        for(i = 1; i < (int)ECardRank.COUNT; i++)
+        {
+            if (moveTableauCardsToString.Contains($"{(ECardRank)i}_{(ECardColor)(((int)aceColor + i - 1) % 2)}"))
+                checkCount++;
+        }
+
+        return checkCount;
+    }
+
+    private int GetSuitableColorCardsCount(ECardColor cardColor)
+    {
+        int checkCount = 0, i = 0;
+        ECardRank curRank = ECardRank.A;
+
+        List<string> moveTableauCards = new List<string>();
+
+        for (i = 0; i < MoveToTableauCardCount; i++)
+        {
+            moveTableauCards.Add($"{deck[i].cardInfo.cardRank}_{deck[i].cardInfo.cardColor}");
+        }
+
+        for(i = 0; i < (int)ECardRank.COUNT; i++)
+        {
+            if (moveTableauCards.Contains($"{curRank}_{cardColor}"))
+                checkCount++;
+
+            curRank++;
+        }
+
+        return checkCount;
+    }
 
 	private void ShuffleDeck()
 	{
@@ -236,9 +345,11 @@ public class GameManager : MonoBehaviour
 				card.transform.localPosition = cardPos;
 				card.Move(tableaus[j], waitTime += 0.05f);
 				card.ShowCoroutine(j == i ? ECardDirection.FRONT : ECardDirection.BACK, waitTime);
+
+				zOffset -= 0.1f;
 			}
 
-			zOffset -= 0.1f;
+			zOffset = -0.1f;
 		}
 	}
 }

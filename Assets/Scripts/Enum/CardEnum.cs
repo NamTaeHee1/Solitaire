@@ -45,7 +45,6 @@ public enum ECardRank
 	J,
 	Q,
 	K,
-	Dummy,
 	COUNT
 }
 

@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Stock : Point
 {
-	[Header("Å¬¸¯ ½Ã ÀÌµ¿ Point")][SerializeField]
+	[Header("í´ë¦­ ì‹œ ì´ë™ Point")][SerializeField]
 	private Point wastePoint;
 
 	private Camera mainCam;
