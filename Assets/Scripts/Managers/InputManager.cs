@@ -25,7 +25,7 @@ public class InputManager : MonoBehaviour
 
 	private static InputManager _instance;
 
-	[Header("Å¬¸¯ÇÑ Card")]
+	[Header("í´ë¦­í•œ Card")]
 	[SerializeField]
 	private Card clickedCard;
 
@@ -35,7 +35,7 @@ public class InputManager : MonoBehaviour
 
 	private Vector3 inputOffset;
 
-	[Header("ÇöÀç Å¬¸¯ °¡´ÉÇÑ°¡")]
+	[Header("í˜„ì¬ í´ë¦­ ê°€ëŠ¥í•œê°€")]
 	public bool canInput;
 
 	private void Awake()
@@ -45,7 +45,7 @@ public class InputManager : MonoBehaviour
 		mainCam = Camera.main;
 	}
 
-	private void Update()
+    private void Update()
 	{
 		if (canInput == false)
 		{
@@ -100,7 +100,7 @@ public class InputManager : MonoBehaviour
 	private bool CheckBlockingInput(Card inputCard)
 	{
 		return (inputCard.cardState != ECardMoveState.MOVING &&
-				inputCard.cardTextureDirection == ECardDirection.FRONT &&
+				inputCard.cardDirection == ECardDirection.FRONT &&
 				inputCard.transform.GetSiblingIndex() == inputCard.curPoint.transform.childCount - 1);
 	}
 	

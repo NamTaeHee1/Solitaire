@@ -9,7 +9,35 @@ public struct CardInfo
 	public ECardSuit cardSuit;
 	public ECardRank cardRank;
 	public ECardColor cardColor;
+
+    public CardInfo(ECardSuit suit, ECardRank rank, ECardColor color)
+    {
+        cardSuit = suit;
+        cardRank = rank;
+        cardColor = color;
+    }
+
+    public override bool Equals(object obj)
+    {
+        CardInfo info = (CardInfo)obj;
+
+        if (cardSuit == info.cardSuit &&
+            cardRank == info.cardRank) return true;
+
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+
+    public override string ToString()
+    {
+        return $"{cardSuit}_{cardRank}_{cardColor}";
+    }
 }
+
 public class Card : Point
 {
 	[Header("카드 Texture")]
@@ -18,7 +46,7 @@ public class Card : Point
 
 	[Header("카드 상태")]
 	public ECardMoveState cardState = ECardMoveState.IDLE;
-	public ECardDirection cardTextureDirection = ECardDirection.BACK;
+	public ECardDirection cardDirection = ECardDirection.BACK;
 
 	[Header("Point")]
 	public Point curPoint;
@@ -68,7 +96,7 @@ public class Card : Point
 				break;
 		}
 
-		cardTextureDirection = _direction;
+		cardDirection = _direction;
 	}
 
 	public void ShowCoroutine(ECardDirection _direction, float _waitTime = 0)
@@ -316,7 +344,7 @@ public class Card : Point
 		if (transform.childCount != 0) return false;
 
 		// 4. 뒷면이라면
-		if (cardTextureDirection == ECardDirection.BACK) return false;
+		if (cardDirection == ECardDirection.BACK) return false;
 
 		// 5. Foundation 또는 Waste에 있다면
 		if (curPoint.pointType == EPointType.Waste ||

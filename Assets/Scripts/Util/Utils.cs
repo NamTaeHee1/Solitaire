@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public static class Utils
@@ -13,4 +14,30 @@ public static class Utils
 
 		return hit;
 	}
+
+    public static int Max(this int[] array)
+    {
+        int maxNum = array[0];
+
+        for(int i = 1; i < array.Length; i++)
+        {
+            if(array[i] > maxNum)
+                maxNum = array[i];
+        }
+
+        return maxNum;
+    }
+
+    public static int Min(this int[] array)
+    {
+        int minNum = array[0];
+
+        for(int i = 1; i < array.Length; i++)
+        {
+            if(array[i] < minNum)
+                minNum = array[i];
+        }
+
+        return minNum;
+    }
 }
