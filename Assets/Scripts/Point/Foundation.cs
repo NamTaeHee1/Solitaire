@@ -7,10 +7,10 @@ public class Foundation : Point
 {
 	public override bool IsSuitablePoint(Card card)
 	{
-		// 1. °Ë»öÁßÀÎ Ä«µå¿¡ ÀÚ½ÄÀÌ ÀÖÀ» °æ¿ì
+		// 1. ê²€ìƒ‰ì¤‘ì¸ ì¹´ë“œì— ìì‹ì´ ìˆì„ ê²½ìš°
 		if (card.GetLastCard() != null) return false;
 
-		// 2. ´Ù¸¥ Foundation¿¡ ÀÌ¹Ì card¿Í °°Àº suit°¡ ÀÖ´Ù¸é
+		// 2. ë‹¤ë¥¸ Foundationì— ì´ë¯¸ cardì™€ ê°™ì€ suitê°€ ìˆë‹¤ë©´
 		if (IsSameSuitInOtherFoundations(card.cardInfo.cardSuit) == true) return false;
 
 		Card childCard = GetLastCard();
@@ -22,7 +22,7 @@ public class Foundation : Point
 		else
 		{
 			if (card.cardInfo.cardRank != childCard.cardInfo.cardRank + 1 ||
-			    card.cardInfo.cardSuit  != childCard.cardInfo.cardSuit) return false;
+			    card.cardInfo.cardSuit != childCard.cardInfo.cardSuit) return false;
 		}
 
 		return true;

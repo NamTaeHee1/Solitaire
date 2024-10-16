@@ -11,10 +11,10 @@ public enum EPointType
 
 public class Point : MonoBehaviour
 {
-	[Header("Æ÷ÀÎÆ®¿¡ Ä«µå°¡ ½×ÀÏ ¶§ YÃàÀÌ Á¡Â÷ ¹ØÀ¸·Î ³»·Á°¡´Â°¡")]
+	[Header("í¬ì¸íŠ¸ì— ì¹´ë“œê°€ ìŒ“ì¼ ë•Œ Yì¶•ì´ ì ì°¨ ë°‘ìœ¼ë¡œ ë‚´ë ¤ê°€ëŠ”ê°€")]
 	public bool useCardYOffset;
 
-	[Header("Point À¯Çü")]
+	[Header("Point ìœ í˜•")]
 	public EPointType pointType;
 
 	public Card GetLastCard()
@@ -28,9 +28,9 @@ public class Point : MonoBehaviour
 	}
 
 	/// <summary>
-	/// ÇöÀç °Ë»öÇÏ°í ÀÖ´Â Ä«µå¿Í ÀÌ Point°¡ ÀûÇÕÇÑ°¡ (°Ë»öµÈ Point ½ÃÁ¡À¸·Î ±¸Çö)
+	/// í˜„ì¬ ê²€ìƒ‰í•˜ê³  ìˆëŠ” ì¹´ë“œì™€ ì´ Pointê°€ ì í•©í•œê°€ (ê²€ìƒ‰ëœ Point ì‹œì ìœ¼ë¡œ êµ¬í˜„)
 	/// </summary>
 	/// <param name="card"></param>
 	/// <returns></returns>
-	public virtual bool IsSuitablePoint(Card card) { return true; }
+	public virtual bool IsSuitablePoint(Card card) { return false; }
 }

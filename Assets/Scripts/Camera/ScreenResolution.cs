@@ -1,38 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraManager : MonoBehaviour
+public class ScreenResolution : MonoBehaviour
 {
-    public static CameraManager Instance
-    {
-        get
-        {
-            if(_instance == null)
-            {
-                _instance = FindObjectOfType<CameraManager>();
-            }
-
-            return _instance;
-        }
-    }
-    private static CameraManager _instance;
-
-    [HideInInspector]
-    public Camera mainCam;
-
-    private void Awake()
-    {
-        mainCam = Camera.main;
-    }
-
-    private void Start()
+    void Start()
     {
         SetCameraResolution();
     }
 
     private void SetCameraResolution()
     {
+        Camera mainCam = Camera.main;
         Rect viewportRect = mainCam.rect;
 
         float screenAspectRatio = (float)Screen.width / Screen.height;
