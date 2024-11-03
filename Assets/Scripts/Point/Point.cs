@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum EPointType
@@ -19,13 +20,27 @@ public class Point : MonoBehaviour
 
 	public Card GetLastCard()
 	{
-		int lastCardIndex = base.transform.childCount - 1;
+		int lastCardIndex = transform.childCount - 1;
 
 		if (lastCardIndex < 0)
 			return null;
 
-		return base.transform.GetChild(lastCardIndex).GetComponent<Card>();
+		return transform.GetChild(lastCardIndex).GetComponent<Card>();
 	}
+
+    public List<string> GetChildCardsToString()
+    {
+        List<string> cards = new List<string>();
+
+        for(int i = 0; i < transform.childCount; i++)
+        {
+            Card card = transform.GetChild(i).GetComponent<Card>();
+
+            cards.Add(card.cardInfo.ToString());
+        }
+
+        return cards;
+    }
 
 	/// <summary>
 	/// 현재 검색하고 있는 카드와 이 Point가 적합한가 (검색된 Point 시점으로 구현)

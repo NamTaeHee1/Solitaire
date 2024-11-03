@@ -25,6 +25,8 @@ public class Stock : Point
     {
         GenerateCards();
         MoveCardToPoints();
+        // DFS 사용하자
+        // 이동한 카드, 출발지, 목적지 등을 기억할 MoveState
     }
 
     private void Update()
@@ -63,7 +65,7 @@ public class Stock : Point
 
         SolitaireSolver solver = new SolitaireSolver();
 
-        while (solver.IsSolve(GetCardInfos()) == false)
+        while (solver.IsSolve(GetCardInfos()) == false) 
         {
             ShuffleDeck();
         }

@@ -2,26 +2,25 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Random = System.Random;
-using UnityEngine;
 
 public class SolitaireSolver
 {
-    private struct CardState
+    public struct CardState
     {
-        public string cardName;
+        public CardInfo cardInfo;
         public bool isFaceUp;
         public bool movedDiffTableau;
 
-        public CardState(string _cardName, bool _isFaceUp)
+        public CardState(CardInfo _cardInfo, bool _isFaceUp)
         {
-            cardName = _cardName;
+            cardInfo = _cardInfo;
             isFaceUp = _isFaceUp;
             movedDiffTableau = false;
         }
 
         public override bool Equals(object obj)
         {
-            return ((CardState)obj).cardName.Equals(this.cardName);
+            return ((CardState)obj).cardInfo.Equals(this.cardInfo);
         }
 
         public override int GetHashCode()
@@ -30,148 +29,164 @@ public class SolitaireSolver
         }
     }
 
-    private List<CardState>[] tableaus =
+    public struct Deck
     {
-        new List<CardState>(),
-        new List<CardState>(),
-        new List<CardState>(),
-        new List<CardState>(),
-        new List<CardState>(),
-        new List<CardState>(),
-        new List<CardState>()
-    };
-    private List<CardState> stock = new List<CardState>();
-    private int[] foundations = { 0, 0, 0, 0 };
+        public List<CardState>[] tableaus;
+        public List<CardState> stock;
+        public int[] foundations;
 
-    private int RemainCards
-    {
-        get
+        public Deck(List<CardState>[] _tableaus, List<CardState> _stock, int[] _foundation)
         {
-            return DEFINE.CARD_MAX_SIZE - (foundations[0] + foundations[1] +
-                                           foundations[2] + foundations[3]);
+            tableaus = _tableaus;
+            stock = _stock;
+            foundations = _foundation;
+        }
+
+        // 깊은 복사
+        public Deck Clone()
+        {
+            Deck newDeck = new Deck();
+
+            newDeck.tableaus = new List<CardState>[tableaus.Length];
+
+            for (int i = 0; i < tableaus.Length; i++)
+                newDeck.tableaus[i] = new List<CardState>(tableaus[i]);
+
+            newDeck.stock = new List<CardState>(stock);
+
+            newDeck.foundations = new int[foundations.Length];
+
+            for(int i = 0; i < foundations.Length; i++)
+                newDeck.foundations[i] = foundations[i];
+
+            return newDeck;
         }
     }
 
-    public bool IsSolve(List<string> deckToString)
+    public Deck Init(List<string> deckToString)
     {
-        Init(deckToString);
+        List<CardState>[] tableaus = new List<CardState>[7];
+        List<CardState> stock = new List<CardState>();
 
-        return PlayGame();
-    }
-
-    private void Init(List<string> deckToString)
-    {
-        List<CardState> deck = new List<CardState>();
-
-        CardState firstCard;
-        int i;
-
-        for(i = 0; i < deckToString.Count; i++)
-        {
-            deck.Add(new CardState(deckToString[i], false));
-        }
+        int i, count = 0;
+        CardState lastCard;
 
         for (i = 0; i < tableaus.Length; i++)
-            tableaus[i].Clear();
-
-        for (i = 0; i < foundations.Length; i++)
-            foundations[i] = 0;
-
-        stock.Clear();
+            tableaus[i] = new List<CardState>();
 
         for (i = 0; i < tableaus.Length; i++)
         {
             for (int j = i; j < tableaus.Length; j++)
             {
-                firstCard = deck.First();
+                lastCard = new CardState(GetCardInfo(deckToString[count++]), i == j);
 
-                deck.Remove(firstCard);
-
-                if (i == j) firstCard.isFaceUp = true;
-
-                tableaus[j].Add(firstCard);
+                tableaus[j].Add(lastCard);
             }
         }
 
-        while (deck.Count != 0)
+        for (i = count; i < deckToString.Count; i++)
         {
-            firstCard = deck.First();
+            lastCard = new CardState(GetCardInfo(deckToString[count++]), true);
 
-            deck.Remove(firstCard);
-
-            stock.Add(firstCard);
+            stock.Add(lastCard);
         }
+
+        isSolved = false;
+
+        return new Deck(tableaus, stock, new int[4] {0, 0, 0, 0});
     }
 
     private List<string> logs = new List<string>();
-    private int moveCount = 0;
 
-    private bool PlayGame()
+    private Random rand = new Random();
+
+    private bool isSolved = false;
+
+    public bool IsSolve(List<string> deckToString)
     {
-        int i;
-        Random rand = new Random();
+        Deck deck = Init(deckToString);
 
-        while (RemainCards > 0)
+        return Solve(deck);
+    }
+
+    public bool Solve(Deck deck)
+    {
+        List<Action<Deck>> moves = GetPossibleMoves(deck);
+
+        if (GetRemainCards(deck) <= 0 && moves.Count == 0)
+            isSolved = true;
+
+        if (isSolved) return true;
+
+        for (int i = 0; i < moves.Count; i++)
         {
-            for (i = 0; i < tableaus.Length; i++)
-            {
-                if (tableaus[i].Count == 0) continue;
+            Deck copyDeck = deck.Clone();
 
-                MoveFromTableauToFoundation(i);
+            moves[i].Invoke(copyDeck);
 
-                MoveFromTableauToDiffTableau(i);
-            }
-
-            MoveFromStockToDiffPoints();
-
-            if (moveCount == 0)
-            {
-                logs.Clear();
-                return false;
-            }
-
-            moveCount = 0;
+            if (Solve(copyDeck) == false) return false;
         }
 
-        for(i = 0; i < logs.Count; i++)
-            Debug.Log($"logs [{i + 1}] : {logs[i]}");
-
-        return true;
+        return false;
     }
 
-    private ECardColor GetCardColor(ECardSuit suit)
+    private int GetRemainCards(Deck deck)
     {
-        if (suit == ECardSuit.DIAMONDS || suit == ECardSuit.HEARTS)
-            return ECardColor.RED;
-        else
-            return ECardColor.BLACK;
+        int cardCount = 0;
+
+        for(int i = 0; i < deck.foundations.Length; i++)
+        {
+            cardCount += deck.foundations[i];
+        }
+
+        return DEFINE.CARD_MAX_SIZE - cardCount;
     }
+
+    public List<Action<Deck>> GetPossibleMoves(Deck deck)
+    {
+        List<Action<Deck>> moves = new List<Action<Deck>>();
+
+        for (int i = 0; i < deck.tableaus.Length; i++)
+        {
+            if (deck.tableaus[i].Count == 0) continue;
+
+            MoveFromTableauToFoundation(i, moves);
+
+            MoveFromTableauToDiffTableau(i, deck, moves);
+        }
+
+        MoveFromStockToDiffPoints(moves);
+
+        return moves;
+    }
+
+    #region CardInfo
 
     private CardInfo GetCardInfo(string cardInfoStr)
     {
         string[] infos = cardInfoStr.Split('_');
-        
-        return new CardInfo((ECardSuit) Enum.Parse(typeof(ECardSuit),  infos[0]),
-                            (ECardRank) Enum.Parse(typeof(ECardRank),  infos[1]),
+
+        return new CardInfo((ECardSuit)Enum.Parse(typeof(ECardSuit), infos[0]),
+                            (ECardRank)Enum.Parse(typeof(ECardRank), infos[1]),
                             (ECardColor)Enum.Parse(typeof(ECardColor), infos[2]));
     }
 
+    #endregion
+
     #region Foundation
 
-    private bool CanMoveFoundation(CardState card)
+    private bool CanMoveFoundation(Deck deck, CardState card)
     {
-        CardInfo info = GetCardInfo(card.cardName);
+        CardInfo info = card.cardInfo;
 
-        return foundations[(int)info.cardSuit] == (int)info.cardRank - 1;
+        return deck.foundations[(int)info.cardSuit] == (int)info.cardRank - 1;
     }
 
-    private void MoveToFoundation(CardState cardToMove, string movePoint)
+    private void MoveToFoundation(Deck deck, CardState cardToMove, string movePoint)
     {
-        CardInfo info = GetCardInfo(cardToMove.cardName);
+        CardInfo info = cardToMove.cardInfo;
 
-        foundations[(int)info.cardSuit]++;
-
-        moveCount++;
+        deck.foundations[(int)info.cardSuit]++;
 
         logs.Add($"{movePoint}에 있던 Card_{info.cardRank}_{info.cardColor}를 Foundation {(int)info.cardSuit}번으로 이동");
     }
@@ -180,31 +195,32 @@ public class SolitaireSolver
 
     #region Tableau
 
-    private void MoveFromTableauToFoundation(int tableauIndex)
+    private void MoveFromTableauToFoundation(int tableauIndex, List<Action<Deck>> moves)
     {
-        List<CardState> tableau = tableaus[tableauIndex];
-        CardState tableauCard = tableau.Last();
-
-        if (CanMoveFoundation(tableauCard) == false) return;
-
-        tableau.Remove(tableauCard);
-
-        if (tableau.Count != 0)
+        moves.Add((deck) =>
         {
-            if (tableau.Last().isFaceUp == false)
-            {
-                CardState state = tableau[tableau.Count - 1];
-                state.isFaceUp = true;
-                tableau[tableau.Count - 1] = state;
-            }
-        }
+            List<CardState> tableau = deck.tableaus[tableauIndex];
+            CardState tableauCard = tableau.Last();
 
-        MoveToFoundation(tableauCard, $"Tablaeu {tableauIndex}");
+            if (CanMoveFoundation(deck, tableauCard) == false) return;
+
+            tableau.Remove(tableauCard);
+
+            MoveToFoundation(deck, tableauCard, $"Tablaeu {tableauIndex}");
+
+            if (tableau.Count == 0) return;
+
+            if (tableau.Last().isFaceUp == true) return;
+
+            CardState state = tableau[tableau.Count - 1];
+            state.isFaceUp = true;
+            tableau[tableau.Count - 1] = state;
+        });
     }
 
-    private void MoveFromTableauToDiffTableau(int tableauIndex)
+    private void MoveFromTableauToDiffTableau(int tableauIndex, Deck deck, List<Action<Deck>> moves)
     {
-        List<CardState> tableau = tableaus[tableauIndex];
+        List<CardState> tableau = deck.tableaus[tableauIndex];
         int i;
 
         for(i = 0; i < tableau.Count; i++)
@@ -212,15 +228,21 @@ public class SolitaireSolver
             if (tableau[i].movedDiffTableau == true ||
                 tableau[i].isFaceUp == false) continue;
 
-            FindMoveableDiffTableau(tableauIndex, tableau[i], out int moveableIndex);
+            FindMoveableDiffTableau(tableauIndex, tableau[i], deck, out int moveableIndex);
 
             if(moveableIndex != -1)
             {
-                CardState state = tableaus[tableauIndex][i];
-                state.movedDiffTableau = true;
-                tableaus[tableauIndex][i] = state;
+                moves.Add((deck) => 
+                {
+                    tableau = deck.tableaus[tableauIndex];
 
-                MoveToDiffTableau(tableauIndex, moveableIndex, i);
+                    CardState state = tableau[i];
+                    state.movedDiffTableau = true;
+                    tableau[i] = state;
+
+                    MoveToDiffTableau(tableauIndex, moveableIndex, i, deck.tableaus);
+
+                });
 
                 break;
             }
@@ -229,8 +251,8 @@ public class SolitaireSolver
 
     private bool CanMoveTableau(CardState from, CardState to)
     {
-        CardInfo fromInfo = GetCardInfo(from.cardName);
-        CardInfo toInfo   = GetCardInfo(to.cardName);
+        CardInfo fromInfo = from.cardInfo;
+        CardInfo toInfo   = to.cardInfo;
 
         if (fromInfo.cardRank + 1 == toInfo.cardRank &&
             fromInfo.cardColor    != toInfo.cardColor) return true;
@@ -238,22 +260,22 @@ public class SolitaireSolver
         return false;
     }
 
-    private void FindMoveableDiffTableau(int curTableauIndex, CardState cardState, out int moveableTableauIndex)
+    private void FindMoveableDiffTableau(int curTableauIndex, CardState cardState, Deck deck, out int moveableTableauIndex)
     {
         moveableTableauIndex = -1;
 
-        for (int i = 0; i < tableaus.Length; i++)
+        for (int i = 0; i < deck.tableaus.Length; i++)
         {
             if (i == curTableauIndex) continue;
 
-            if (tableaus[i].Count == 0)
+            if (deck.tableaus[i].Count == 0)
             {
-                if (GetCardInfo(cardState.cardName).cardRank != ECardRank.K)
+                if (cardState.cardInfo.cardRank != ECardRank.K)
                     continue;
             }
             else
             {
-                if (CanMoveTableau(cardState, tableaus[i].Last()) == false)
+                if (CanMoveTableau(cardState, deck.tableaus[i].Last()) == false)
                     continue;
             }
 
@@ -263,22 +285,20 @@ public class SolitaireSolver
         }
     }
 
-    private void MoveToTableau(int moveTableau, CardState cardToMove, string movePoint)
+    private void MoveToTableau(int moveTableau, CardState cardToMove, Deck deck, string movePoint)
     {
-        tableaus[moveTableau].Add(cardToMove);
+        deck.tableaus[moveTableau].Add(cardToMove);
 
-        moveCount++;
-
-        CardInfo info = GetCardInfo(cardToMove.cardName);
+        CardInfo info = cardToMove.cardInfo;
 
         logs.Add($"{movePoint}에 있던 Card_{info.cardRank}_{info.cardColor}를 Tableau {moveTableau}로 이동");
     }
 
-    private void MoveToDiffTableau(int fromTableau, int toTableau, int cardIndex)
+    private void MoveToDiffTableau(int fromTableau, int toTableau, int cardIndex, List<CardState>[] tableaus)
     {
         List<CardState> childsIncludingSelf = new List<CardState>();
         int i;
-        CardInfo info = GetCardInfo(tableaus[fromTableau][cardIndex].cardName);
+        CardInfo info = tableaus[fromTableau][cardIndex].cardInfo;
 
         for (i = cardIndex; i < tableaus[fromTableau].Count; i++)
         {
@@ -310,114 +330,55 @@ public class SolitaireSolver
         tableaus[toTableau].AddRange(childsIncludingSelf);
 
         logs.Add($"Tableau {fromTableau}에 있던 Card_{info.cardRank}_{info.cardColor}를 Tableau {toTableau}로 이동");
-
-        moveCount++;
     }
 
     #endregion
 
     #region Stock
 
-    private void MoveFromStockToDiffPoints()
+    private void MoveFromStockToDiffPoints(List<Action<Deck>> list)
     {
-        CardState stockCard;
-        int i, j;
-
-        List<CardState> stockCopy = new List<CardState>(stock);
-
-        for (i = 0; i < stockCopy.Count; i++)
+        list.Add((deck) =>
         {
-            stockCard = stockCopy[i];
+            CardState stockCard;
+            int i, j;
 
-            if (CanMoveFoundation(stockCard))
+            List<CardState> stock = new List<CardState>(deck.stock);
+
+            for (i = 0; i < stock.Count; i++)
             {
-                stock.Remove(stockCard);
+                stockCard = stock[i];
 
-                MoveToFoundation(stockCard, "Stock");
-
-                continue;
-            }
-
-            for (j = 0; j < tableaus.Length; j++)
-            {
-                if (tableaus[j].Count != 0)
+                if (CanMoveFoundation(deck, stockCard))
                 {
-                    if (CanMoveTableau(stockCard, tableaus[j].Last()) == false)
-                        continue;
-                }
-                else
-                {
-                    if (GetCardInfo(stockCard.cardName).cardRank != ECardRank.K)
-                        continue;
+                    deck.stock.Remove(stockCard);
+
+                    MoveToFoundation(deck, stockCard, "Stock");
+
+                    continue;
                 }
 
-                stock.Remove(stockCard);
-
-                stockCard.isFaceUp = true;
-
-                MoveToTableau(j, stockCard, "Stock");
-            }
-        }
-    }
-
-    #endregion
-
-    #region Find
-
-    private struct PointType
-    {
-        public List<CardState> list;
-        public int index;
-    }
-
-    private PointType FindCard(string cardInfoToFind)
-    {
-        int i;
-
-        PointType cardPointToFind = new PointType();
-
-        for (i = 0; i < tableaus.Length; i++)
-        {
-            for (int j = 0; j < tableaus[i].Count; j++)
-            {
-                if (tableaus[i][j].Equals(cardInfoToFind))
+                for (j = 0; j < deck.tableaus.Length; j++)
                 {
-                    cardPointToFind.list = tableaus[i];
-                    cardPointToFind.index = j;
+                    if (deck.tableaus[j].Count != 0)
+                    {
+                        if (CanMoveTableau(stockCard, deck.tableaus[j].Last()) == false)
+                            continue;
+                    }
+                    else
+                    {
+                        if (stockCard.cardInfo.cardRank != ECardRank.K)
+                            continue;
+                    }
 
-                    return cardPointToFind;
+                    deck.stock.Remove(stockCard);
+
+                    stockCard.isFaceUp = true;
+
+                    MoveToTableau(j, stockCard, deck, "Stock");
                 }
             }
-        }
-
-        for (i = 0; i < stock.Count; i++)
-        {
-            if (stock[i].Equals(cardInfoToFind))
-            {
-                cardPointToFind.list = stock;
-                cardPointToFind.index = i;
-
-                return cardPointToFind;
-            }
-        }
-
-        return cardPointToFind;
-    }
-
-    #endregion
-
-    #region Swap
-
-    private void Swap(string infoA, string infoB)
-    {
-        PointType aPoint = FindCard(infoA);
-        PointType bPoint = FindCard(infoB);
-
-        if (aPoint.list == null || bPoint.list == null) return;
-
-        CardState temp = aPoint.list[aPoint.index];
-        aPoint.list[aPoint.index] = bPoint.list[bPoint.index];
-        bPoint.list[bPoint.index] = temp;
+        });
     }
 
     #endregion
