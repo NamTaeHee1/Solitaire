@@ -143,6 +143,7 @@ public class Card : Point
 
 		isDrag = false;
 
+
 		Move();
 	}
 

@@ -44,26 +44,6 @@ public class SolitaireSolver
             foundations = _foundation;
         }
 
-        // 깊은 복사
-        public Deck Clone()
-        {
-            Deck newDeck = new Deck();
-
-            newDeck.tableaus = new List<CardState>[tableaus.Length];
-
-            for (int i = 0; i < tableaus.Length; i++)
-                newDeck.tableaus[i] = new List<CardState>(tableaus[i]);
-
-            newDeck.stock = new List<CardState>(stock);
-
-            newDeck.foundations = new int[foundations.Length];
-
-            for(int i = 0; i < foundations.Length; i++)
-                newDeck.foundations[i] = foundations[i];
-
-            return newDeck;
-        }
-
         public bool IsSolvable()
         {
             int faceUpCount = 0, i;
@@ -115,8 +95,6 @@ public class SolitaireSolver
 
         return new Deck(tableaus, stock, new int[4] {0, 0, 0, 0});
     }
-
-    private Random rand = new Random();
 
     public bool IsSolve(List<string> deckToString)
     {
