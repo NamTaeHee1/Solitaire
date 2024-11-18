@@ -20,6 +20,7 @@ public class PointManager : MonoBehaviour
 	public Point[] tableaus;
 	public Point[] foundations;
 	public Point stock;
+    public Point waste;
 
 	public bool blockingRule = true;
 }

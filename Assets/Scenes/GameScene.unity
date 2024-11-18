@@ -166,6 +166,7 @@ MonoBehaviour:
   - {fileID: 556317599}
   - {fileID: 1012025805}
   stock: {fileID: 1310311384}
+  waste: {fileID: 2113700970}
   blockingRule: 0
 --- !u!4 &12260724
 Transform:
@@ -1522,7 +1523,7 @@ GameObject:
   - component: {fileID: 1186860702}
   - component: {fileID: 1186860701}
   m_Layer: 0
-  m_Name: MoveRecorder
+  m_Name: Recorder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1537,7 +1538,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1186860700}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44cfe18b7466cad4e9f89fef94c32f31, type: 3}
+  m_Script: {fileID: 11500000, guid: 9dc90ded7cfb6c9419fd6dea9b0457e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &1186860702

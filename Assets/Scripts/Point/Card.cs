@@ -108,11 +108,11 @@ public class Card : Point
 
 	#region OnClick Functions
 
-	private bool isDrag = false;
-
 	public void OnClickDown()
 	{
-		List<Card> childCards = GetChildCards();
+        SetCardState(ECardMoveState.CLICKED);
+
+        List<Card> childCards = GetChildCards();
 		childCards.Add(this);
 
 		for (int i = 0; i < childCards.Count; i++)
@@ -121,8 +121,6 @@ public class Card : Point
 
 			childCards[i].cardSR.sortingOrder = 1;
 		}
-
-		SetCardState(ECardMoveState.CLICKED);
 	}
 
 	public void OnClicking(Vector3 mousePos)
@@ -136,59 +134,47 @@ public class Card : Point
 
 	public void OnClickUp()
 	{
-		if (isDrag == false) // Down부터 Drag 하지 않고 Up에 도달했을때
-		{
-			//TODO
-		}
+        List<Point> overlapPoints = SearchPointAround();
+        Point toPoint = ChoiceToPointFromList(overlapPoints);
 
-		isDrag = false;
+        if (overlapPoints.Count == 0 || toPoint == null)
+        {
+            Move(curPoint);
 
+            return;
+        }
 
-		Move();
-	}
+        MoveCardCommand command = new MoveCardCommand(this, curPoint, toPoint);
+
+        command.Excute();
+
+        Recorder.Instance.Push(command);
+    }
 
 	#endregion
 
 	#region Move Function
 
-	public void Move(Point movePoint = null, float waitTime = 0f)
+	public void Move(Point movePoint, float waitTime = 0f, ECardSlibDirection slibDirection = ECardSlibDirection.LAST)
 	{
-		if (movePoint != null)
-		{
-			transform.SetParent(movePoint.transform);
+        transform.SetParent(movePoint.transform);
 
-			beforePoint = curPoint;
-			curPoint = movePoint;
+        if (slibDirection == ECardSlibDirection.FIRST)
+            transform.SetAsFirstSibling();
 
-			OnMovedToOtherPoint();
+        beforePoint = curPoint;
+        curPoint = movePoint;
 
-			Vector3 cardPos = transform.localPosition;
+        OnMovedToOtherPoint();
 
-			cardPos.z = -((curPoint.transform.childCount + 1) * 0.1f);
+        Vector3 cardPos = transform.localPosition;
 
-			transform.localPosition = cardPos;
+        cardPos.z = -((curPoint.transform.childCount + 1) * 0.1f);
 
-			StartCoroutine(MoveCard(movePoint, waitTime));
+        transform.localPosition = cardPos;
 
-			return;
-		}
-
-		List<Point> overlapPoints = SearchPointAround();
-
-		if (overlapPoints.Count > 0)
-		{
-			Point toPoint = ChoiceToPointFromList(overlapPoints);
-
-			if (toPoint != null)
-			{
-				Move(toPoint);
-
-				return;
-			}
-		}
-
-		Move(curPoint);
-	}
+        StartCoroutine(MoveCard(movePoint, waitTime));
+    }
 
 	IEnumerator MoveCard(Point movePoint, float _waitTime = 0f)
 	{
@@ -255,7 +241,7 @@ public class Card : Point
 
 	#endregion
 
-	#region Child Card
+	#region Parent & Child Card
 
 	private List<Card> GetChildCards()
 	{

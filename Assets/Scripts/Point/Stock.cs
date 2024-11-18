@@ -24,14 +24,14 @@ public class Stock : Point
     private void Start()
     {
         GenerateCards();
-        MoveCardToPoints();
-        // DFS 사용하자
-        // 이동한 카드, 출발지, 목적지 등을 기억할 MoveState
     }
 
     private void Update()
     {
         StockPointClick();
+
+        if(Input.GetKeyDown(KeyCode.U))
+            MoveCardToPoints();
     }
 
     #region Generate Cards
@@ -40,23 +40,21 @@ public class Stock : Point
     {
         Sprite[] cardFronts = Resources.LoadAll<Sprite>("Cards");
         Dictionary<string, Sprite> frontsNameDict = new Dictionary<string, Sprite>();
+        Card card;
+        int i;
 
-        for (int i = 0; i < cardFronts.Length; i++)
+        for (i = 0; i < cardFronts.Length; i++)
         {
             frontsNameDict.Add(cardFronts[i].name.ToLower(), cardFronts[i]);
         }
 
-        Card card;
-
         GameObject cardPrefab = Resources.Load<GameObject>("Prefabs/Card");
 
-        for (int i = 0; i < DEFINE.CARD_MAX_SIZE; i++)
+        for (i = 0; i < DEFINE.CARD_MAX_SIZE; i++)
         {
             card = Instantiate(cardPrefab, Managers.Point.stock.transform).GetComponent<Card>();
 
             card.SetCardInfo(cardFronts[i], cardFronts[i].name);
-
-            SetCardPosZ(card.transform, -((i + 1) * 0.01f));
 
             Deck.Add(card);
         }
@@ -68,6 +66,17 @@ public class Stock : Point
         while (solver.IsSolve(GetCardInfos()) == false) 
         {
             ShuffleDeck();
+        }
+
+        Transform cardTr;
+
+        for (i = 0; i < Deck.Count; i++)
+        {
+            cardTr = Deck[i].transform;
+
+            SetCardPosZ(cardTr, -((i + 1) * 0.01f));
+
+            cardTr.SetAsLastSibling();
         }
 
         /* 규칙성에 어긋날 시 재배치하는 코드 (현재 사용하지 않음)
@@ -117,29 +126,29 @@ public class Stock : Point
 
     private void MoveCardToPoints()
     {
-        float waitTime = 0;
+        float waitTime = 0, zOffset;
         Point[] tableaus = Managers.Point.tableaus;
-        float zOffset = -0.1f;
+        int i;
 
-        for (int i = 0; i < tableaus.Length; i++)
+        for (i = 0; i < tableaus.Length; i++)
         {
+            zOffset = -0.1f;
+
             for (int j = i; j < tableaus.Length; j++)
             {
-                Card card = Deck.First<Card>();
+                Card card = Deck.Last();
 
                 Deck.Remove(card);
 
                 Vector3 cardPos = card.transform.localPosition;
                 cardPos.z = zOffset;
-
                 card.transform.localPosition = cardPos;
+
                 card.Move(tableaus[j], waitTime += 0.05f);
                 card.ShowCoroutine(j == i ? ECardDirection.FRONT : ECardDirection.BACK, waitTime);
 
                 zOffset -= 0.1f;
             }
-
-            zOffset = -0.1f;
         }
     }
 
@@ -524,39 +533,11 @@ public class Stock : Point
 
 			if (hit == false) return;
 
-			if (Managers.Game.deck.Count == 0)
-				BackToStock();
-			else
-				PickCardFromStock();
-		}
-	}
+            DrawCardCommand command = new DrawCardCommand();
 
-	private void PickCardFromStock()
-	{
-		GameManager Game = Managers.Game;
+            command.Excute();
 
-		Card pickCard = Game.deck.First<Card>();
-
-		pickCard.Show(ECardDirection.FRONT);
-		pickCard.Move(wastePoint);
-
-		Game.deck.Remove(pickCard);
-		Game.deckInWaste.Add(pickCard);
-	}
-
-	private void BackToStock()
-	{
-		GameManager Game = Managers.Game;
-
-		while(Game.deckInWaste.Count > 0)
-		{
-			Card card = Game.deckInWaste.First<Card>();
-
-			card.Show(ECardDirection.BACK);
-			card.Move(this);
-
-			Game.deck.Add(card);
-			Game.deckInWaste.Remove(card);
+            Recorder.Instance.Push(command);
 		}
 	}
 

@@ -28,20 +28,6 @@ public class Point : MonoBehaviour
 		return transform.GetChild(lastCardIndex).GetComponent<Card>();
 	}
 
-    public List<string> GetChildCardsToString()
-    {
-        List<string> cards = new List<string>();
-
-        for(int i = 0; i < transform.childCount; i++)
-        {
-            Card card = transform.GetChild(i).GetComponent<Card>();
-
-            cards.Add(card.cardInfo.ToString());
-        }
-
-        return cards;
-    }
-
 	/// <summary>
 	/// 현재 검색하고 있는 카드와 이 Point가 적합한가 (검색된 Point 시점으로 구현)
 	/// </summary>
