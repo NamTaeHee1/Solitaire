@@ -3,10 +3,11 @@ using UnityEngine;
 
 public enum EPointType
 {
-	Tableau = 0,
-	Foundation,
-	Waste,
-	Stock,
+	TALBEAU = 0,
+	FOUNDATION,
+	WASTE,
+	STOCK,
+    CARD,
 	COUNT
 }
 
@@ -18,7 +19,7 @@ public class Point : MonoBehaviour
 	[Header("Point 유형")]
 	public EPointType pointType;
 
-	public Card GetLastCard()
+	public virtual Card GetLastCard()
 	{
 		int lastCardIndex = transform.childCount - 1;
 
@@ -31,7 +32,9 @@ public class Point : MonoBehaviour
 	/// <summary>
 	/// 현재 검색하고 있는 카드와 이 Point가 적합한가 (검색된 Point 시점으로 구현)
 	/// </summary>
-	/// <param name="card"></param>
-	/// <returns></returns>
 	public virtual bool IsSuitablePoint(Card card) { return false; }
+
+    public virtual void OnEnterPoint(Card movedCard) { }
+
+    public virtual void OnExitPoint(Card movedCard) { }
 }

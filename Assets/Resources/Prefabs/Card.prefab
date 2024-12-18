@@ -98,18 +98,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   useCardYOffset: 1
+  pointType: 4
   cardFrontTexture: {fileID: 0}
   cardBackTexture: {fileID: -8246103488371625927, guid: 21abfb87035730f4b8c2539f6bbfd9da, type: 3}
   cardState: 0
-  cardTextureDirection: 1
-  isInFoundation: 0
+  cardDirection: 1
   curPoint: {fileID: 0}
   beforePoint: {fileID: 0}
   cardSR: {fileID: 7665609696292477590}
   cardCollider: {fileID: 7665609696292477584}
   cardInfo:
     cardSuit: 0
-    cardOrder: 1
+    cardRank: 0
     cardColor: 0
 --- !u!61 &7665609696292477584
 BoxCollider2D:

@@ -15,29 +15,12 @@ public static class Utils
 		return hit;
 	}
 
-    public static int Max(this int[] array)
+    public static Card GetCard(string cardName)
     {
-        int maxNum = array[0];
+        var cardNameDict = Managers.Point.stock.cardNameDict;
 
-        for(int i = 1; i < array.Length; i++)
-        {
-            if(array[i] > maxNum)
-                maxNum = array[i];
-        }
+        cardNameDict.TryGetValue(cardName, out Card card);
 
-        return maxNum;
-    }
-
-    public static int Min(this int[] array)
-    {
-        int minNum = array[0];
-
-        for(int i = 1; i < array.Length; i++)
-        {
-            if(array[i] < minNum)
-                minNum = array[i];
-        }
-
-        return minNum;
+        return card;
     }
 }

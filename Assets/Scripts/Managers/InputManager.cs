@@ -1,14 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-
-public enum InputState
-{
-	IDLE,
-	CLICKED,
-	DRAGING
-}
 
 public class InputManager : MonoBehaviour
 {
@@ -25,8 +17,7 @@ public class InputManager : MonoBehaviour
 
 	private static InputManager _instance;
 
-	[Header("클릭한 Card")]
-	[SerializeField]
+	[Header("클릭한 Card")][SerializeField]
 	private Card clickedCard;
 
 	private LayerMask cardLayer;
@@ -35,8 +26,18 @@ public class InputManager : MonoBehaviour
 
 	private Vector3 inputOffset;
 
-	[Header("현재 클릭 가능한가")]
-	public bool canInput;
+    public bool IsBlocking { get { return BlockingInput != 0; } }
+
+	public int BlockingInput
+    {
+        get { return blockingInput; }
+        set
+        {
+            blockingInput = Mathf.Clamp(value, 0, value);
+        }
+    }
+    [SerializeField]
+    private int blockingInput;
 
 	private void Awake()
 	{
@@ -47,13 +48,15 @@ public class InputManager : MonoBehaviour
 
     private void Update()
 	{
-		if (canInput == false)
+		if (BlockingInput > 0)
 		{
 			if (clickedCard != null)
 			{
 				clickedCard.OnClickUp();
 				clickedCard = null;
 			}
+
+            return;
 		}
 
 		if (Input.GetMouseButtonDown(0))

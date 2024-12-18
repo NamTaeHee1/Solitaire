@@ -19,7 +19,6 @@ public class DrawCardCommand : ICommand
                 card.Move(Managers.Point.stock);
 
                 Game.deck.Add(card);
-                Game.deckInWaste.Remove(card);
             }
         }
         else
@@ -30,7 +29,6 @@ public class DrawCardCommand : ICommand
             card.Move(Managers.Point.waste);
 
             Game.deck.Remove(card);
-            Game.deckInWaste.Add(card);
         }
     }
 
@@ -38,19 +36,26 @@ public class DrawCardCommand : ICommand
     {
         GameManager Game = Managers.Game;
 
-        if (Game.deck.Count != 0)
+        if (Game.deckInWaste.Count == 0)
+        {
+            while(Game.deck.Count > 0)
+            {
+                Card card = Game.deck.Last();
+
+                card.Show(ECardDirection.FRONT);
+                card.Move(Managers.Point.waste);
+
+                Game.deck.Remove(card);
+            }
+        }
+        else
         {
             Card card = Game.deckInWaste.Last();
 
             card.Show(ECardDirection.BACK);
             card.Move(Managers.Point.stock);
 
-            Game.deckInWaste.Remove(card);
             Game.deck.Add(card);
-        }
-        else
-        {
-
         }
     }
 }

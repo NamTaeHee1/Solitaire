@@ -17,10 +17,9 @@ public class PointManager : MonoBehaviour
 
 	private static PointManager _instance;
 
-	public Point[] tableaus;
-	public Point[] foundations;
-	public Point stock;
-    public Point waste;
+	public Tableau[] tableaus;
+	public Foundation[] foundations;
+	public Stock stock;
+    public Waste waste;
 
-	public bool blockingRule = true;
 }

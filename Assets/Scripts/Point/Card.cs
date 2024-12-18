@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 [Serializable]
 public struct CardInfo
@@ -77,6 +78,7 @@ public class Card : Point
 	#endregion
 
 	#region Texture
+
 	private IEnumerator Show(ECardDirection _direction, float _waitTime = 0)
 	{
 		yield return new WaitForSeconds(_waitTime);
@@ -104,6 +106,11 @@ public class Card : Point
 		StartCoroutine(Show(_direction, _waitTime));
 	}
 
+    public void SetSortingOrder(int order)
+    {
+        cardSR.sortingOrder = order;
+    }
+
 	#endregion
 
 	#region OnClick Functions
@@ -113,14 +120,11 @@ public class Card : Point
         SetCardState(ECardMoveState.CLICKED);
 
         List<Card> childCards = GetChildCards();
-		childCards.Add(this);
 
 		for (int i = 0; i < childCards.Count; i++)
-		{
-			childCards[i].cardCollider.enabled = false;
+            childCards[i].SetSortingOrder(1);
 
-			childCards[i].cardSR.sortingOrder = 1;
-		}
+        SetSortingOrder(1);
 	}
 
 	public void OnClicking(Vector3 mousePos)
@@ -139,7 +143,7 @@ public class Card : Point
 
         if (overlapPoints.Count == 0 || toPoint == null)
         {
-            Move(curPoint);
+            Move(curPoint, 0f, false);
 
             return;
         }
@@ -151,21 +155,22 @@ public class Card : Point
         Recorder.Instance.Push(command);
     }
 
-	#endregion
+    #endregion
 
-	#region Move Function
+    #region Move Function
 
-	public void Move(Point movePoint, float waitTime = 0f, ECardSlibDirection slibDirection = ECardSlibDirection.LAST)
-	{
+    public void Move(Point movePoint, float waitTime = 0f, bool playSound = true)
+    {
         transform.SetParent(movePoint.transform);
-
-        if (slibDirection == ECardSlibDirection.FIRST)
-            transform.SetAsFirstSibling();
 
         beforePoint = curPoint;
         curPoint = movePoint;
 
-        OnMovedToOtherPoint();
+        if (beforePoint != curPoint)
+        {
+            if (beforePoint != null) beforePoint.OnExitPoint(this);
+            curPoint.OnEnterPoint(this);
+        }
 
         Vector3 cardPos = transform.localPosition;
 
@@ -173,10 +178,16 @@ public class Card : Point
 
         transform.localPosition = cardPos;
 
+        Managers.Game.CheckAutoComplete();
+
+        Managers.Game.CheckWin();
+
+        if(playSound) Managers.Sound.Play(ESoundType.EFFECT, "MoveCard");
+
         StartCoroutine(MoveCard(movePoint, waitTime));
     }
 
-	IEnumerator MoveCard(Point movePoint, float _waitTime = 0f)
+	private IEnumerator MoveCard(Point movePoint, float _waitTime = 0f)
 	{
 		SetCardState(ECardMoveState.MOVING);
 
@@ -204,44 +215,16 @@ public class Card : Point
 		SetCardState(ECardMoveState.IDLE);
 
 		List<Card> childCards = GetChildCards();
-		childCards.Insert(0, this);
 
 		for (int i = 0; i < childCards.Count; i++)
-		{
-			childCards[i].cardCollider.enabled = true;
+            childCards[i].SetSortingOrder(0);
 
-			childCards[i].cardSR.sortingOrder = 0;
-		}
-	}
-
-	private void OnMovedToOtherPoint()
-	{
-		if (beforePoint == null) return;
-
-		switch(beforePoint.pointType)
-		{
-			case EPointType.Tableau:
-
-				Card pointLastCard = beforePoint.GetLastCard();
-
-				if (pointLastCard != null)
-					pointLastCard.Show(ECardDirection.FRONT);
-
-				break;
-
-			case EPointType.Waste:
-
-				if (curPoint.pointType == EPointType.Waste) break;
-
-				Managers.Game.deckInWaste.Remove(this);
-
-				break;
-		}
+        SetSortingOrder(0);
 	}
 
 	#endregion
 
-	#region Parent & Child Card
+	#region Child Card
 
 	private List<Card> GetChildCards()
 	{
@@ -283,16 +266,13 @@ public class Card : Point
 
 	private Point ChoiceToPointFromList(List<Point> overlapPoints)
 	{
-		if(Managers.Point.blockingRule == false)
-		{
-			for (int i = overlapPoints.Count - 1; i >= 0; i--)
-			{
-				if (overlapPoints[i].IsSuitablePoint(this) == false)
-					overlapPoints.Remove(overlapPoints[i]);
-			}
-		}
+        for (int i = overlapPoints.Count - 1; i >= 0; i--)
+        {
+            if (overlapPoints[i].IsSuitablePoint(this) == false)
+                overlapPoints.Remove(overlapPoints[i]);
+        }
 
-		if (overlapPoints.Count == 0) // 적합한 카드가 없다면
+        if (overlapPoints.Count == 0) // 적합한 카드가 없다면
 			return null;
 
 		Point proximateCard = overlapPoints[0];
@@ -334,8 +314,8 @@ public class Card : Point
 		if (cardDirection == ECardDirection.BACK) return false;
 
 		// 5. Foundation 또는 Waste에 있다면
-		if (curPoint.pointType == EPointType.Waste ||
-			curPoint.pointType == EPointType.Foundation) return false;
+		if (curPoint.pointType == EPointType.WASTE ||
+			curPoint.pointType == EPointType.FOUNDATION) return false;
 
 		return true;
 	}
@@ -352,7 +332,8 @@ public class Card : Point
 		Gizmos.color = Color.red;
 		Gizmos.DrawWireCube(transform.position, cardSR.size);
 	}
+
 #endif
-	#endregion
+    #endregion
 
 }

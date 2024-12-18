@@ -1,15 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
-public class Recorder : MonoBehaviour
+public class Recorder
 {
     public static Recorder Instance
     {
         get
         {
-            if(_instance == null)
-                _instance = FindObjectOfType<Recorder>();
+            if (_instance == null)
+                _instance = new Recorder();
 
             return _instance;
         }
@@ -17,6 +16,8 @@ public class Recorder : MonoBehaviour
     private static Recorder _instance;
 
     private Stack<ICommand> commandHistory = new Stack<ICommand>();
+
+    public bool IsEmpty { get { return commandHistory.Count == 0; } }
 
     public void Push(ICommand command)
     {
@@ -28,13 +29,8 @@ public class Recorder : MonoBehaviour
         return commandHistory.Pop();
     }
 
-    private void Update()
+    public void ClearHistory()
     {
-        if(Input.GetKeyDown(KeyCode.P))
-        {
-            ICommand command = Pop();
-
-            command.Undo();
-        }
+        commandHistory.Clear();
     }
 }

@@ -9,4 +9,6 @@ public class Managers : MonoBehaviour
 	public static PointManager Point { get { return PointManager.Instance; } }
 
 	public static GameManager Game { get { return GameManager.Instance; } }
+
+    public static SoundManager Sound { get { return SoundManager.Instance; } }
 }

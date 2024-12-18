@@ -6,12 +6,49 @@ public class Tableau : Point
 {
 	public override bool IsSuitablePoint(Card card)
 	{
-		// 1. cardÀÇ Rank°¡ K°¡ ¾Æ´Ï¶ó¸é
+		// 1. cardì˜ Rankê°€ Kê°€ ì•„ë‹ˆë¼ë©´
 		if (card.cardInfo.cardRank != ECardRank.K) return false;
 
-		// 2. ÀÌ¹Ì ´Ù¸¥ Ä«µå°¡ ÀÖÀ» °æ¿ì
+		// 2. ì´ë¯¸ ë‹¤ë¥¸ ì¹´ë“œê°€ ìˆì„ ê²½ìš°
 		if (GetLastCard() != null) return false;
 
 		return true;
 	}
+
+    public override Card GetLastCard()
+    {
+        Card lastCard = base.GetLastCard();
+
+        if (lastCard == null) return null;
+
+        while(lastCard.transform.childCount != 0)
+        {
+            lastCard = lastCard.GetLastCard();
+        }
+
+        return lastCard;
+    }
+
+    #region Enter & Exit Point
+
+    public override void OnEnterPoint(Card movedCard)
+    {
+        if (transform.childCount < 2) return;
+
+        Card coverToCard = transform.GetChild(transform.childCount - 2).GetComponent<Card>();
+
+        if (coverToCard != null)
+            coverToCard.Show(ECardDirection.BACK);
+    }
+
+    public override void OnExitPoint(Card movedCard)
+    {
+        Card pointLastCard = GetLastCard();
+
+        if (pointLastCard != null)
+            pointLastCard.Show(ECardDirection.FRONT);
+    }
+
+    #endregion
+
 }

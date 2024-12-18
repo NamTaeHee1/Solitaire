@@ -5,4 +5,6 @@ public class DEFINE
 	public const int CARD_MAX_SIZE = 52;
 
 	public const float CARD_MOVE_SPEED = 20.0f;
+
+    public const float HINT_COOL = 3.0f;
 }

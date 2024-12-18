@@ -1,9 +1,22 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using static SolitaireSolver;
-using Random = System.Random;
+
+public struct Deck
+{
+    public List<CardState>[] tableaus;
+    public List<CardState> stock;
+    public int[] foundations;
+
+    public Deck(List<CardState>[] _tableaus, List<CardState> _stock, int[] _foundation)
+    {
+        tableaus = _tableaus;
+        stock = _stock;
+        foundations = _foundation;
+    }
+}
 
 public class SolitaireSolver
 {
@@ -28,40 +41,6 @@ public class SolitaireSolver
         public override int GetHashCode()
         {
             return base.GetHashCode();
-        }
-    }
-
-    public struct Deck
-    {
-        public List<CardState>[] tableaus;
-        public List<CardState> stock;
-        public int[] foundations;
-
-        public Deck(List<CardState>[] _tableaus, List<CardState> _stock, int[] _foundation)
-        {
-            tableaus = _tableaus;
-            stock = _stock;
-            foundations = _foundation;
-        }
-
-        public bool IsSolvable()
-        {
-            int faceUpCount = 0, i;
-
-            for(i = 0; i < tableaus.Length; i++)
-            {
-                for(int j = 0; j < tableaus[i].Count; j++)
-                {
-                    if (tableaus[i][j].isFaceUp == true) faceUpCount++;
-                }
-            }
-
-            faceUpCount += stock.Count;
-
-            for (i = 0; i < foundations.Length; i++)
-                faceUpCount += foundations[i];
-
-            return faceUpCount >= DEFINE.CARD_MAX_SIZE;
         }
     }
 
@@ -116,13 +95,32 @@ public class SolitaireSolver
 
         MoveFromStockToDiffPoints(deck, out changedDeck);
 
-        if (deck.IsSolvable())
-            return true;
+        if (IsSolvable(deck)) return true;
 
         if (changedDeck)
             return Solve(deck);
         else
             return false;
+    }
+
+    public bool IsSolvable(Deck deck)
+    {
+        int faceUpCount = 0, i;
+
+        for (i = 0; i < deck.tableaus.Length; i++)
+        {
+            for (int j = 0; j < deck.tableaus[i].Count; j++)
+            {
+                if (deck.tableaus[i][j].isFaceUp) faceUpCount++;
+            }
+        }
+
+        faceUpCount += deck.stock.Count;
+
+        for (i = 0; i < deck.foundations.Length; i++)
+            faceUpCount += deck.foundations[i];
+
+        return faceUpCount >= DEFINE.CARD_MAX_SIZE;
     }
 
     #region CardInfo
@@ -184,6 +182,7 @@ public class SolitaireSolver
         CardState state = tableau[tableau.Count - 1];
         state.isFaceUp = true;
         tableau[tableau.Count - 1] = state;
+
     }
 
     private void MoveFromTableauToDiffTableau(int tableauIndex, Deck deck, out bool changedDeck)
@@ -336,6 +335,8 @@ public class SolitaireSolver
                 deck.stock.Remove(stockCard);
 
                 MoveToTableau(j, stockCard, deck);
+
+                j = deck.tableaus.Length; // 한 번이라도 이동했으면 바로 스킵
 
                 changedDeck = true;
             }
