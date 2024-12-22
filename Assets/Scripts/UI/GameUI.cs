@@ -52,6 +52,8 @@ public class GameUI : MonoBehaviour
     {
         Managers.Sound.Play(ESoundType.EFFECT, "Press");
 
+        if (Managers.Input.IsBlocking) return;
+
         pausePanel.gameObject.SetActive(true);
     }
 

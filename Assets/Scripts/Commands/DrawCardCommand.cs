@@ -11,12 +11,14 @@ public class DrawCardCommand : ICommand
 
         if (Game.deck.Count == 0)
         {
+            Managers.Sound.Play(ESoundType.EFFECT, "MoveCard");
+
             while (Game.deckInWaste.Count > 0)
             {
                 Card card = Game.deckInWaste.Last();
 
                 card.Show(ECardDirection.BACK);
-                card.Move(Managers.Point.stock);
+                card.Move(Managers.Point.stock, 0f, false);
 
                 Game.deck.Add(card);
             }
