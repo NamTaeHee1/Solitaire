@@ -31,13 +31,6 @@ public class SoundManager : MonoBehaviour
         AudioClip clip = Resources.Load<AudioClip>($"Sounds/{path}");
         AudioSource audioSource = audioSources[(int)soundType];
 
-        if(clip == null)
-        {
-            Debug.LogError("Missing Clip");
-
-            return;
-        }
-
         if(soundType == ESoundType.BGM)
         {
             audioSource.loop = true;

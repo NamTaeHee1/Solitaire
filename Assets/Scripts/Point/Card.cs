@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -111,13 +112,17 @@ public class Card : Point
         cardSR.sortingOrder = order;
     }
 
-	#endregion
+    #endregion
 
-	#region OnClick Functions
+    #region OnClick Functions
 
-	public void OnClickDown()
+    private Vector2 clickPos;
+
+	public void OnClickDown(Vector3 mousePos)
 	{
         SetCardState(ECardMoveState.CLICKED);
+
+        clickPos = mousePos;
 
         List<Card> childCards = GetChildCards();
 
@@ -131,17 +136,22 @@ public class Card : Point
 	{
 		SetCardState(ECardMoveState.DRAGING);
 
-		mousePos.z = transform.position.z;
+        mousePos.z = transform.position.z;
 
 		transform.position = mousePos;
 	}
 
-	public void OnClickUp()
+	public void OnClickUp(Vector3 mousePos)
 	{
         List<Point> overlapPoints = SearchPointAround();
         Point toPoint = ChoiceToPointFromList(overlapPoints);
 
-        if (overlapPoints.Count == 0 || toPoint == null)
+        if (Vector2.Distance(clickPos, mousePos) <= 0.1f && toPoint == null)
+        {
+            toPoint = GetPointToMove();
+        }
+
+        if (toPoint == null)
         {
             Move(curPoint, 0f, false);
 
@@ -153,6 +163,50 @@ public class Card : Point
         command.Excute();
 
         Recorder.Instance.Push(command);
+    }
+
+    private Point GetPointToMove()
+    {
+        #region Foundation
+
+        Foundation foundationToMove = Managers.Point.foundations[(int)cardInfo.cardSuit];
+
+        if (cardInfo.cardRank == ECardRank.A)
+            return foundationToMove;
+
+        if (foundationToMove.GetLastCard() != null)
+        {
+            if (foundationToMove.IsSuitablePoint(this))
+                return foundationToMove;
+        }
+
+        #endregion
+
+        #region Tableau
+
+        Tableau[] tableaus = Managers.Point.tableaus;
+
+        for(int i = 0; i < tableaus.Length; i++)
+        {
+            if(cardInfo.cardRank == ECardRank.K)
+            {
+                if (tableaus[i].GetLastCard() == null)
+                    return tableaus[i];
+            }
+            else
+            {
+                Card lastCard = tableaus[i].GetLastCard();
+
+                if (lastCard == null) continue;
+
+                if (lastCard.IsSuitablePoint(this))
+                    return lastCard;
+            }
+        }
+
+        #endregion
+
+        return null;
     }
 
     #endregion

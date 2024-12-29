@@ -52,7 +52,7 @@ public class InputManager : MonoBehaviour
 		{
 			if (clickedCard != null)
 			{
-				clickedCard.OnClickUp();
+				clickedCard.OnClickUp(GetMousePos());
 				clickedCard = null;
 			}
 
@@ -74,7 +74,7 @@ public class InputManager : MonoBehaviour
 		{
 			if (clickedCard != null)
 			{
-				clickedCard.OnClickUp();
+				clickedCard.OnClickUp(GetMousePos());
 				clickedCard = null;
 			}
 		}
@@ -94,9 +94,11 @@ public class InputManager : MonoBehaviour
 				return;
 			}
 
-			clickedCard.OnClickDown();
+            Vector3 mousePos = GetMousePos();
 
-			inputOffset = clickedCard.transform.position - GetMousePos();
+			clickedCard.OnClickDown(mousePos);
+
+			inputOffset = clickedCard.transform.position - mousePos;
 		}
 	}
 
