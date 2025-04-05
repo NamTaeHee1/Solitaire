@@ -40,7 +40,7 @@ public class PausePanel : MonoBehaviour
 
     public void ResumeButtonClick()
     {
-        Managers.Sound.Play(ESoundType.EFFECT, "Press");
+        Managers.Sound.Play("Press");
 
         gameObject.SetActive(false);
     }
@@ -54,7 +54,7 @@ public class PausePanel : MonoBehaviour
 
     public void RetryButtonClick()
     {
-        Managers.Sound.Play(ESoundType.EFFECT, "Press");
+        Managers.Sound.Play("Press");
 
         Managers.Game.StartGame(true);
          
@@ -70,7 +70,7 @@ public class PausePanel : MonoBehaviour
 
     public void NewGameButtonClick()
     {
-        Managers.Sound.Play(ESoundType.EFFECT, "Press");
+        Managers.Sound.Play("Press");
 
         Managers.Game.StartGame(false);
 

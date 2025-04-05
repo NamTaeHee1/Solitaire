@@ -2,13 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ESoundType
-{
-    BGM,
-    EFFECT,
-    COUNT
-}
-
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance
@@ -23,28 +16,27 @@ public class SoundManager : MonoBehaviour
     }
     private static SoundManager _instance;
 
-    [Header("Audio Sources")][SerializeField]
-    private AudioSource[] audioSources = new AudioSource[(int)ESoundType.COUNT];
+    [Header("Audio Source")][SerializeField]
+    private AudioSource audioSource;
 
-    public void Play(ESoundType soundType, string path)
+    /// <summary>
+    /// Resource 재호출을 방지하기 위한 Audio Clip 저장용 변수
+    /// </summary>
+    private Dictionary<string, AudioClip> audioDicts = new Dictionary<string, AudioClip>();
+
+    public void Play(string path)
     {
-        AudioClip clip = Resources.Load<AudioClip>($"Sounds/{path}");
-        AudioSource audioSource = audioSources[(int)soundType];
+        path = $"Sounds/{path}";
+        Debug.Log($"path : {path}");
 
-        if(soundType == ESoundType.BGM)
+        AudioClip clip;
+
+        if (audioDicts.TryGetValue(path, out clip) == false)
         {
-            audioSource.loop = true;
-            audioSource.clip = clip;
-            audioSource.Play();
+            clip = Resources.Load<AudioClip>(path);
+            audioDicts.Add(path, clip);
         }
-        else
-        {
-            audioSource.PlayOneShot(clip);
-        }
-    }
 
-    public void Pause()
-    {
-
+        audioSource.PlayOneShot(clip);
     }
 }

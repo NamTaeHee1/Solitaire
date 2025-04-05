@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
+using UnityEngine.U2D;
 
 public class Stock : Point
 {
@@ -14,26 +15,29 @@ public class Stock : Point
 
 	private LayerMask stockLayer;
 
+    [SerializeField]
     private Sprite[] cardFronts;
 
     private GameObject cardPrefab;
 
     private List<Card> Deck { get { return Managers.Game.deck; } }
 
-    // 다시하기 시 바뀌지 않은 현재 덱이 필요하기 때문에 Back Up을 놔둠
-    private List<string> backUpDeck = new List<string>();
+    /// <summary>
+    /// 다시하기 시 바뀌지 않은 현재 덱이 필요하기 때문
+    /// </summary>
+    private List<string> backUpCurrentDeck = new List<string>();
 
     [HideInInspector]
     public List<Card> allCards = new List<Card>();
     public Dictionary<string, Card> cardNameDict = new Dictionary<string, Card>();
-
+    
 	private void Awake()
 	{
 		mainCam = Camera.main;
 
 		stockLayer = 1 << LayerMask.NameToLayer("Stock");
 
-        cardFronts = Resources.LoadAll<Sprite>("Cards");
+        cardFronts = Resources.LoadAll<Sprite>("Casual_Cards_Sheet");
 
         cardPrefab = Resources.Load<GameObject>("Prefabs/Card");
     }
@@ -51,9 +55,9 @@ public class Stock : Point
 
         if (retryCurrentDeck)
         {
-            for(i = 0; i < backUpDeck.Count; i++)
+            for(i = 0; i < backUpCurrentDeck.Count; i++)
             {
-                cardNameDict.TryGetValue(backUpDeck[i], out Card card);
+                cardNameDict.TryGetValue(backUpCurrentDeck[i], out Card card);
 
                 card.transform.SetAsLastSibling();
             }
@@ -76,11 +80,11 @@ public class Stock : Point
                 ShuffleDeck();
             }
 
-            backUpDeck.Clear();
+            backUpCurrentDeck.Clear();
 
             for (i = 0; i < Deck.Count; i++)
             {
-                backUpDeck.Add(Deck[i].cardInfo.ToString());
+                backUpCurrentDeck.Add(Deck[i].cardInfo.ToString());
             }
         }
 
@@ -120,11 +124,12 @@ public class Stock : Point
     {
         Card card;
 
-        for (int i = 0; i < DEFINE.CARD_MAX_SIZE; i++)
+        for (int i = 1; i <= DEFINE.CARD_MAX_SIZE; i++)
         {
             card = Instantiate(cardPrefab, Managers.Point.stock.transform).GetComponent<Card>();
 
-            card.SetCardInfo(cardFronts[i], cardFronts[i].name);
+            card.SetCardInfo(cardFronts[i].name);
+            card.SetCardTexture(cardFronts[i], cardFronts[0]);
 
             Deck.Add(card);
 
@@ -177,7 +182,7 @@ public class Stock : Point
         Managers.Input.BlockingInput++;
         Invoke(nameof(ActiveInput), 2f);
 
-        Managers.Sound.Play(ESoundType.EFFECT, "Shuffling");
+        Managers.Sound.Play("Shuffling");
 
         for (int i = 0; i < tableaus.Length; i++)
         {
@@ -614,14 +619,15 @@ public class Stock : Point
 
 			if (hit == false) return;
 
+            if (Managers.Game.deck.Count        == 0 && 
+                Managers.Game.deckInWaste.Count == 0) return;
+
             DrawCard();
 		}
 	}
 
     public void DrawCard()
     {
-        Managers.Sound.Play(ESoundType.EFFECT, "MoveCard");
-
         DrawCardCommand command = new DrawCardCommand();
 
         command.Excute();

@@ -37,7 +37,7 @@ public class AutoCompletePopup : MonoBehaviour
 
     public void ConfirmButtonClick()
     {
-        Managers.Sound.Play(ESoundType.EFFECT, "Press");
+        Managers.Sound.Play("Press");
 
         popupVisual.SetActive(false);
 
@@ -101,9 +101,11 @@ public class AutoCompletePopup : MonoBehaviour
 
     public void CancleButtonClick()
     {
-        Managers.Sound.Play(ESoundType.EFFECT, "Press");
+        Managers.Sound.Play("Press");
 
         gameObject.SetActive(false);
+
+        Managers.Game.notAllowAutoComplete = true;
     }
 
     #endregion

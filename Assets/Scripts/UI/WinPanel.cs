@@ -33,7 +33,7 @@ public class WinPanel : MonoBehaviour
 
     public void RetryButtonClick()
     {
-        Managers.Sound.Play(ESoundType.EFFECT, "Press");
+        Managers.Sound.Play("Press");
 
         Managers.Game.StartGame(true);
 
@@ -49,7 +49,7 @@ public class WinPanel : MonoBehaviour
 
     public void NewGameButtonClick()
     {
-        Managers.Sound.Play(ESoundType.EFFECT, "Press");
+        Managers.Sound.Play("Press");
 
         Managers.Game.StartGame(false);
 

@@ -43,8 +43,8 @@ public struct CardInfo
 public class Card : Point
 {
 	[Header("카드 Texture")]
-	[SerializeField] private Sprite cardFrontTexture;
-	[SerializeField] private Sprite cardBackTexture;
+	[SerializeField] private Sprite cardFront;
+	[SerializeField] private Sprite cardBack;
 
 	[Header("카드 상태")]
 	public ECardMoveState cardState = ECardMoveState.IDLE;
@@ -63,16 +63,25 @@ public class Card : Point
     [Header("카드 정보")]
 	public CardInfo cardInfo;
 
-	public void SetCardInfo(Sprite cardFrontTexure, string cardName)
+	public void SetCardInfo(string cardName)
 	{
-		this.cardFrontTexture = cardFrontTexure;
-		transform.name = cardName;
+#if UNITY_EDITOR
+        transform.name = cardName;
+#endif
 
-		string[] cardInfoArr = cardName.Split('_'); // [1] : Suit, [2] : Rank, [3] : Color
+        string[] cardInfoArr = cardName.Split('_'); // [1] : Suit, [2] : Rank, [3] : Color
 		cardInfo.cardSuit = (ECardSuit)Enum.Parse(typeof(ECardSuit), cardInfoArr[1].ToUpper());
 		cardInfo.cardRank = (ECardRank)Enum.Parse(typeof(ECardRank), cardInfoArr[2].ToUpper());
 		cardInfo.cardColor = (ECardColor)Enum.Parse(typeof(ECardColor), cardInfoArr[3].ToUpper());
 	}
+
+    public void SetCardTexture(Sprite cardFront, Sprite cardBack)
+    {
+        this.cardFront = cardFront;
+        this.cardBack = cardBack;
+
+        Show(ECardDirection.BACK);
+    }
 
 	private void SetCardState(ECardMoveState state) => cardState = state;
 
@@ -92,10 +101,10 @@ public class Card : Point
 		switch (_direction)
 		{
 			case ECardDirection.FRONT:
-				cardSR.sprite = cardFrontTexture;
+				cardSR.sprite = cardFront;
 				break;
 			case ECardDirection.BACK:
-				cardSR.sprite = cardBackTexture;
+				cardSR.sprite = cardBack;
 				break;
 		}
 
@@ -116,7 +125,7 @@ public class Card : Point
 
     #region OnClick Functions
 
-    private Vector2 clickPos;
+    private Vector2 clickPos; // 터치 감지 위해
 
 	public void OnClickDown(Vector3 mousePos)
 	{
@@ -146,7 +155,7 @@ public class Card : Point
         List<Point> overlapPoints = SearchPointAround();
         Point toPoint = ChoiceToPointFromList(overlapPoints);
 
-        if (Vector2.Distance(clickPos, mousePos) <= 0.1f && toPoint == null)
+        if (Vector2.Distance(clickPos, mousePos) <= 0.1f && toPoint == null) // 터치일 경우
         {
             toPoint = GetPointToMove();
         }
@@ -236,7 +245,7 @@ public class Card : Point
 
         Managers.Game.CheckWin();
 
-        if(playSound) Managers.Sound.Play(ESoundType.EFFECT, "MoveCard");
+        if(playSound) Managers.Sound.Play("MoveCard");
 
         StartCoroutine(MoveCard(movePoint, waitTime));
     }

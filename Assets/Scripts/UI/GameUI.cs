@@ -50,7 +50,7 @@ public class GameUI : MonoBehaviour
 
     public void PauseButtonClick()
     {
-        Managers.Sound.Play(ESoundType.EFFECT, "Press");
+        Managers.Sound.Play("Press");
 
         if (Managers.Input.IsBlocking) return;
 
@@ -72,8 +72,6 @@ public class GameUI : MonoBehaviour
     public void HintButtonClick()
     {
         if (hintButtonCool.gameObject.activeSelf) return;
-
-        Managers.Sound.Play(ESoundType.EFFECT, "Press");
 
         if (Managers.Input.IsBlocking) return;
 
@@ -112,13 +110,16 @@ public class GameUI : MonoBehaviour
 
     public void UndoButtonClick()
     {
-        Managers.Sound.Play(ESoundType.EFFECT, "Press");
-
         if (Managers.Input.IsBlocking) return;
 
         Recorder recorder = Recorder.Instance;
 
-        if (recorder.IsEmpty) return;
+        if (recorder.IsEmpty)
+        {
+            Managers.Sound.Play("Press");
+
+            return;
+        }
 
         recorder.Pop().Undo();
     }
@@ -143,6 +144,7 @@ public class GameUI : MonoBehaviour
 
     public void AutoCompleteButtonClick()
     {
+        Debug.Log($"fjewiofiwe");
         ShowAutoCompletePopup();
 
         autoCompletePopup.ConfirmButtonClick();

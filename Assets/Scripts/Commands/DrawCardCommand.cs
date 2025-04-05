@@ -11,7 +11,7 @@ public class DrawCardCommand : ICommand
 
         if (Game.deck.Count == 0)
         {
-            Managers.Sound.Play(ESoundType.EFFECT, "MoveCard");
+            Managers.Sound.Play("MoveCard");
 
             while (Game.deckInWaste.Count > 0)
             {

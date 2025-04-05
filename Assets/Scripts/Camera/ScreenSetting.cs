@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ScreenResolution : MonoBehaviour
+public class ScreenSetting : MonoBehaviour
 {
     void Start()
     {

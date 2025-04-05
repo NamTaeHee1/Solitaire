@@ -35,6 +35,8 @@ public class GameManager : MonoBehaviour
     {
         GameUI.Instance.ResetUI();
 
+        notAllowAutoComplete = false;
+
         Stock stock = Managers.Point.stock;
 
         stock.GenerateCards(retryCurrentDeck);
@@ -47,8 +49,16 @@ public class GameManager : MonoBehaviour
 
     #region Auto Complete
 
+    /// <summary>
+    /// 이번 판에서 자동 완성을 허락하지 않았을 경우(아니요 클릭)를 체크하기 위한 변수
+    /// </summary>
+    [HideInInspector]
+    public bool notAllowAutoComplete = false;
+
     public void CheckAutoComplete()
     {
+        if (Managers.Game.notAllowAutoComplete == true) return;
+
         List<Card> cards = Managers.Point.stock.allCards;
 
         for(int i = 0; i < cards.Count; i++)
@@ -74,7 +84,7 @@ public class GameManager : MonoBehaviour
     public void CheckWin()
     {
         if (IsWin())
-            ExcuteGameWin();
+            StartCoroutine(GameWin());
     }
 
     public bool IsWin()
@@ -92,11 +102,6 @@ public class GameManager : MonoBehaviour
         }
 
         return true;
-    }
-
-    private void ExcuteGameWin()
-    {
-        StartCoroutine(GameWin());
     }
 
     WaitForSeconds wait1f = new WaitForSeconds(1.0f);

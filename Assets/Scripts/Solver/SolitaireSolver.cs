@@ -84,23 +84,30 @@ public class SolitaireSolver
 
     public bool Solve(Deck deck)
     {
+        // 모든 Point를 순회 중 변화가 있었는지 확인
         bool changedDeck = false;
 
         for (int i = 0; i < deck.tableaus.Length; i++)
         {
+            // Cards in Tableaus -> Foundation
             MoveFromTableauToFoundation(i, deck, out changedDeck);
 
+            // Cards in Tableau -> Cards in Different Tableaus
             MoveFromTableauToDiffTableau(i, deck, out changedDeck);
         }
 
+        // Stock -> Cards in Tableaus, Foundation
         MoveFromStockToDiffPoints(deck, out changedDeck);
 
-        if (IsSolvable(deck)) return true;
+        if (IsSolvable(deck)) return true; 
+        // 모두 풀렸으니 재귀함수를 중단하고 True 리턴
 
         if (changedDeck)
-            return Solve(deck);
+            return Solve(deck); 
+            // 변화했지만 풀리진 않은 Deck으로 다시 재귀함수 실행
         else
-            return false;
+            return false; 
+            // 이전 Deck과 변화가 없으므로 못푸는 덱으로 판별
     }
 
     public bool IsSolvable(Deck deck)
