@@ -1,35 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Recorder
+public static class Recorder
 {
-    public static Recorder Instance
-    {
-        get
-        {
-            if (_instance == null)
-                _instance = new Recorder();
+    private static Stack<ICommand> commandHistory = new Stack<ICommand>();
 
-            return _instance;
-        }
-    }
-    private static Recorder _instance;
+    public static bool IsEmpty { get { return commandHistory.Count == 0; } }
 
-    private Stack<ICommand> commandHistory = new Stack<ICommand>();
-
-    public bool IsEmpty { get { return commandHistory.Count == 0; } }
-
-    public void Push(ICommand command)
+    public static void Push(ICommand command)
     {
         commandHistory.Push(command);
     }
 
-    public ICommand Pop()
+    public static ICommand Pop()
     {
         return commandHistory.Pop();
     }
 
-    public void ClearHistory()
+    public static void ClearHistory()
     {
         commandHistory.Clear();
     }

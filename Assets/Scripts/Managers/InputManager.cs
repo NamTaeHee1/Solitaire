@@ -2,23 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InputManager : MonoBehaviour
+public class InputManager : Singleton<InputManager>
 {
-	public static InputManager Instance
-	{
-		get
-		{
-			if (_instance == null)
-				_instance = FindObjectOfType<InputManager>();
-
-			return _instance;
-		}
-	}
-
-	private static InputManager _instance;
-
 	[Header("클릭한 Card")][SerializeField]
 	private Card clickedCard;
+
+    [Header("Touch 허용 여부")]
+    public ETOUCH_STATE touchState;
 
 	private LayerMask cardLayer;
 
@@ -36,7 +26,6 @@ public class InputManager : MonoBehaviour
             blockingInput = Mathf.Clamp(value, 0, value);
         }
     }
-    [SerializeField]
     private int blockingInput;
 
 	private void Awake()

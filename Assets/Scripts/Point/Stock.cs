@@ -213,10 +213,8 @@ public class Stock : Point
 
     public void ResetCardsSettings()
     {
-        GameManager Game = GameManager.Instance;
-
-        Game.deck.Clear();
-        Game.deckInWaste.Clear();
+        Managers.Game.deck.Clear();
+        Managers.Game.deckInWaste.Clear();
 
         Transform cardTr;
 
@@ -229,7 +227,7 @@ public class Stock : Point
 
             allCards[i].Show(ECardDirection.BACK);
 
-            Game.deck.Add(allCards[i]);
+            Managers.Game.deck.Add(allCards[i]);
         }
     }
 
@@ -604,17 +602,25 @@ public class Stock : Point
 
     #region Touch Stock
 
+    [Header("Draw Timer")][SerializeField]
+    private float drawTimer = 0f;
+
     private void Update()
     {
         StockPointClick();
+
+        if (drawTimer >= 0f)
+            drawTimer -= Time.deltaTime;
     }
 
     private void StockPointClick()
 	{
-		if (Managers.Input.BlockingInput != 0) return;
+        if (Managers.Input.BlockingInput != 0) return;
 
-		if (Input.GetMouseButtonDown(0))
+		if (Input.GetMouseButtonUp(0))
 		{
+            //if (drawTimer > 0f) return;
+
 			RaycastHit2D hit = Utils.RaycastMousePos(mainCam, stockLayer);
 
 			if (hit == false) return;
@@ -623,6 +629,8 @@ public class Stock : Point
                 Managers.Game.deckInWaste.Count == 0) return;
 
             DrawCard();
+
+            drawTimer = DEFINE.DRAW_TICK;
 		}
 	}
 
@@ -632,7 +640,7 @@ public class Stock : Point
 
         command.Excute();
 
-        Recorder.Instance.Push(command);
+        Recorder.Push(command);
     }
 
     #endregion

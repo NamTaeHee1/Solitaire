@@ -25,7 +25,7 @@ public class HintSystem
 
         AddLogs(moveCard.cardInfo, toPoint);
 
-        Recorder.Instance.Push(command);
+        Recorder.Push(command);
     }
 
     #endregion

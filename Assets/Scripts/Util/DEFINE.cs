@@ -7,4 +7,6 @@ public class DEFINE
 	public const float CARD_MOVE_SPEED = 20.0f;
 
     public const float HINT_COOL = 3.0f;
+
+    public const float DRAW_TICK = 0.15f;
 }

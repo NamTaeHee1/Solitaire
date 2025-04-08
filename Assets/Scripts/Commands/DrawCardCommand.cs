@@ -22,6 +22,8 @@ public class DrawCardCommand : ICommand
 
                 Game.deck.Add(card);
             }
+
+            Debug.Log($"Deck Add");
         }
         else
         {
@@ -31,6 +33,8 @@ public class DrawCardCommand : ICommand
             card.Move(Managers.Point.waste);
 
             Game.deck.Remove(card);
+
+            Debug.Log($"Deck Remove");
         }
     }
 

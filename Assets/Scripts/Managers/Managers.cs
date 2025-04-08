@@ -11,4 +11,6 @@ public class Managers : MonoBehaviour
 	public static GameManager Game { get { return GameManager.Instance; } }
 
     public static SoundManager Sound { get { return SoundManager.Instance; } }
+
+    public static UIManager UI { get { return UIManager.Instance; } }
 }

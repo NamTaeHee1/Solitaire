@@ -4,28 +4,23 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
-public class GameUI : MonoBehaviour
+public class UIManager : Singleton<UIManager>
 {
-	public static GameUI Instance
-	{
-		get
-		{
-			if(_instance == null)
-				_instance = FindObjectOfType<GameUI>();
-			return _instance;
-		}
-	}
-	private static GameUI _instance;
+    #region Init
 
     private void Awake()
     {
         pauseButton.onClick.AddListener(PauseButtonClick);
         hintButton.onClick.AddListener(HintButtonClick);
         undoButton.onClick.AddListener(UndoButtonClick);
+        settingButton.onClick.AddListener(SettingButtonClick);
         autoCompleteButton.onClick.AddListener(AutoCompleteButtonClick);
+        collectionButton.onClick.AddListener(CollectionButtonClick);
 
         hint = new HintSystem();
     }
+
+    #endregion
 
     #region Reset
 
@@ -50,9 +45,9 @@ public class GameUI : MonoBehaviour
 
     public void PauseButtonClick()
     {
-        Managers.Sound.Play("Press");
-
         if (Managers.Input.IsBlocking) return;
+
+        Managers.Sound.Play("Press");
 
         pausePanel.gameObject.SetActive(true);
     }
@@ -112,16 +107,52 @@ public class GameUI : MonoBehaviour
     {
         if (Managers.Input.IsBlocking) return;
 
-        Recorder recorder = Recorder.Instance;
-
-        if (recorder.IsEmpty)
+        if (Recorder.IsEmpty)
         {
             Managers.Sound.Play("Press");
 
             return;
         }
 
-        recorder.Pop().Undo();
+        Recorder.Pop().Undo();
+    }
+
+    #endregion
+
+    #region Setting
+
+    [Header("설정 버튼")][SerializeField]
+    private Button settingButton;
+
+    [Header("설정 Panel")][SerializeField]
+    private SettingPanel settingPanel;
+
+    public void SettingButtonClick()
+    {
+        if (Managers.Input.IsBlocking) return;
+
+        Managers.Sound.Play("Press");
+
+        settingPanel.gameObject.SetActive(true);
+    }
+
+    #endregion
+
+    #region Collection
+
+    [Header("콜렉션 버튼")][SerializeField]
+    private Button collectionButton;
+
+    [Header("콜렉션 Panel")][SerializeField]
+    private CollectionPanel collectionPanel;
+
+    private void CollectionButtonClick()
+    {
+        if (Managers.Input.IsBlocking) return;
+
+        Managers.Sound.Play("Press");
+
+        collectionPanel.gameObject.SetActive(true);
     }
 
     #endregion

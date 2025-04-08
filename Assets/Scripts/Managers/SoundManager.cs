@@ -2,20 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SoundManager : MonoBehaviour
+public class SoundManager : Singleton<SoundManager>
 {
-    public static SoundManager Instance
-    {
-        get
-        {
-            if (_instance == null)
-                _instance = FindObjectOfType<SoundManager>();
-
-            return _instance;
-        }
-    }
-    private static SoundManager _instance;
-
     [Header("Audio Source")][SerializeField]
     private AudioSource audioSource;
 
@@ -27,7 +15,6 @@ public class SoundManager : MonoBehaviour
     public void Play(string path)
     {
         path = $"Sounds/{path}";
-        Debug.Log($"path : {path}");
 
         AudioClip clip;
 
@@ -38,5 +25,13 @@ public class SoundManager : MonoBehaviour
         }
 
         audioSource.PlayOneShot(clip);
+    }
+
+    public void SetVolume(ESOUND_STATE state)
+    {
+        if (state == ESOUND_STATE.ON) 
+            audioSource.volume = 1.0f;
+        else
+            audioSource.volume = 0f;
     }
 }

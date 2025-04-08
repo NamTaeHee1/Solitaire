@@ -3,24 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
-	private static GameManager _instance = null;
-	public static GameManager Instance
-	{
-		get 
-		{
-			if (_instance == null)
-			{
-				_instance = FindObjectOfType<GameManager>();
-			}
-
-			return _instance;
-		}
-	}
-
 	public List<Card> deck = new List<Card>();
 	public List<Card> deckInWaste = new List<Card>();
 
@@ -29,11 +14,13 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         StartGame(false);
+
+        Settings.Load();
     }
 
     public void StartGame(bool retryCurrentDeck)
     {
-        GameUI.Instance.ResetUI();
+        Managers.UI.ResetUI();
 
         notAllowAutoComplete = false;
 
@@ -42,7 +29,7 @@ public class GameManager : MonoBehaviour
         stock.GenerateCards(retryCurrentDeck);
         stock.MoveCardToPoints();
 
-        Recorder.Instance.ClearHistory();
+        Recorder.ClearHistory();
     }
 
     #endregion
@@ -74,7 +61,7 @@ public class GameManager : MonoBehaviour
             if (cards[i].cardDirection == ECardDirection.BACK) return;
         }
 
-        GameUI.Instance.ShowAutoCompletePopup();
+        Managers.UI.ShowAutoCompletePopup();
     }
 
     #endregion
@@ -112,7 +99,7 @@ public class GameManager : MonoBehaviour
 
         Managers.Input.BlockingInput--;
 
-        GameUI.Instance.ShowWinPanel();
+        Managers.UI.ShowWinPanel();
     }
 
     #endregion

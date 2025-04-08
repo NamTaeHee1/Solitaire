@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -157,7 +158,8 @@ public class Card : Point
 
         if (Vector2.Distance(clickPos, mousePos) <= 0.1f && toPoint == null) // 터치일 경우
         {
-            toPoint = GetPointToMove();
+            if (Managers.Input.touchState == ETOUCH_STATE.ON)
+                toPoint = GetPointToMove();
         }
 
         if (toPoint == null)
@@ -171,7 +173,7 @@ public class Card : Point
 
         command.Excute();
 
-        Recorder.Instance.Push(command);
+        Recorder.Push(command);
     }
 
     private Point GetPointToMove()
@@ -226,6 +228,12 @@ public class Card : Point
     {
         transform.SetParent(movePoint.transform);
 
+        Vector3 cardPos = transform.localPosition;
+
+        cardPos.z = -((transform.GetSiblingIndex() + 1) * 0.1f);
+
+        transform.localPosition = cardPos;
+
         beforePoint = curPoint;
         curPoint = movePoint;
 
@@ -234,12 +242,6 @@ public class Card : Point
             if (beforePoint != null) beforePoint.OnExitPoint(this);
             curPoint.OnEnterPoint(this);
         }
-
-        Vector3 cardPos = transform.localPosition;
-
-        cardPos.z = -((curPoint.transform.childCount + 1) * 0.1f);
-
-        transform.localPosition = cardPos;
 
         Managers.Game.CheckAutoComplete();
 
@@ -386,7 +388,9 @@ public class Card : Point
 	#endregion
 
 	#region Gizmo
+
 #if UNITY_EDITOR
+
 	private void OnDrawGizmos()
 	{
 		if (cardState != ECardMoveState.DRAGING)
@@ -397,6 +401,7 @@ public class Card : Point
 	}
 
 #endif
+
     #endregion
 
 }
