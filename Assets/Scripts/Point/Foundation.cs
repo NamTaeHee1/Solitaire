@@ -17,7 +17,7 @@ public class Foundation : Point
 
 		if(childCard == null)
 		{
-			if (card.cardInfo.cardRank != ECardRank.A) return false;
+			if (card.cardInfo.cardRank != ECARD_RANK.A) return false;
 		}
 		else
 		{
@@ -28,7 +28,7 @@ public class Foundation : Point
 		return true;
 	}
 
-	private bool IsSameSuitInOtherFoundations(ECardSuit suit)
+	private bool IsSameSuitInOtherFoundations(ECARD_SUIT suit)
 	{
 		Point[] foundations = Managers.Point.foundations;
 

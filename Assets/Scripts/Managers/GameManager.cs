@@ -54,11 +54,11 @@ public class GameManager : Singleton<GameManager>
 
             if (cardPoint == null) continue;
 
-            if (cardPoint.pointType != EPointType.TALBEAU &&
-                cardPoint.pointType != EPointType.CARD) continue;
+            if (cardPoint.pointType != EPOINT_TYPE.TALBEAU &&
+                cardPoint.pointType != EPOINT_TYPE.CARD) continue;
 
             // 현재 다른 카드 및 Tableau에 있는 카드 중 하나라도 뒷면이라면 자동 완성이 안됨
-            if (cards[i].cardDirection == ECardDirection.BACK) return;
+            if (cards[i].cardDirection == ECARD_DIRECTION.BACK) return;
         }
 
         Managers.UI.ShowAutoCompletePopup();
@@ -85,7 +85,7 @@ public class GameManager : Singleton<GameManager>
 
             if (lastCard == null) return false;
 
-            if (lastCard.cardInfo.cardRank != ECardRank.K) return false;
+            if (lastCard.cardInfo.cardRank != ECARD_RANK.K) return false;
         }
 
         return true;

@@ -41,7 +41,7 @@ public class HintSystem
         {
             Card childCard = tableaus[index].transform.GetChild(i).GetComponent<Card>();
 
-            if (childCard.cardDirection == ECardDirection.BACK) continue;
+            if (childCard.cardDirection == ECARD_DIRECTION.BACK) continue;
 
             for (int j = 0; j < tableaus.Length; j++)
             {
@@ -68,7 +68,7 @@ public class HintSystem
 
         if (lastCard == null)
         {
-            if (wasteLastCard.cardInfo.cardRank == ECardRank.K)
+            if (wasteLastCard.cardInfo.cardRank == ECARD_RANK.K)
             {
                 MoveCard(wasteLastCard, tableaus[index]);
 
@@ -101,7 +101,7 @@ public class HintSystem
 
         if (lastCard == null)
         {
-            if (moveCardInfo.cardRank == ECardRank.K && IsMoved(moveCardInfo, tableau) == false)
+            if (moveCardInfo.cardRank == ECARD_RANK.K && IsMoved(moveCardInfo, tableau) == false)
             {
                 pointToMove = tableau;
 
@@ -164,7 +164,7 @@ public class HintSystem
     {
         Foundation[] foundations = Managers.Point.foundations;
 
-        if (cardInfo.cardRank == ECardRank.A) return true;
+        if (cardInfo.cardRank == ECARD_RANK.A) return true;
 
         Card foundationLastCard = foundations[(int)cardInfo.cardSuit].GetLastCard();
 

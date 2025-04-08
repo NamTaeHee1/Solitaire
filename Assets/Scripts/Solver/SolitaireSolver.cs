@@ -136,9 +136,9 @@ public class SolitaireSolver
     {
         string[] infos = cardInfoStr.Split('_');
 
-        return new CardInfo((ECardSuit) Enum.Parse(typeof(ECardSuit),  infos[0]),
-                            (ECardRank) Enum.Parse(typeof(ECardRank),  infos[1]),
-                            (ECardColor)Enum.Parse(typeof(ECardColor), infos[2]));
+        return new CardInfo((ECARD_SUIT) Enum.Parse(typeof(ECARD_SUIT),  infos[0]),
+                            (ECARD_RANK) Enum.Parse(typeof(ECARD_RANK),  infos[1]),
+                            (ECARD_COLOR)Enum.Parse(typeof(ECARD_COLOR), infos[2]));
     }
 
     #endregion
@@ -243,7 +243,7 @@ public class SolitaireSolver
 
             if (deck.tableaus[i].Count == 0)
             {
-                if (cardState.cardInfo.cardRank != ECardRank.K)
+                if (cardState.cardInfo.cardRank != ECARD_RANK.K)
                     continue;
             }
             else
@@ -335,7 +335,7 @@ public class SolitaireSolver
                 }
                 else
                 {
-                    if (stockCard.cardInfo.cardRank != ECardRank.K)
+                    if (stockCard.cardInfo.cardRank != ECARD_RANK.K)
                         continue;
                 }
 

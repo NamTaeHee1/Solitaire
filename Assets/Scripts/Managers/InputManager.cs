@@ -93,8 +93,8 @@ public class InputManager : Singleton<InputManager>
 
 	private bool CheckBlockingInput(Card inputCard)
 	{
-		return (inputCard.cardState != ECardMoveState.MOVING &&
-				inputCard.cardDirection == ECardDirection.FRONT &&
+		return (inputCard.cardState != ECARD_MOVE_STATE.MOVING &&
+				inputCard.cardDirection == ECARD_DIRECTION.FRONT &&
 				inputCard.transform.GetSiblingIndex() == inputCard.curPoint.transform.childCount - 1);
 	}
 	

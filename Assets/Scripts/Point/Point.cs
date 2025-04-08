@@ -1,23 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EPointType
-{
-	TALBEAU = 0,
-	FOUNDATION,
-	WASTE,
-	STOCK,
-    CARD,
-	COUNT
-}
-
 public class Point : MonoBehaviour
 {
 	[Header("포인트에 카드가 쌓일 때 Y축이 점차 밑으로 내려가는가")]
 	public bool useCardYOffset;
 
 	[Header("Point 유형")]
-	public EPointType pointType;
+	public EPOINT_TYPE pointType;
 
 	public virtual Card GetLastCard()
 	{

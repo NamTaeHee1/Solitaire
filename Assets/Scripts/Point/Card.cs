@@ -9,11 +9,11 @@ using UnityEngine.EventSystems;
 [Serializable]
 public struct CardInfo
 {
-	public ECardSuit cardSuit;
-	public ECardRank cardRank;
-	public ECardColor cardColor;
+	public ECARD_SUIT cardSuit;
+	public ECARD_RANK cardRank;
+	public ECARD_COLOR cardColor;
 
-    public CardInfo(ECardSuit suit, ECardRank rank, ECardColor color)
+    public CardInfo(ECARD_SUIT suit, ECARD_RANK rank, ECARD_COLOR color)
     {
         cardSuit = suit;
         cardRank = rank;
@@ -48,8 +48,8 @@ public class Card : Point
 	[SerializeField] private Sprite cardBack;
 
 	[Header("카드 상태")]
-	public ECardMoveState cardState = ECardMoveState.IDLE;
-	public ECardDirection cardDirection = ECardDirection.BACK;
+	public ECARD_MOVE_STATE cardState = ECARD_MOVE_STATE.IDLE;
+	public ECARD_DIRECTION cardDirection = ECARD_DIRECTION.BACK;
 
 	[Header("Point")]
 	public Point curPoint;
@@ -71,9 +71,9 @@ public class Card : Point
 #endif
 
         string[] cardInfoArr = cardName.Split('_'); // [1] : Suit, [2] : Rank, [3] : Color
-		cardInfo.cardSuit = (ECardSuit)Enum.Parse(typeof(ECardSuit), cardInfoArr[1].ToUpper());
-		cardInfo.cardRank = (ECardRank)Enum.Parse(typeof(ECardRank), cardInfoArr[2].ToUpper());
-		cardInfo.cardColor = (ECardColor)Enum.Parse(typeof(ECardColor), cardInfoArr[3].ToUpper());
+		cardInfo.cardSuit = (ECARD_SUIT)Enum.Parse(typeof(ECARD_SUIT), cardInfoArr[1].ToUpper());
+		cardInfo.cardRank = (ECARD_RANK)Enum.Parse(typeof(ECARD_RANK), cardInfoArr[2].ToUpper());
+		cardInfo.cardColor = (ECARD_COLOR)Enum.Parse(typeof(ECARD_COLOR), cardInfoArr[3].ToUpper());
 	}
 
     public void SetCardTexture(Sprite cardFront, Sprite cardBack)
@@ -81,30 +81,30 @@ public class Card : Point
         this.cardFront = cardFront;
         this.cardBack = cardBack;
 
-        Show(ECardDirection.BACK);
+        Show(ECARD_DIRECTION.BACK);
     }
 
-	private void SetCardState(ECardMoveState state) => cardState = state;
+	private void SetCardState(ECARD_MOVE_STATE state) => cardState = state;
 
 	#endregion
 
 	#region Texture
 
-	private IEnumerator Show(ECardDirection _direction, float _waitTime = 0)
+	private IEnumerator Show(ECARD_DIRECTION _direction, float _waitTime = 0)
 	{
 		yield return new WaitForSeconds(_waitTime);
 
 		Show(_direction);
 	}
 
-	public void Show(ECardDirection _direction)
+	public void Show(ECARD_DIRECTION _direction)
 	{
 		switch (_direction)
 		{
-			case ECardDirection.FRONT:
+			case ECARD_DIRECTION.FRONT:
 				cardSR.sprite = cardFront;
 				break;
-			case ECardDirection.BACK:
+			case ECARD_DIRECTION.BACK:
 				cardSR.sprite = cardBack;
 				break;
 		}
@@ -112,7 +112,7 @@ public class Card : Point
 		cardDirection = _direction;
 	}
 
-	public void ShowCoroutine(ECardDirection _direction, float _waitTime = 0)
+	public void ShowCoroutine(ECARD_DIRECTION _direction, float _waitTime = 0)
 	{
 		StartCoroutine(Show(_direction, _waitTime));
 	}
@@ -130,7 +130,7 @@ public class Card : Point
 
 	public void OnClickDown(Vector3 mousePos)
 	{
-        SetCardState(ECardMoveState.CLICKED);
+        SetCardState(ECARD_MOVE_STATE.CLICKED);
 
         clickPos = mousePos;
 
@@ -144,7 +144,7 @@ public class Card : Point
 
 	public void OnClicking(Vector3 mousePos)
 	{
-		SetCardState(ECardMoveState.DRAGING);
+		SetCardState(ECARD_MOVE_STATE.DRAGING);
 
         mousePos.z = transform.position.z;
 
@@ -182,7 +182,7 @@ public class Card : Point
 
         Foundation foundationToMove = Managers.Point.foundations[(int)cardInfo.cardSuit];
 
-        if (cardInfo.cardRank == ECardRank.A)
+        if (cardInfo.cardRank == ECARD_RANK.A)
             return foundationToMove;
 
         if (foundationToMove.GetLastCard() != null)
@@ -199,7 +199,7 @@ public class Card : Point
 
         for(int i = 0; i < tableaus.Length; i++)
         {
-            if(cardInfo.cardRank == ECardRank.K)
+            if(cardInfo.cardRank == ECARD_RANK.K)
             {
                 if (tableaus[i].GetLastCard() == null)
                     return tableaus[i];
@@ -254,7 +254,7 @@ public class Card : Point
 
 	private IEnumerator MoveCard(Point movePoint, float _waitTime = 0f)
 	{
-		SetCardState(ECardMoveState.MOVING);
+		SetCardState(ECARD_MOVE_STATE.MOVING);
 
 		float yOffset = -(movePoint.useCardYOffset ? DEFINE.CARD_CHILD_Y_OFFSET : 0f) *
 					     (movePoint.transform.childCount - (movePoint is Card ? 0 : 1));
@@ -265,7 +265,7 @@ public class Card : Point
 
 		while (Vector2.Distance(transform.localPosition, toPos) > 0.01f)
 		{
-			if (cardState == ECardMoveState.CLICKED)
+			if (cardState == ECARD_MOVE_STATE.CLICKED)
 				yield break;
 
 			transform.localPosition = Vector3.Lerp(transform.localPosition, 
@@ -277,7 +277,7 @@ public class Card : Point
 
 		transform.localPosition = toPos;
 
-		SetCardState(ECardMoveState.IDLE);
+		SetCardState(ECARD_MOVE_STATE.IDLE);
 
 		List<Card> childCards = GetChildCards();
 
@@ -376,11 +376,11 @@ public class Card : Point
 		if (transform.childCount != 0) return false;
 
 		// 4. 뒷면이라면
-		if (cardDirection == ECardDirection.BACK) return false;
+		if (cardDirection == ECARD_DIRECTION.BACK) return false;
 
 		// 5. Foundation 또는 Waste에 있다면
-		if (curPoint.pointType == EPointType.WASTE ||
-			curPoint.pointType == EPointType.FOUNDATION) return false;
+		if (curPoint.pointType == EPOINT_TYPE.WASTE ||
+			curPoint.pointType == EPOINT_TYPE.FOUNDATION) return false;
 
 		return true;
 	}
@@ -393,7 +393,7 @@ public class Card : Point
 
 	private void OnDrawGizmos()
 	{
-		if (cardState != ECardMoveState.DRAGING)
+		if (cardState != ECARD_MOVE_STATE.DRAGING)
 			return;
 
 		Gizmos.color = Color.red;

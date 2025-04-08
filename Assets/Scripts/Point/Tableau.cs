@@ -7,7 +7,7 @@ public class Tableau : Point
 	public override bool IsSuitablePoint(Card card)
 	{
 		// 1. card의 Rank가 K가 아니라면
-		if (card.cardInfo.cardRank != ECardRank.K) return false;
+		if (card.cardInfo.cardRank != ECARD_RANK.K) return false;
 
 		// 2. 이미 다른 카드가 있을 경우
 		if (GetLastCard() != null) return false;
@@ -38,7 +38,7 @@ public class Tableau : Point
         Card coverToCard = transform.GetChild(transform.childCount - 2).GetComponent<Card>();
 
         if (coverToCard != null)
-            coverToCard.Show(ECardDirection.BACK);
+            coverToCard.Show(ECARD_DIRECTION.BACK);
     }
 
     public override void OnExitPoint(Card movedCard)
@@ -46,7 +46,7 @@ public class Tableau : Point
         Card pointLastCard = GetLastCard();
 
         if (pointLastCard != null)
-            pointLastCard.Show(ECardDirection.FRONT);
+            pointLastCard.Show(ECARD_DIRECTION.FRONT);
     }
 
     #endregion

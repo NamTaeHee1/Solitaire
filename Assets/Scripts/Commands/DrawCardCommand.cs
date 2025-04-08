@@ -17,7 +17,7 @@ public class DrawCardCommand : ICommand
             {
                 Card card = Game.deckInWaste.Last();
 
-                card.Show(ECardDirection.BACK);
+                card.Show(ECARD_DIRECTION.BACK);
                 card.Move(Managers.Point.stock, 0f, false);
 
                 Game.deck.Add(card);
@@ -29,7 +29,7 @@ public class DrawCardCommand : ICommand
         {
             Card card = Game.deck.Last();
 
-            card.Show(ECardDirection.FRONT);
+            card.Show(ECARD_DIRECTION.FRONT);
             card.Move(Managers.Point.waste);
 
             Game.deck.Remove(card);
@@ -48,7 +48,7 @@ public class DrawCardCommand : ICommand
             {
                 Card card = Game.deck.Last();
 
-                card.Show(ECardDirection.FRONT);
+                card.Show(ECARD_DIRECTION.FRONT);
                 card.Move(Managers.Point.waste);
 
                 Game.deck.Remove(card);
@@ -58,7 +58,7 @@ public class DrawCardCommand : ICommand
         {
             Card card = Game.deckInWaste.Last();
 
-            card.Show(ECardDirection.BACK);
+            card.Show(ECARD_DIRECTION.BACK);
             card.Move(Managers.Point.stock);
 
             Game.deck.Add(card);

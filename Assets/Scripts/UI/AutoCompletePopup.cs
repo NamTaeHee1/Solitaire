@@ -48,10 +48,10 @@ public class AutoCompletePopup : MonoBehaviour
 
     private IEnumerator ExcuteAutoComplete()
     {
-        ECardColor GetCardColor(ECardSuit suit)
+        ECARD_COLOR GetCardColor(ECARD_SUIT suit)
         {
-            return (suit == ECardSuit.DIAMONDS || suit == ECardSuit.HEARTS) ?
-                   ECardColor.RED : ECardColor.BLACK;
+            return (suit == ECARD_SUIT.DIAMONDS || suit == ECARD_SUIT.HEARTS) ?
+                   ECARD_COLOR.RED : ECARD_COLOR.BLACK;
         }
 
         GameManager Game = Managers.Game;
@@ -69,12 +69,12 @@ public class AutoCompletePopup : MonoBehaviour
 
                 if (lastCard == null)
                 {
-                    cardInfo = new CardInfo((ECardSuit)i, ECardRank.A, GetCardColor((ECardSuit)i));
+                    cardInfo = new CardInfo((ECARD_SUIT)i, ECARD_RANK.A, GetCardColor((ECARD_SUIT)i));
                 }
 
                 cardInfo = lastCard.cardInfo;
 
-                if (cardInfo.cardRank == ECardRank.K) continue;
+                if (cardInfo.cardRank == ECARD_RANK.K) continue;
 
                 string nextCardInfo = $"{cardInfo.cardSuit}_{cardInfo.cardRank + 1}_{cardInfo.cardColor}";
 
@@ -82,7 +82,7 @@ public class AutoCompletePopup : MonoBehaviour
 
                 if (nextCard.transform.childCount != 0) continue;
 
-                nextCard.Show(ECardDirection.FRONT);
+                nextCard.Show(ECARD_DIRECTION.FRONT);
                 nextCard.Move(foundations[i]);
 
                 yield return wait01f;

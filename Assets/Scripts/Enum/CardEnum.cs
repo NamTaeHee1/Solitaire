@@ -1,4 +1,4 @@
-public enum ECardMoveState
+public enum ECARD_MOVE_STATE
 {
 	IDLE,
 	CLICKED,
@@ -7,21 +7,14 @@ public enum ECardMoveState
 	COUNT
 }
 
-public enum ECardDirection
+public enum ECARD_DIRECTION
 {
 	FRONT,
 	BACK,
 	COUNT
 }
 
-public enum ECardSlibDirection
-{
-	FIRST,
-	LAST,
-	COUNT
-}
-
-public enum ECardSuit
+public enum ECARD_SUIT
 {
 	SPADES,
 	HEARTS,
@@ -30,7 +23,7 @@ public enum ECardSuit
 	COUNT
 }
 
-public enum ECardRank
+public enum ECARD_RANK
 {
 	A = 1,
 	TWO,
@@ -48,7 +41,7 @@ public enum ECardRank
 	COUNT
 }
 
-public enum ECardColor
+public enum ECARD_COLOR
 {
 	RED,
 	BLACK,

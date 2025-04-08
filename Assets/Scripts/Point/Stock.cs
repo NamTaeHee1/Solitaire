@@ -199,7 +199,7 @@ public class Stock : Point
                 card.transform.localPosition = cardPos;
 
                 card.Move(tableaus[j], waitTime += 0.05f, false);
-                card.ShowCoroutine(i == j ? ECardDirection.FRONT : ECardDirection.BACK, waitTime);
+                card.ShowCoroutine(i == j ? ECARD_DIRECTION.FRONT : ECARD_DIRECTION.BACK, waitTime);
 
                 zOffset -= 0.1f;
             }
@@ -225,7 +225,7 @@ public class Stock : Point
             cardTr.SetParent(transform);
             cardTr.localPosition = Vector3.zero;
 
-            allCards[i].Show(ECardDirection.BACK);
+            allCards[i].Show(ECARD_DIRECTION.BACK);
 
             Managers.Game.deck.Add(allCards[i]);
         }
