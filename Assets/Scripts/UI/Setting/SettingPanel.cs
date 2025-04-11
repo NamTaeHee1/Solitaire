@@ -58,13 +58,13 @@ public class SettingPanel : MonoBehaviour
     private void ApplyUIWithSavedData()
     {
         handDirectionToggles[0].isOn = false;
-        handDirectionToggles[(int)Settings.HandDirection].isOn = true;
+        handDirectionToggles[(int)Data.HandDirection].isOn = true;
 
         soundToggles[0].isOn = false;
-        soundToggles[(int)Settings.SoundState].isOn = true;
+        soundToggles[(int)Data.SoundState].isOn = true;
 
         touchToggles[0].isOn = false;
-        touchToggles[(int)Settings.TouchState].isOn = true;
+        touchToggles[(int)Data.TouchState].isOn = true;
     }
 
     #endregion
@@ -75,7 +75,7 @@ public class SettingPanel : MonoBehaviour
     {
         if (value == false) return;
 
-        Settings.ApplyHandDirection(direction);
+        Data.ApplyHandDirection(direction);
 
         PlayerPrefs.SetInt("HandDirection", (int)direction);
         PlayerPrefs.Save();
@@ -85,7 +85,7 @@ public class SettingPanel : MonoBehaviour
     {
         if (value == false) return;
 
-        Settings.ApplySoundState(state);
+        Data.ApplySoundState(state);
 
         PlayerPrefs.SetInt("Sound", (int)state);
         PlayerPrefs.Save();
@@ -95,7 +95,7 @@ public class SettingPanel : MonoBehaviour
     {
         if (value == false) return;
 
-        Settings.ApplyTouchState(state);
+        Data.ApplyTouchState(state);
 
         PlayerPrefs.SetInt("Touch", (int)state);
         PlayerPrefs.Save();

@@ -1,10 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
-public class UIManager : Singleton<UIManager>
+public class UIManager : SingletonMono<UIManager>
 {
     #region Init
 
@@ -17,7 +16,7 @@ public class UIManager : Singleton<UIManager>
         autoCompleteButton.onClick.AddListener(AutoCompleteButtonClick);
         collectionButton.onClick.AddListener(CollectionButtonClick);
 
-        hint = new HintSystem();
+        hint = new Hint();
     }
 
     #endregion
@@ -62,7 +61,7 @@ public class UIManager : Singleton<UIManager>
     [Header("힌트 버튼 쿨타임 이미지")][SerializeField]
     private Image hintButtonCool;
 
-    private HintSystem hint;
+    private Hint hint;
 
     public void HintButtonClick()
     {

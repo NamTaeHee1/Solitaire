@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Managers : MonoBehaviour
+public class Managers
 {
 	public static InputManager Input { get { return InputManager.Instance; } }
 	

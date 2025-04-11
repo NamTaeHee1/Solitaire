@@ -15,8 +15,8 @@ public class Stock : Point
 
 	private LayerMask stockLayer;
 
-    [SerializeField]
-    private Sprite[] cardFronts;
+    // Card Pack Sheet
+    public List<Sprite> cardSheet;
 
     private GameObject cardPrefab;
 
@@ -37,9 +37,7 @@ public class Stock : Point
 
 		stockLayer = 1 << LayerMask.NameToLayer("Stock");
 
-        cardFronts = Resources.LoadAll<Sprite>("Casual_Cards_Sheet");
-
-        cardPrefab = Resources.Load<GameObject>("Prefabs/Card");
+        cardPrefab = ResourcesCache<GameObject>.Load("Prefabs/Card");
     }
 
     #region Cards Settings
@@ -124,12 +122,16 @@ public class Stock : Point
     {
         Card card;
 
-        for (int i = 1; i <= DEFINE.CARD_MAX_SIZE; i++)
+        Sprite cardBack = cardSheet.Find(sprite => sprite.name.Equals("card_back"));
+
+        for (int i = 0; i < cardSheet.Count; i++)
         {
+            if (cardSheet[i] == cardBack) continue;
+
             card = Instantiate(cardPrefab, Managers.Point.stock.transform).GetComponent<Card>();
 
-            card.SetCardInfo(cardFronts[i].name);
-            card.SetCardTexture(cardFronts[i], cardFronts[0]);
+            card.SetCardInfo(cardSheet[i].name);
+            card.SetCardTexture(cardSheet[i], cardBack);
 
             Deck.Add(card);
 
@@ -602,15 +604,9 @@ public class Stock : Point
 
     #region Touch Stock
 
-    [Header("Draw Timer")][SerializeField]
-    private float drawTimer = 0f;
-
     private void Update()
     {
         StockPointClick();
-
-        if (drawTimer >= 0f)
-            drawTimer -= Time.deltaTime;
     }
 
     private void StockPointClick()
@@ -629,8 +625,6 @@ public class Stock : Point
                 Managers.Game.deckInWaste.Count == 0) return;
 
             DrawCard();
-
-            drawTimer = DEFINE.DRAW_TICK;
 		}
 	}
 

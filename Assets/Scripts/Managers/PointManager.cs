@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PointManager : Singleton<PointManager>
+public class PointManager : SingletonMono<PointManager>
 {
 	public Tableau[] tableaus;
 	public Foundation[] foundations;

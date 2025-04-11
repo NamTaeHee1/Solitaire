@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
-public class HintSystem
+public class Hint
 {
     #region Move
 

@@ -4,19 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class GameManager : Singleton<GameManager>
+public class GameManager : SingletonMono<GameManager>
 {
 	public List<Card> deck = new List<Card>();
 	public List<Card> deckInWaste = new List<Card>();
 
     #region Start Game
-
-    private void Start()
-    {
-        StartGame(false);
-
-        Settings.Load();
-    }
 
     public void StartGame(bool retryCurrentDeck)
     {
@@ -100,6 +93,15 @@ public class GameManager : Singleton<GameManager>
         Managers.Input.BlockingInput--;
 
         Managers.UI.ShowWinPanel();
+    }
+
+    #endregion
+
+    #region Card Pack
+
+    public void SetCardPack(List<Sprite> sheet)
+    {
+        Managers.Point.stock.cardSheet = sheet;
     }
 
     #endregion

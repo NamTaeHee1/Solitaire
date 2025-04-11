@@ -15,11 +15,25 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_Data:
     m_SerializedData: []
-  m_GUID: b5a122789d6bb8e429216ee60b61d0e1
-  m_SerializeEntries: []
+  m_GUID: ffaa02bc3dc1caa47ab2fc1878b8f184
+  m_SerializeEntries:
+  - m_GUID: 15922c8889a38774aad08c2be315bb47
+    m_Address: Assets/Rawdatas/Arts/Sheets/Basic_Cards_Sheet.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+  - m_GUID: 133392e61c58db94d8e95a1245ab2cb7
+    m_Address: Assets/Rawdatas/Arts/Sheets/Casual_Cards_Sheet.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+  - m_GUID: f3ef86ab534d69d49a5463eba3a46c68
+    m_Address: Assets/Rawdatas/Arts/Sheets/Retro_Cards_Sheet.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
   m_ReadOnly: 0
-  m_Settings: {fileID: 11400000, guid: 8a3f7fcc674bca64ca860d083fe57325, type: 2}
+  m_Settings: {fileID: 11400000, guid: f0618dcec91ca20488bcec9b30e3fb46, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 32374b88abe780d4386826c2d7e0905a, type: 2}
-    - {fileID: 11400000, guid: 5b938c667803b5e46ab059ec1a88c4f3, type: 2}
+    - {fileID: 11400000, guid: 2aac77776a3eb8e4e8208dd3e4f7fae6, type: 2}

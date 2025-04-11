@@ -1,10 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Net;
-using UnityEditorInternal;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 [Serializable]
 public struct CardInfo

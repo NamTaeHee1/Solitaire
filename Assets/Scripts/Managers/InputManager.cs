@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InputManager : Singleton<InputManager>
+public class InputManager : SingletonMono<InputManager>
 {
 	[Header("클릭한 Card")][SerializeField]
 	private Card clickedCard;

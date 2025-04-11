@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Settings
+public class Data
 {
     public static void Load()
     {
         ApplyTouchState((ETOUCH_STATE)PlayerPrefs.GetInt("Touch", (int)ETOUCH_STATE.ON));
         ApplySoundState((ESOUND_STATE)PlayerPrefs.GetInt("Sound", (int)ESOUND_STATE.ON));
         ApplyHandDirection((EHAND_DIRECTION)PlayerPrefs.GetInt("HandDirection", (int)EHAND_DIRECTION.RIGHT));
+        ApplyCardPack((ECARD_PACK_TYPE)PlayerPrefs.GetInt("CardPack", (int)ECARD_PACK_TYPE.BASIC));
     }
 
     #region Touch On/Off
@@ -47,6 +48,17 @@ public class Settings
         HandDirection = direction;
 
         Managers.Point.SetHandDirection(direction);
+    }
+
+    #endregion
+
+    #region Card Pack
+
+    public static ECARD_PACK_TYPE CardPack;
+
+    public static void ApplyCardPack(ECARD_PACK_TYPE type)
+    {
+        CardPack = type;
     }
 
     #endregion
