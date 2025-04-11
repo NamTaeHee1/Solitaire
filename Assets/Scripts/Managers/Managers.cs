@@ -9,4 +9,6 @@ public class Managers
     public static SoundManager Sound { get { return SoundManager.Instance; } }
 
     public static UIManager UI { get { return UIManager.Instance; } }
+
+    public static AddressableManager Addressable { get { return AddressableManager.Instance; } }
 }

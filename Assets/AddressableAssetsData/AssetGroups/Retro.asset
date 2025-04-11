@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Retro
+  m_EditorClassIdentifier: 
+  m_GroupName: Retro
+  m_Data:
+    m_SerializedData: []
+  m_GUID: bc5e31c5ecc3eec43a81d6cb9cb102f5
+  m_SerializeEntries:
+  - m_GUID: f3ef86ab534d69d49a5463eba3a46c68
+    m_Address: Assets/Rawdatas/Arts/Sheets/Retro_Cards_Sheet.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: f0618dcec91ca20488bcec9b30e3fb46, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 8774cdf9998bc1f47a67236ad95553aa, type: 2}
+    - {fileID: 11400000, guid: 6809f65e8c6ee444787d1000dd1babb8, type: 2}

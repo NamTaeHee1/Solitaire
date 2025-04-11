@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Casual
+  m_EditorClassIdentifier: 
+  m_GroupName: Casual
+  m_Data:
+    m_SerializedData: []
+  m_GUID: c72698b559192f44c9b3b8c7a01f2b66
+  m_SerializeEntries:
+  - m_GUID: 133392e61c58db94d8e95a1245ab2cb7
+    m_Address: Assets/Rawdatas/Arts/Sheets/Casual_Cards_Sheet.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: f0618dcec91ca20488bcec9b30e3fb46, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 0cd9f9b9a75579d4c8c12cfe89042d8e, type: 2}
+    - {fileID: 11400000, guid: d3f299727414f744781c826c5968df29, type: 2}

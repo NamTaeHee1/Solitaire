@@ -19,3 +19,4 @@ MonoBehaviour:
     m_EditorAssetChanged: 0
   cardPackProfile: {fileID: 21300000, guid: 31c01e8c9ffec72459eae718e8f61e36, type: 3}
   cardPackName: Retro
+  cardPackType: 2

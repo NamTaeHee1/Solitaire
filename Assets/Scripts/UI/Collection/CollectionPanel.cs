@@ -12,6 +12,8 @@ public class CollectionPanel : MonoBehaviour
     {
         exitButton.onClick.AddListener(ExitButtonClick);
 
+        downloadPopupCancel.onClick.AddListener(() => { downloadPopup.SetActive(false); });
+
         CreateCardPack();
     }
 
@@ -36,6 +38,8 @@ public class CollectionPanel : MonoBehaviour
     [Header("Card Pack ScrollView Content")][SerializeField]
     private Transform scrollViewContent;
 
+    private Dictionary<ECARD_PACK_TYPE, CardPackUI> cardPackUIDict = new Dictionary<ECARD_PACK_TYPE, CardPackUI>();
+
     private void CreateCardPack()
     {
         GameObject cardPackPrefab = ResourcesCache<GameObject>.Load("Prefabs/CardPack");
@@ -47,7 +51,18 @@ public class CollectionPanel : MonoBehaviour
             CardPackInfo info = ResourcesCache<CardPackInfo>.Load($"SO/CardPack/{packTypes[i]}");
 
             pack.SetInfo(info);
+            pack.collectionPanel = this;
+
+            if(cardPackUIDict.ContainsKey(info.cardPackType) == false)
+                cardPackUIDict.Add(info.cardPackType, pack);
         }
+    }
+
+    public CardPackUI GetCardPackUI(ECARD_PACK_TYPE type)
+    {
+        cardPackUIDict.TryGetValue(type, out CardPackUI ui);
+
+        return ui;
     }
 
     #endregion
@@ -62,6 +77,37 @@ public class CollectionPanel : MonoBehaviour
         Managers.Sound.Play("Press");
 
         gameObject.SetActive(false);
+    }
+
+    #endregion
+
+    #region Download Popup
+
+    [Header("Download Popup GameObject")][SerializeField]
+    private GameObject downloadPopup;
+
+    [Header("Download Popup 문구 Text")][SerializeField]
+    private Text downloadPopupText;
+
+    [Header("Download Popup 확인 버튼")][SerializeField]
+    private Button downloadPopupConfirm;
+
+    [Header("Download Popup 취소 버튼")][SerializeField]
+    private Button downloadPopupCancel;
+
+    public void ShowDownloadPopup(CardPackUI cardPackUI, string content)
+    {
+        downloadPopup.SetActive(true);
+
+        downloadPopupText.text = content;
+
+        downloadPopupConfirm.onClick.RemoveAllListeners();
+        downloadPopupConfirm.onClick.AddListener(() =>
+        {
+            downloadPopup.SetActive(false);
+
+            cardPackUI.DownloadCardPack();
+        });
     }
 
     #endregion

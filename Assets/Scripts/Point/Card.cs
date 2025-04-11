@@ -67,10 +67,7 @@ public class Card : Point
         transform.name = cardName;
 #endif
 
-        string[] cardInfoArr = cardName.Split('_'); // [1] : Suit, [2] : Rank, [3] : Color
-		cardInfo.cardSuit = (ECARD_SUIT)Enum.Parse(typeof(ECARD_SUIT), cardInfoArr[1].ToUpper());
-		cardInfo.cardRank = (ECARD_RANK)Enum.Parse(typeof(ECARD_RANK), cardInfoArr[2].ToUpper());
-		cardInfo.cardColor = (ECARD_COLOR)Enum.Parse(typeof(ECARD_COLOR), cardInfoArr[3].ToUpper());
+        cardInfo = cardName.ToCardInfo();
 	}
 
     public void SetCardTexture(Sprite cardFront, Sprite cardBack)
@@ -78,7 +75,7 @@ public class Card : Point
         this.cardFront = cardFront;
         this.cardBack = cardBack;
 
-        Show(ECARD_DIRECTION.BACK);
+        Show(cardDirection);
     }
 
 	private void SetCardState(ECARD_MOVE_STATE state) => cardState = state;

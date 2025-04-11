@@ -24,7 +24,6 @@ public class LoadingPanel : MonoBehaviour
 
         yield return getSizeHandle;
 
-        List<Sprite> cardPackSheet = new List<Sprite>();
 
         if (getSizeHandle.Status == AsyncOperationStatus.Succeeded && getSizeHandle.Result > 0)
         {
@@ -40,6 +39,7 @@ public class LoadingPanel : MonoBehaviour
         Addressables.Release(getSizeHandle);
 
         AsyncOperationHandle<IList<Sprite>> loadHandle = Addressables.LoadAssetAsync<IList<Sprite>>(info.cardPackSheet);
+        List<Sprite> cardPackSheet = new List<Sprite>();
 
         StartCoroutine(SetProgressBar(loadHandle, "Card Pack 불러오는 중..."));
 
@@ -51,7 +51,7 @@ public class LoadingPanel : MonoBehaviour
         }
 
         Managers.Game.SetCardPack(cardPackSheet);
-        Managers.Game.StartGame(false);
+        Managers.Game.StartGame(false, true);
 
         gameObject.SetActive(false);
     }

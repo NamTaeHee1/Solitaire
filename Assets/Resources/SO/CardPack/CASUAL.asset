@@ -19,3 +19,4 @@ MonoBehaviour:
     m_EditorAssetChanged: 0
   cardPackProfile: {fileID: 21300000, guid: 6363f780f33d2d04897096a7f664249d, type: 3}
   cardPackName: Casual
+  cardPackType: 1

@@ -143,6 +143,20 @@ public class Stock : Point
         createdCard = true;
     }
 
+    public void ApplyCardSheet()
+    {
+        Sprite cardBack = cardSheet.Find(sprite => sprite.name.Equals("card_back"));
+
+        for (int i = 0; i < cardSheet.Count; i++)
+        {
+            if (cardSheet[i] == cardBack) continue;
+
+            cardNameDict.TryGetValue(cardSheet[i].name.ToCardInfo().ToString(), out Card card);
+
+            card.SetCardTexture(cardSheet[i], cardBack);
+        }
+    }
+
     private List<string> GetCardInfos()
     {
         List<string> cardInfos = new List<string>();

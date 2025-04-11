@@ -15,6 +15,7 @@ public class UIManager : SingletonMono<UIManager>
         settingButton.onClick.AddListener(SettingButtonClick);
         autoCompleteButton.onClick.AddListener(AutoCompleteButtonClick);
         collectionButton.onClick.AddListener(CollectionButtonClick);
+        touchToScreen.onClick.AddListener(TouchToScreen);
 
         hint = new Hint();
     }
@@ -23,13 +24,15 @@ public class UIManager : SingletonMono<UIManager>
 
     #region Reset
 
-    public void ResetUI()
+    public void ResetUI(bool touchToScreen)
     {
         autoCompleteButton.gameObject.SetActive(false);
 
         undoButton.gameObject.SetActive(true);
 
         hint.ClearLogs();
+
+        if(touchToScreen == true) this.touchToScreen.gameObject.SetActive(true);
     }
 
     #endregion
@@ -152,6 +155,20 @@ public class UIManager : SingletonMono<UIManager>
         Managers.Sound.Play("Press");
 
         collectionPanel.gameObject.SetActive(true);
+    }
+
+    #endregion
+
+    #region Touch To Screen
+
+    [Header("화면 클릭 감지 버튼 (클릭 시 시작)")][SerializeField]
+    private Button touchToScreen;
+
+    public void TouchToScreen()
+    {
+        touchToScreen.gameObject.SetActive(false);
+
+        Managers.Point.stock.MoveCardToPoints();
     }
 
     #endregion

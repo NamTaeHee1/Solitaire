@@ -56,7 +56,7 @@ public class PausePanel : MonoBehaviour
     {
         Managers.Sound.Play("Press");
 
-        Managers.Game.StartGame(true);
+        Managers.Game.StartGame(true, false);
          
         gameObject.SetActive(false);
     }
@@ -72,7 +72,7 @@ public class PausePanel : MonoBehaviour
     {
         Managers.Sound.Play("Press");
 
-        Managers.Game.StartGame(false);
+        Managers.Game.StartGame(false, true);
 
         gameObject.SetActive(false);
     }

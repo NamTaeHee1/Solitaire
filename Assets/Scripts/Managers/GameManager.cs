@@ -11,16 +11,16 @@ public class GameManager : SingletonMono<GameManager>
 
     #region Start Game
 
-    public void StartGame(bool retryCurrentDeck)
+    public void StartGame(bool retryCurrentDeck, bool touchToScreen)
     {
-        Managers.UI.ResetUI();
+        Managers.UI.ResetUI(touchToScreen);
 
         notAllowAutoComplete = false;
 
         Stock stock = Managers.Point.stock;
 
         stock.GenerateCards(retryCurrentDeck);
-        stock.MoveCardToPoints();
+        if (touchToScreen == false) stock.MoveCardToPoints();
 
         Recorder.ClearHistory();
     }

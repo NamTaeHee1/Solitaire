@@ -10,25 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Default Local Group
+  m_Name: Basic
   m_EditorClassIdentifier: 
-  m_GroupName: Default Local Group
+  m_GroupName: Basic
   m_Data:
     m_SerializedData: []
   m_GUID: ffaa02bc3dc1caa47ab2fc1878b8f184
   m_SerializeEntries:
   - m_GUID: 15922c8889a38774aad08c2be315bb47
     m_Address: Assets/Rawdatas/Arts/Sheets/Basic_Cards_Sheet.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - default
-  - m_GUID: 133392e61c58db94d8e95a1245ab2cb7
-    m_Address: Assets/Rawdatas/Arts/Sheets/Casual_Cards_Sheet.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - default
-  - m_GUID: f3ef86ab534d69d49a5463eba3a46c68
-    m_Address: Assets/Rawdatas/Arts/Sheets/Retro_Cards_Sheet.png
     m_ReadOnly: 0
     m_SerializedLabels:
     - default
