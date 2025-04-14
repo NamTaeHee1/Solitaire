@@ -116,6 +116,7 @@ public class UIManager : SingletonMono<UIManager>
             return;
         }
 
+        // 스택에서 가장 최근 명령을 꺼내어 Undo 실행
         Recorder.Pop().Undo();
     }
 

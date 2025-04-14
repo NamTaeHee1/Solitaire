@@ -19,13 +19,9 @@ public class Hint
 
     private void MoveCard(Card moveCard, Point toPoint)
     {
-        MoveCardCommand command = new MoveCardCommand(moveCard, moveCard.curPoint, toPoint);
-
-        command.Excute();
+        new MoveCardCommand(moveCard, moveCard.curPoint, toPoint).Excute();
 
         AddLogs(moveCard.cardInfo, toPoint);
-
-        Recorder.Push(command);
     }
 
     #endregion

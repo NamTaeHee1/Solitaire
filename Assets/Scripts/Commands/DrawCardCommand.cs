@@ -36,6 +36,8 @@ public class DrawCardCommand : ICommand
 
             Debug.Log($"Deck Remove");
         }
+
+        Recorder.Push(this);
     }
 
     public void Undo()

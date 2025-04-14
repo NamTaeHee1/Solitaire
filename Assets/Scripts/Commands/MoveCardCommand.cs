@@ -13,6 +13,8 @@ public class MoveCardCommand : ICommand
     public void Excute()
     {
         moveCard.Move(to);
+
+        Recorder.Push(this);
     }
 
     public void Undo()

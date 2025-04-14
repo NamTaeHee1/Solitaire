@@ -11,7 +11,7 @@ public class Foundation : Point
 		if (card.GetLastCard() != null) return false;
 
 		// 2. 다른 Foundation에 이미 card와 같은 suit가 있다면
-		if (IsSameSuitInOtherFoundations(card.cardInfo.cardSuit) == true) return false;
+		if (IsSameSuitOtherFoundations(card.cardInfo.cardSuit) == true) return false;
 
 		Card childCard = GetLastCard();
 
@@ -28,7 +28,7 @@ public class Foundation : Point
 		return true;
 	}
 
-	private bool IsSameSuitInOtherFoundations(ECARD_SUIT suit)
+	private bool IsSameSuitOtherFoundations(ECARD_SUIT suit)
 	{
 		Point[] foundations = Managers.Point.foundations;
 

@@ -644,11 +644,7 @@ public class Stock : Point
 
     public void DrawCard()
     {
-        DrawCardCommand command = new DrawCardCommand();
-
-        command.Excute();
-
-        Recorder.Push(command);
+        new DrawCardCommand().Excute();
     }
 
     #endregion

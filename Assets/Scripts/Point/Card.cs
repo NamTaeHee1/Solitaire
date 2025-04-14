@@ -163,11 +163,7 @@ public class Card : Point
             return;
         }
 
-        MoveCardCommand command = new MoveCardCommand(this, curPoint, toPoint);
-
-        command.Excute();
-
-        Recorder.Push(command);
+        new MoveCardCommand(this, curPoint, toPoint).Excute();
     }
 
     private Point GetPointToMove()
@@ -302,33 +298,38 @@ public class Card : Point
 		}
 	}
 
-	#endregion
+    #endregion
 
-	#region Interact with DifferentCard
+    #region Interact with DifferentCard
 
-	private const string PointTag = "Point";
+    private int overlapLayer;
+    
+    private void Awake()
+    {
+        overlapLayer = LayerMask.NameToLayer("Point") & LayerMask.NameToLayer("Card");
+    }
 
-	private List<Point> SearchPointAround() // 자신을 제외한 주변 카드 검색 및 리스트로 반환 & pCard로 지정하는 함수는 따로 구현
+	private List<Point> SearchPointAround() // 자신을 제외한 주변 카드 검색 및 리스트로 반환
 	{
-		Collider2D[] overlapObjects = Physics2D.OverlapBoxAll(transform.position, cardSR.size, 0);
+		Collider2D[] overlapObjects = Physics2D.OverlapBoxAll(transform.position, 
+                                                              cardSR.size, 
+                                                              overlapLayer);
+		List<Point> overlapPoints = new List<Point>();
 
-		List<Point> overlapCards = new List<Point>();
+        // Collider2D -> Point로 바꾸기 위해
+        for(int i = 0; i < overlapObjects.Length; i++)
+            overlapPoints.Add(overlapObjects[i].GetComponent<Point>());
 
-		foreach (Collider2D obj in overlapObjects)
-		{
-			if (obj.CompareTag(PointTag))
-				overlapCards.Add(obj.GetComponent<Point>());
-		}
-
-		return overlapCards;
+		return overlapPoints;
 	}
 
 	private Point ChoiceToPointFromList(List<Point> overlapPoints)
 	{
+        // RemoveAt 메서드로 인한 인덱스 변화를 방지하기 위해 리스트를 역순으로 순회
         for (int i = overlapPoints.Count - 1; i >= 0; i--)
         {
             if (overlapPoints[i].IsSuitablePoint(this) == false)
-                overlapPoints.Remove(overlapPoints[i]);
+                overlapPoints.RemoveAt(i);
         }
 
         if (overlapPoints.Count == 0) // 적합한 카드가 없다면
@@ -348,9 +349,9 @@ public class Card : Point
 		return proximateCard;
 	}
 
-	public float GetDistance(Point _diffPoint)
+	private float GetDistance(Point diffPoint)
 	{
-		Vector2 distance = transform.position - _diffPoint.transform.position;
+		Vector2 distance = transform.position - diffPoint.transform.position;
 		return distance.sqrMagnitude;
 	}
 

@@ -1,10 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using UnityEngine.UIElements;
 
 public class AddressableManager : Singleton<AddressableManager>
 {
@@ -17,13 +15,33 @@ public class AddressableManager : Singleton<AddressableManager>
         return handle;
     }
 
-    public AsyncOperationHandle CheckDownload()
+    public AsyncOperationHandle GetDownloadSize(AssetReferenceSprite sprite, Action<AsyncOperationHandle<long>> after = null)
     {
-        return new AsyncOperationHandle();
+        AsyncOperationHandle<long> handle = Addressables.GetDownloadSizeAsync(sprite);
+
+        handle.Completed += after;
+
+        return handle;
     }
 
-    public AsyncOperationHandle Download()
+    public AsyncOperationHandle Download(AssetReferenceSprite sprite, Action<AsyncOperationHandle> after = null)
     {
-        return new AsyncOperationHandle();
+        AsyncOperationHandle handle = Addressables.DownloadDependenciesAsync(sprite);
+        
+        handle.Completed += after;
+
+        return handle;
+    }
+
+    /// <summary>
+    /// IList<Sprite> 반환 후 List<Sprite>에 다시 담아야 함.
+    /// </summary>
+    public AsyncOperationHandle<IList<Sprite>> LoadAssetSpriteSheet(AssetReferenceSprite sprite, Action<AsyncOperationHandle<IList<Sprite>>> after = null)
+    {
+        AsyncOperationHandle<IList<Sprite>> handle = Addressables.LoadAssetAsync<IList<Sprite>>(sprite);
+
+        handle.Completed += after;
+
+        return handle;
     }
 }
