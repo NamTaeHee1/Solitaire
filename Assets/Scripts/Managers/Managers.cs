@@ -10,5 +10,5 @@ public class Managers
 
     public static UIManager UI { get { return UIManager.Instance; } }
 
-    public static AddressableManager Addressable { get { return AddressableManager.Instance; } }
+    public static AddressablesManager Addressables { get { return AddressablesManager.Instance; } }
 }

@@ -15,19 +15,18 @@ public class LoadingPanel : MonoBehaviour
 #endif
         Data.Load();
 
-        yield return Addressables.InitializeAsync();
+        yield return Managers.Addressables.Init();
 
         CardPackInfo info = ResourcesCache<CardPackInfo>.Load($"SO/CardPack/{Data.CardPack}");
-        AsyncOperationHandle<long> getSizeHandle = Addressables.GetDownloadSizeAsync(info.cardPackSheet);
+        AsyncOperationHandle<long> getSizeHandle = Managers.Addressables.GetDownloadSize(info.cardPackSheet);
 
         StartCoroutine(SetProgressBar(getSizeHandle, "Card Pack 다운로드 확인 중..."));
 
         yield return getSizeHandle;
 
-
         if (getSizeHandle.Status == AsyncOperationStatus.Succeeded && getSizeHandle.Result > 0)
         {
-            AsyncOperationHandle downloadHandle = Addressables.DownloadDependenciesAsync(info.cardPackSheet);
+            AsyncOperationHandle downloadHandle = Managers.Addressables.Download(info.cardPackSheet);
 
             StartCoroutine(SetProgressBar(downloadHandle, "Card Pack 다운로드 중..."));
 
@@ -38,7 +37,7 @@ public class LoadingPanel : MonoBehaviour
 
         Addressables.Release(getSizeHandle);
 
-        AsyncOperationHandle<IList<Sprite>> loadHandle = Addressables.LoadAssetAsync<IList<Sprite>>(info.cardPackSheet);
+        AsyncOperationHandle<IList<Sprite>> loadHandle = Managers.Addressables.LoadAssetSpriteSheet(info.cardPackSheet);
         List<Sprite> cardPackSheet = new List<Sprite>();
 
         StartCoroutine(SetProgressBar(loadHandle, "Card Pack 불러오는 중..."));

@@ -40,7 +40,7 @@ public class CardPackUI : MonoBehaviour
 
         cardPackInfo = info;
 
-        StartCoroutine(CheckDownload());
+        CheckDownload();
     }
 
     #endregion
@@ -50,31 +50,30 @@ public class CardPackUI : MonoBehaviour
     [HideInInspector]
     public float downloadSize;
 
-    private IEnumerator CheckDownload()
+    private void CheckDownload()
     {
-        AsyncOperationHandle<long> handle = Addressables.GetDownloadSizeAsync(cardPackInfo.cardPackSheet);
-
-        yield return handle;
-
-        if(handle.Result > 0)
+        Managers.Addressables.GetDownloadSize(cardPackInfo.cardPackSheet, (handle) =>
         {
-            downloadSize = handle.Result / 1024f;
-
-            SetState(ECARD_PACK_STATE.NOT_DOWNLOADED);
-        }
-        else
-        {
-            if(cardPackInfo.cardPackType == Data.CardPack)
+            if (handle.Result > 0)
             {
-                SetState(ECARD_PACK_STATE.IN_USE);
+                downloadSize = handle.Result / 1024f;
+
+                SetState(ECARD_PACK_STATE.NOT_DOWNLOADED);
             }
             else
             {
-                SetState(ECARD_PACK_STATE.NOT_IN_USE);
+                if (cardPackInfo.cardPackType == Data.CardPack)
+                {
+                    SetState(ECARD_PACK_STATE.IN_USE);
+                }
+                else
+                {
+                    SetState(ECARD_PACK_STATE.NOT_IN_USE);
+                }
             }
-        }
 
-        Addressables.Release(handle);
+            Addressables.Release(handle);
+        });
     }
 
     #endregion
@@ -102,9 +101,7 @@ public class CardPackUI : MonoBehaviour
         }
         else if(currentState == ECARD_PACK_STATE.NOT_IN_USE)
         {
-            AsyncOperationHandle<IList<Sprite>> handle = Addressables.LoadAssetAsync<IList<Sprite>>(cardPackInfo.cardPackSheet);
-
-            handle.Completed += (handle) =>
+            Managers.Addressables.LoadAssetSpriteSheet(cardPackInfo.cardPackSheet, (handle) =>
             {
                 List<Sprite> list = new List<Sprite>();
 
@@ -122,7 +119,7 @@ public class CardPackUI : MonoBehaviour
                 Managers.Point.stock.ApplyCardSheet();
 
                 SetState(ECARD_PACK_STATE.IN_USE);
-            };
+            });
         }
     }
 
@@ -190,14 +187,12 @@ public class CardPackUI : MonoBehaviour
 
     public void DownloadCardPack()
     {
-        AsyncOperationHandle handle = Addressables.DownloadDependenciesAsync(cardPackInfo.cardPackSheet);
-
-        StartCoroutine(ShowDownloadProgress(handle));
-
-        handle.Completed += (handle) =>
+        AsyncOperationHandle handle = Managers.Addressables.Download(cardPackInfo.cardPackSheet, (handle) =>
         {
             SetState(ECARD_PACK_STATE.NOT_IN_USE);
-        };
+        });
+
+        StartCoroutine(ShowDownloadProgress(handle));
     }
 
     #endregion

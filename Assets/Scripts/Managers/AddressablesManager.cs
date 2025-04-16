@@ -4,31 +4,40 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-public class AddressableManager : Singleton<AddressableManager>
+public class AddressablesManager : Singleton<AddressablesManager>
 {
-    public AsyncOperationHandle Init(Action<AsyncOperationHandle> after)
+    /// <summary>
+    /// Addressables 기능들을 사용하기 위한 초기화 함수 (호출하지 않고 다른 기능을 호출하면 자동으로 초기화 함수가 호출)
+    /// </summary>
+    public AsyncOperationHandle Init(Action<AsyncOperationHandle> after = null)
     {
         AsyncOperationHandle handle = Addressables.InitializeAsync();
 
-        handle.Completed += after;
+        if (after != null) handle.Completed += after;
 
         return handle;
     }
 
-    public AsyncOperationHandle GetDownloadSize(AssetReferenceSprite sprite, Action<AsyncOperationHandle<long>> after = null)
+    /// <summary>
+    /// sprite 다운로드 사이즈 반환, 완료하고 after 있으면 실행
+    /// </summary>
+    public AsyncOperationHandle<long> GetDownloadSize(AssetReferenceSprite sprite, Action<AsyncOperationHandle<long>> after = null)
     {
         AsyncOperationHandle<long> handle = Addressables.GetDownloadSizeAsync(sprite);
 
-        handle.Completed += after;
+        if (after != null) handle.Completed += after;
 
         return handle;
     }
 
+    /// <summary>
+    /// sprite 다운하고, 완료하고 after 있으면 실행
+    /// </summary>
     public AsyncOperationHandle Download(AssetReferenceSprite sprite, Action<AsyncOperationHandle> after = null)
     {
         AsyncOperationHandle handle = Addressables.DownloadDependenciesAsync(sprite);
-        
-        handle.Completed += after;
+
+        if (after != null) handle.Completed += after;
 
         return handle;
     }
@@ -40,7 +49,7 @@ public class AddressableManager : Singleton<AddressableManager>
     {
         AsyncOperationHandle<IList<Sprite>> handle = Addressables.LoadAssetAsync<IList<Sprite>>(sprite);
 
-        handle.Completed += after;
+        if(after != null) handle.Completed += after;
 
         return handle;
     }

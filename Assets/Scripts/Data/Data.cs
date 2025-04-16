@@ -15,7 +15,7 @@ public class Data
 
     #region Touch On/Off
 
-    public static ETOUCH_STATE TouchState;
+    
 
     public static void ApplyTouchState(ETOUCH_STATE state)
     {
@@ -25,10 +25,11 @@ public class Data
     }
 
     #endregion
+    public static ETOUCH_STATE TouchState;
 
     #region Sound On/Off
 
-    public static ESOUND_STATE SoundState;
+
 
     public static void ApplySoundState(ESOUND_STATE state)
     {
@@ -38,10 +39,11 @@ public class Data
     }
 
     #endregion
+    public static ESOUND_STATE SoundState;
 
     #region Hand Direction
 
-    public static EHAND_DIRECTION HandDirection = EHAND_DIRECTION.RIGHT;
+
 
     public static void ApplyHandDirection(EHAND_DIRECTION direction)
     {
@@ -51,10 +53,9 @@ public class Data
     }
 
     #endregion
+    public static EHAND_DIRECTION HandDirection = EHAND_DIRECTION.RIGHT;
 
     #region Card Pack
-
-    public static ECARD_PACK_TYPE CardPack;
 
     public static void ApplyCardPack(ECARD_PACK_TYPE type)
     {
@@ -62,4 +63,5 @@ public class Data
     }
 
     #endregion
+    public static ECARD_PACK_TYPE CardPack;
 }
